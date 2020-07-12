@@ -1,0 +1,42 @@
+@import "~vue-xy-ui/dist/mixin";
+@import "~assets/scss/value";
+
+// https://blog.csdn.net/jayhkw/article/details/54314704
+:root {
+  font-family: -apple-system, "PingFang SC", BlinkMacSystemFont, 'Microsoft YaHei', Arial, sans-serif;
+}
+[v-cloak] {
+  display: none;
+}
+//隐藏ios 默认的点击出现遮罩层的bug
+html,body{-webkit-text-size-adjust: 100%;-webkit-tap-highlight-color: rgba(0, 0, 0, 0);}
+.container {
+  font-size: rsh(32);
+  color: $baseFontColor;
+  a {
+    @include acr($baseFontColor);
+  }
+  button, input {
+    color: $baseFontColor;
+  }
+  &:before {
+    content: '';
+    display: block;
+    position: fixed;
+    top: rsh(-20);
+    left: 0;
+    width: 100%;
+    height: rsh(20);
+    box-shadow: 0 rsh(5) rsh(15) rgba($baseShadowColor, 1);
+    z-index: 50;
+  }
+
+  div.xy-list-status {
+    color: #bbb !important;
+    .wc-list-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+}
