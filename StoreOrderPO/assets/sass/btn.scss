@@ -1,0 +1,15 @@
+@import "~assets/sass/_mixins";
+@import "~assets/sass/_value";
+
+.pc-btn{
+    display: block;
+    margin: 0 auto;
+    width: rsh(600);
+    height: rsh(88);
+    background: $mainColor;
+    line-height: rsh(88);
+    color: #fff !important;
+    font-size: rsh(37);
+    text-align: center;
+    border-radius: rsh(50);
+}

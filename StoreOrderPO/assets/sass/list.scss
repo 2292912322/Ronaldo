@@ -1,0 +1,111 @@
+@import "~assets/sass/_mixins";
+@import "~assets/sass/_value";
+.pc-list {
+  width: 100vw;
+  position: relative;
+  overflow-y: auto;
+  & > span {
+    font-size: rsh(38);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .pc-list__item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: rsh(160);
+    background: #fff;
+    margin-bottom: rsh(10);
+    & > i {
+      width: rsh(140);
+      height: rsh(140);
+      margin: 0 rsh(20);
+    }
+    & > div {
+      &:first-of-type {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        width: rsh(300);
+        height: rsh(140);
+        justify-content: space-around;
+        & > span {
+          width: rsh(300);
+        }
+      }
+      &:nth-of-type(2) {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        margin-right: rsh(20);
+        height: rsh(140);
+        width: rsh(200);
+        justify-content: space-around;
+        //数量输入框
+        & > div {
+          width: rsh(170);
+          height: rsh(44);
+          border: 1px solid #d6d6d6;
+          border-radius: rsh(2);
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: space-around;
+          & > span {
+            width: 33.3%;
+            height: rsh(40);
+            line-height: rsh(40);
+            text-align: center;
+            &:first-of-type {
+              border-right: 1px solid #d6d6d6;
+            }
+            &:last-of-type {
+              border-left: 1px solid #d6d6d6;
+            }
+          }
+        }
+        //收货数量
+        & > span {
+          &.pc-list__item--input {
+            color: $mainColor;
+            & > span {
+              font-size: rsh(26);
+            }
+            & > input {
+              width: 3em;
+              height: 1.5em;
+              text-align: center;
+              border: rsh(1) solid $mainColor;
+              &:focus{
+                  outline: none;
+              }
+            }
+          }
+        }
+      }
+      &.pc-list__item--input {
+        & > div {
+          & > span {
+            width: 25%;
+          }
+          & > input {
+            width: 50%;
+            border: none;
+            outline: none;
+            text-align: center;
+          }
+        }
+      }
+    }
+    & > span {
+      width: rsh(150);
+      display: flex;
+      flex-direction: column;
+      & > span {
+        padding-top: rsh(10);
+      }
+    }
+  }
+}

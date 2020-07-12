@@ -1,0 +1,13 @@
+// 设计稿750x1334
+
+// relate to screen height
+// 传入设计稿高度
+@function rsh($value) {
+  //@return $value/1334*100vh;
+  //@return $value/1334*100vmax;
+  //@return $value*0.5px;
+  //@return calc(var(--base-unit) * 0.75);
+  //@return calc(var(--base-unit) * 0.75);
+  @return $value/750*100vw
+}
+  

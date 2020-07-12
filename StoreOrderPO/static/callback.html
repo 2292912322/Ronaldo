@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>登陆回调</title>
+</head>
+
+<body>
+  <h2>登陆中。。。</h2>
+</body>
+<script>
+  function getRequestParam(key) {
+    var result = "";
+    var searchArr = location.search.substr(1).split("&"); //获取请求参数
+    for (var i = 0; i < searchArr.length; i++) {
+      var strArr = searchArr[i].split("="); //key=value的形式
+      if (strArr[0] == key) {
+        result = strArr[1];
+        break;
+      }
+    }
+    return result;
+  }
+  if (getRequestParam("data")) {
+    var res = JSON.parse(decodeURIComponent(getRequestParam("data")));
+    if (res.success) {
+      var userInfo = {
+        openid: res.data.OpenId,
+        nickname: res.data.Name,
+        headimgurl: res.data.ImgUrl,
+        province: res.data.Province,
+        city: res.data.City,
+        country: res.data.Country,
+        sex: res.data.Sex
+      };
+      localStorage.setItem('userInfo_pc', JSON.stringify(userInfo))
+      window.location.href = window.location.origin + "/StoreOrderPO/";
+    }else{
+      window.location.href = window.location.origin + "/StoreOrderPO/#/auth/login?loginStatus=0";
+    }
+  }
+
+</script>
+
+</html>
