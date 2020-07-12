@@ -1,0 +1,275 @@
+<style lang="scss">
+  @import "~vue-xy-ui/dist/mixin";
+  @import "~assets/scss/value";
+
+  .wc-car-confirm {
+    .wc-card {
+      position: relative;
+      padding: rsh(50);
+    }
+    .wc-car-confirm__label {
+      position: absolute;
+      top: rsh(-4);
+      left: rsh(-4);
+      background: linear-gradient(90deg, $mainColor, #fd744b);
+      color: #fff;
+      font-size: rsh(22);
+      line-height: rsh(37);
+      padding: 0 rsh(10);
+      border-radius: rsh(5);
+      box-shadow: rsh(5) rsh(5) rsh(15) rgba(#fea224, .5);
+      z-index: 10;
+    }
+    .wc-car-confirm__btn {
+      position: absolute;
+      bottom: rsh(50);
+      width: 100%;
+      left: 0;
+    }
+    .wc-car-confirm__info, .wc-car-confirm__location {
+      position: relative;
+      &:after {
+        content: '';
+        display: block;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 1px;
+        background-color: $lineColor;
+        transform: scale(1, .5);
+      }
+    }
+    .wc-car-confirm__info {
+      padding-bottom: rsh(25);
+      display: flex;
+      align-items: center;
+      & > div {
+        &:last-child {
+          width: 0;
+          flex-grow: 1;
+          text-align: center;
+          & > i {
+            width: rsh(265);
+            height: rsh(123);
+            display: inline-block;
+          }
+        }
+      }
+      .wc-car-confirm__info__label {
+        font-size: rsh(30);
+        line-height: rsh(48);
+      }
+      .wc-car-confirm__info__name {
+        line-height: rsh(36);
+        & > label {
+          font-size: rsh(16);
+          color: #bbb;
+          border: 1px solid $lineColor;
+          border-radius: rsh(6);
+          padding: 0 rsh(4);
+          line-height: rsh(26);
+          margin-left: rsh(15);
+        }
+        & > span {
+          font-size: rsh(26);
+          color: #aaa;
+          margin-right: rsh(20);
+        }
+      }
+      .wc-car-confirm__info__other {
+        line-height: rsh(46);
+        & > i {
+          display: inline-block;
+          vertical-align: middle;
+        }
+        .wc-car-confirm__info__other__battery {
+          color: $batteryGreen;
+          font-size: rsh(26);
+          margin-left: rsh(12);
+        }
+        .wc-car-confirm__info__other__distance {
+          font-size: rsh(26);
+          color: #aaa;
+          margin-left: rsh(12);
+        }
+      }
+    }
+    .wc-car-confirm__location {
+      padding: rsh(20) 0;
+      line-height: rsh(55);
+      font-size: rsh(26);
+      & > div {
+        display: flex;
+        & > label {
+          flex-shrink: 0;
+        }
+        & > button {
+          display: flex;
+          align-items: center;
+          &.wc-car-confirm__location__select {
+            color: #aaa;
+            width: 0;
+            flex-grow: 1;
+            text-align: left;
+            & > i {
+              margin-left: rsh(10);
+            }
+            &.wc-car-confirm__location__select--on {
+              color: #333;
+            }
+          }
+          &.wc-car-confirm__location__switch {
+            color: #666;
+            flex-shrink: 0;
+            position: relative;
+            &:before {
+              content: '';
+              display: block;
+              width: 1px;
+              height: rsh(28);
+              background-color: $lineColor;
+              transform: scale(.5, 1);
+            }
+            & > i {
+              margin: 0 rsh(20);
+            }
+          }
+        }
+      }
+      & > section {
+        line-height: rsh(44);
+        color: #6dc97b;
+        display: flex;
+        & > span {
+          &:first-child {
+            width: 0;
+            flex-grow: 1;
+          }
+        }
+      }
+    }
+    .wc-car-confirm__fee {
+      padding-top: rsh(10);
+    }
+  }
+</style>
+
+<template>
+  <div class="wc-car-confirm">
+    <div class="wc-card wc-card--page">
+      <label class="wc-car-confirm__label">原点还取</label>
+      <div class="wc-car-confirm__info">
+        <div>
+          <label class="wc-car-confirm__info__label">粤CST000</label>
+          <div class="wc-car-confirm__info__name">
+            <span>众泰云100S</span>
+            <label>4座</label>
+            <label>白色</label>
+          </div>
+          <div class="wc-car-confirm__info__other">
+            <i class="icons-common-battery-80-outer">
+              <div class="icons-common icons-common-battery-80-inner"></div>
+            </i>
+            <span class="wc-car-confirm__info__other__battery">80%</span>
+            <span class="wc-car-confirm__info__other__distance">续航180km</span>
+          </div>
+        </div>
+        <div>
+          <i class="lazy-load">
+            <img v-lazy="'https://dummyimage.com/265x123/cffbfd/000'"
+                 class="lazy-contain">
+          </i>
+        </div>
+      </div>
+      <div class="wc-car-confirm__location">
+        <div>
+          <label>取车：</label><span>食神海鲜城（中山大学）</span>
+        </div>
+        <div>
+          <label>还车：</label>
+          <button class="wc-car-confirm__location__select"
+                  @click="onPoint"
+                  v-xy-hover-btn>
+            <span :class="{'wc-car-confirm__location__select--on':branchId}">{{branchId ? branchName : '选车还车网点'}}</span>
+            <i class="icons-common-gt-small-outer">
+              <div class="icons-common icons-common-gt-small-inner"></div>
+            </i>
+          </button>
+          <button class="wc-car-confirm__location__switch"
+                  v-xy-hover-btn>
+            <i class="icons-common-sync-outer">
+              <div class="icons-common icons-common-sync-inner"></div>
+            </i>
+            <span>同取车网点</span>
+          </button>
+        </div>
+        <section>
+          <span>跨区调度费</span><span>10元/单</span>
+        </section>
+        <section>
+          <span>还车调度费（车位已满）</span><span>10元/单</span>
+        </section>
+      </div>
+      <div class="wc-car-confirm__fee">
+
+      </div>
+      <div class="wc-car-confirm__btn">
+        <button class="wc-btn wc-btn--yellow wc-btn--w600 wc-btn--h85"
+                v-xy-moving-btn>立即用车
+        </button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  import common from '~/mixins/common'
+  import seo from '~/mixins/seo'
+  import wxMixin from '~/mixins/wx-mixin'
+  import vuxValidate from '~/mixins/vux-validate'
+
+  export default {
+    mixins: [common, wxMixin, seo],
+    components: {},
+    data () {
+      return {
+        pageTitle: '确定用车',
+        startLoad: false,
+        //
+        id: '',
+        branchId: '',
+        branchName: ''
+      }
+    },
+    watch: {
+      '$store.state.wxAuthStatus': function (v) {
+        let that = this
+        // 需要授权才可以加载的数据(授权比页面装载慢)
+        if (v && !that.startLoad) {
+          that.startLoad = true
+          //
+        }
+      }
+    },
+    methods: {
+      onPoint () {
+        let that = this
+        // TODO: 重新获取城市和定位
+        // that.$store.state.appInfo.cityCode
+        // that.$store.state.appInfo.branchId ? that.$store.state.appInfo.branchName : '选车还车网点'
+        that.$router.push(`/find/point?code=${'440400'}&la=${that.$store.state.location.latitude}&lo=${that.$store.state.location.longitude}`)
+      }
+    },
+    created () {
+      let that = this
+      that.id = that.$route.params.id
+      // 需要授权才可以加载的数据(授权比页面装载快)
+      if (that.$store.state.wxAuthStatus && !that.startLoad) {
+        that.startLoad = true
+        //
+      }
+      // 无需授权可以提前加载的数据
+    }
+  }
+</script>

@@ -1,0 +1,118 @@
+<style lang="scss">
+@import "~vue-xy-ui/dist/mixin";
+
+.wc-upload {
+  width: rsh(710);
+  height: rsh(200);
+  & > i {
+    & > input {
+      display: block;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+    }
+  }
+  .lazy-img {
+    width: rsh(320);
+    height: rsh(190);
+  }
+}
+</style>
+
+<template>
+  <div class="wc-upload">
+    <i :class="!fileURL[0] ? 'icons-common-cn-back-main-outer' : 'lazy-load lazy-img'">
+      <div class="icons-common icons-common-cn-back-inner" v-if="!fileURL[0]"></div>
+      <img v-lazy="fileURL[0]" class="lazy-cover" v-if="fileURL[0]">
+      <input type="file" @change="onUploadChange" :data-id='1'  accept="image/*">
+    </i>
+    <i :class="fileURL[1] ?'lazy-load lazy-img' :'icons-common-cn-front-main-outer'">
+      <div class="icons-common icons-common-cn-front-inner" v-if='!fileURL[1]'></div>
+      <img v-lazy="fileURL[1]" class="lazy-cover" v-if="fileURL[1]">
+      <input type="file" @change="onUploadChange" :data-id='2' accept="image/*">
+    </i>
+  </div>
+</template>
+
+<script>
+import common from "~/mixins/common";
+import seo from "~/mixins/seo";
+import wxMixin from "~/mixins/wx-mixin";
+import parseData from "~/service/parseData";
+
+export default {
+  mixins: [common, wxMixin, seo],
+  components: {},
+  data() {
+    return {
+      pageTitle: "图片上传demo",
+      startLoad: false,
+      phone: "",
+      verificationCode: "",
+      terminalType: "",
+      signed: "",
+      fileDir: "userValidateCarH5",
+      fileURL:[]
+    };
+  },
+  watch: {
+    "$store.state.wxAuthStatus": function(v) {
+      let that = this;
+      // 需要授权才可以加载的数据(授权比页面装载慢)
+      if (v && !that.startLoad) {
+        that.startLoad = true;
+        //
+      }
+    }
+  },
+  methods: {
+    //单图片上传
+    async onUploadChange({ currentTarget }) {
+      let {
+        files,
+        dataset: { id }
+      } = currentTarget;
+      console.log(id)
+      let that = this;
+      let valid = false;
+      for (let f of files) {
+        if (!valid && !/^image\//.test(f.type)) {
+          valid = true;
+        }
+      }
+      if (valid) {
+        that.$wc.toast(`仅能上传图片文件`);
+      } else {
+        that.$vux.loading.show({ text: "正在上传" });
+        let { bizContent } = await that.$api.common["upload/file_upload"]({
+          file: files,
+          fileDir: that.fileDir
+        });
+        that.fileURL[id] = bizContent[0].fileURL;
+        // console.log(that.fileURL[1])
+      }
+      that.$vux.loading.hide();
+    }
+  },
+  created() {
+    let that = this;
+    that.type = that.$route.params.type;
+    // 需要授权才可以加载的数据(授权比页面装载快)
+    if (that.$store.state.wxAuthStatus && !that.startLoad) {
+      that.startLoad = true;
+      //
+    }
+    // 无需授权可以提前加载的数据
+
+    let browser = that.$xyTools.browser();
+    if (browser.type === "android") {
+      that.terminalType = "01";
+    } else if (browser.type === "ios") {
+      that.terminalType = "02";
+    }
+  }
+};
+</script>

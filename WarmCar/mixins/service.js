@@ -1,0 +1,74 @@
+import location from '~/mixins/location'
+import { API_CONFIG_BASE } from '~/config'
+
+export default {
+  name: 'wc-service',
+  mixins: [location],
+  data () {
+    let that = this
+    return {
+      wcService: {
+        updateCurrentOrder: async function () {
+          let {success, bizContent, code, message} = await that.$api.warmcar['query/customer_current_order']()
+          if (success && bizContent) {
+            bizContent.orderId = bizContent.orderInfo.orderId
+
+            that.$store.commit('currentOrder', bizContent)
+            // 系统时间差
+            that.$store.commit('systemInfo', {timePatch: Date.now() - bizContent.orderInfo.currentTimeStamp})
+          } else {
+            if (code === 1030) {
+              that.$store.dispatch('clearState', 'currentOrder')
+              if (that.$route.path !== '/home') {
+                that.$wc.toast(message)
+                that.$router.go(-1)
+              }
+            }
+          }
+          return success
+        },
+        updateLocation: async function () {
+          that.$vux.loading.show({text: '正在更新定位'})
+          let location
+          try {
+            location = await that.location()
+          } catch (e) {
+            that.$vux.loading.hide()
+            console.error(e)
+            that.$wc.toast(e.message)
+          }
+          if (!location) {
+            location = API_CONFIG_BASE.location
+            console.log(`假定位: ${JSON.stringify(location)}`)
+          }
+          if (location) {
+            let city = await that.$wc.getCity(location.latitude, location.longitude)
+            if (city) {
+              that.$store.commit('location', {
+                ...location,
+                ...city
+              })
+              that.$vux.loading.hide()
+              return true
+            }
+          }
+          that.$vux.loading.hide()
+          return false
+        },
+        updateSystemInfo: async function () {
+          let {success, bizContent} = await that.$api.warmcar['query/sys_param']()
+          if (success && bizContent) {
+            let obj = {}
+            bizContent.forEach(function (item) {
+              obj[item.paramKey] = item.paramValue
+            })
+            that.$store.commit('systemInfo', {
+              params: obj
+            })
+          }
+        }
+      }
+    }
+  },
+  methods: {}
+}

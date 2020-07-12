@@ -1,0 +1,62 @@
+import Vue from 'vue'
+import _ from 'lodash'
+
+// 自定义插件
+import ConfirmComponent from '~/components/pop/confirm.vue'
+import AlertComponent from '~/components/pop/alert.vue'
+import ToastComponent from '~/components/pop/toast.vue'
+
+let ConfirmConstructor = Vue.extend(ConfirmComponent)
+let AlertConstructor = Vue.extend(AlertComponent)
+let ToastConstructor = Vue.extend(ToastComponent)
+
+let ConfirmInstance = new ConfirmConstructor({
+  el: document.createElement('div')
+})
+let AlertInstance = new AlertConstructor({
+  el: document.createElement('div')
+})
+
+document.body.appendChild(ConfirmInstance.$el)
+document.body.appendChild(AlertInstance.$el)
+
+let index = 0
+
+// 同步
+const Confirm = function (content, opts = {}) {
+  opts.index = index++
+  return new Promise(function (resolve) {
+    ConfirmInstance.show(content, opts, (result) => {
+      resolve(result)
+    })
+  })
+}
+
+// 同步
+const Alert = function (content, opts = {}) {
+  opts.index = index++
+  return new Promise(function (resolve) {
+    AlertInstance.show(content, opts, () => {
+      resolve()
+    })
+  })
+}
+
+// 多实例
+const Toast = _.throttle(function (content, opts = {}) {
+  opts.index = index++
+  let ToastInstance = new ToastConstructor({
+    el: document.createElement('div')
+  })
+  document.body.appendChild(ToastInstance.$el)
+  ToastInstance.show(content, opts)
+}, 1500, {
+  leading: true,
+  trailing: false
+})
+
+export default {
+  confirm: Confirm,
+  alert: Alert,
+  toast: Toast
+}

@@ -1,0 +1,44 @@
+<style lang="scss">
+  @import "~vue-xy-ui/dist/mixin";
+</style>
+
+<template>
+  <div>
+    首页
+  </div>
+</template>
+
+<script>
+  import common from '~/mixins/common'
+  import seo from '~/mixins/seo'
+  import wxMixin from '~/mixins/wx-mixin'
+
+  export default {
+    mixins: [common, wxMixin, seo],
+    components: {},
+    data () {
+      return {
+        pageTitle: '首页'
+      }
+    },
+    watch: {
+      '$store.state.wxAuthStatus': function (v) {
+        let that = this
+        // 需要授权才可以加载的数据(授权比页面装载慢)
+        if (v) {
+          // console.log(`%c${that.$route.fullPath} wxAuthStatus`, 'font-size:20px;color:blue;')
+        }
+      }
+    },
+    methods: {},
+    created () {
+      let that = this
+      that.type = that.$route.params.type
+      // 需要授权才可以加载的数据(授权比页面装载快)
+      if (that.$store.state.wxAuthStatus) {
+        // console.log(`%c${that.$route.fullPath} created`, 'font-size:20px;color:blue;')
+      }
+      // 无需授权可以提前加载的数据
+    }
+  }
+</script>

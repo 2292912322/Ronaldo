@@ -1,0 +1,40 @@
+// 迎合warmcar接口
+// 公共参数:
+// customerId        int
+// timestamp         (new Date()).getTime()
+// session           string
+// sign              string
+//
+// bizContent        bizContent
+import cookie from 'js-cookie'
+import _ from 'lodash'
+import {
+  WC_KEY
+} from '~/config'
+import MD5 from 'crypto-js/md5'
+
+function sort (obj) {
+  return _.filter(_.sortBy(_.toPairs(obj), o => {
+    return o[0]
+  }), o => o[1])
+}
+
+function toQuery (obj) {
+  let sorts = sort(obj)
+  let filters = _.filter(sorts, o => o[1])
+  return _.map(filters, o => `${o[0]}=${o[1]}`)
+          .join('&')
+}
+
+export default function (data) {
+  let arr = sort(data)
+  let sign = MD5(toQuery(data) + WC_KEY)
+    .toString()
+  return {
+    customerId: cookie.get('customerId'),
+    timestamp: (new Date()).getTime(),
+    session: cookie.get('session'),
+    bizContent: JSON.stringify(_.fromPairs(arr)),
+    sign: sign
+  }
+}

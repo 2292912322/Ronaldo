@@ -1,0 +1,3 @@
+.icons-common { background-image: url(~/assets/imgs/icons-common.png); background-size: 4.40vw 2.93vw; background-repeat: no-repeat; }
+.icons-common-liulan-outer {width: calc(4.40vw + 2px); height: calc(2.93vw + 2px);}
+.icons-common-liulan-inner { width: calc(4.40vw + 2px); height: calc(2.93vw + 2px); background-position: calc(0.00vw + 1px) calc(0.00vw + 1px); }

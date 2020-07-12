@@ -1,0 +1,35 @@
+import Vuex from 'vuex'
+
+//此对象名不可改
+import mutations from './mutations'
+import actions from './actions'
+
+const createStore = () => {
+  let wxAuthStatus = false
+  return new Vuex.Store({
+    state: {
+      userInfo: {
+        headImg: '',
+        nickName: '',
+        phone: '',
+        sex: ''
+      },
+      userStatus: {
+        certificationStatus: '',
+        moneyStatus: ''
+      },
+      appInfo: {
+        cityCode: '',
+        cityName: '',
+        latitude: '',
+        longitude: '',
+        isLocal: false
+      },
+      wxAuthStatus: wxAuthStatus
+    },
+    mutations,
+    actions
+  })
+}
+
+export default createStore

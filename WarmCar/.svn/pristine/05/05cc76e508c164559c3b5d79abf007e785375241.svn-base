@@ -1,0 +1,19 @@
+.icons-car { background-image: url(~/assets/imgs/icons-car.png); background-size: 135.60vw 77.87vw; background-repeat: no-repeat; }
+.icons-car-return-back-left-2-outer {width: calc(44.67vw + 2px); height: calc(25.33vw + 2px);}
+.icons-car-return-back-left-2-inner { width: calc(44.67vw + 2px); height: calc(25.33vw + 2px); background-position: calc(-45.47vw + 1px) calc(0.00vw + 1px); }
+.icons-car-return-back-left-4-outer {width: calc(44.67vw + 2px); height: calc(25.33vw + 2px);}
+.icons-car-return-back-left-4-inner { width: calc(44.67vw + 2px); height: calc(25.33vw + 2px); background-position: calc(0.00vw + 1px) calc(-26.40vw + 1px); }
+.icons-car-return-back-right-2-outer {width: calc(44.67vw + 2px); height: calc(25.33vw + 2px);}
+.icons-car-return-back-right-2-inner { width: calc(44.67vw + 2px); height: calc(25.33vw + 2px); background-position: calc(-45.47vw + 1px) calc(-26.40vw + 1px); }
+.icons-car-return-back-right-4-outer {width: calc(44.67vw + 2px); height: calc(25.33vw + 2px);}
+.icons-car-return-back-right-4-inner { width: calc(44.67vw + 2px); height: calc(25.33vw + 2px); background-position: calc(0.00vw + 1px) calc(-52.53vw + 1px); }
+.icons-car-return-front-left-2-outer {width: calc(44.67vw + 2px); height: calc(25.33vw + 2px);}
+.icons-car-return-front-left-2-inner { width: calc(44.67vw + 2px); height: calc(25.33vw + 2px); background-position: calc(-45.47vw + 1px) calc(-52.53vw + 1px); }
+.icons-car-return-front-left-4-outer {width: calc(44.67vw + 2px); height: calc(25.33vw + 2px);}
+.icons-car-return-front-left-4-inner { width: calc(44.67vw + 2px); height: calc(25.33vw + 2px); background-position: calc(-90.93vw + 1px) calc(0.00vw + 1px); }
+.icons-car-return-front-right-2-outer {width: calc(44.67vw + 2px); height: calc(25.33vw + 2px);}
+.icons-car-return-front-right-2-inner { width: calc(44.67vw + 2px); height: calc(25.33vw + 2px); background-position: calc(-90.93vw + 1px) calc(-26.13vw + 1px); }
+.icons-car-return-front-right-4-outer {width: calc(44.67vw + 2px); height: calc(25.33vw + 2px);}
+.icons-car-return-front-right-4-inner { width: calc(44.67vw + 2px); height: calc(25.33vw + 2px); background-position: calc(-90.93vw + 1px) calc(-52.27vw + 1px); }
+.icons-car-return-inner-outer {width: calc(44.67vw + 2px); height: calc(25.60vw + 2px);}
+.icons-car-return-inner-inner { width: calc(44.67vw + 2px); height: calc(25.60vw + 2px); background-position: calc(0.00vw + 1px) calc(0.00vw + 1px); }

@@ -1,0 +1,22 @@
+export default [
+  {
+    //        参数:
+    //        loginName:用户名
+    //        loginPwdS：密码SHA256加密
+    //        loginPwdM：密码MD5加密
+    //        返回:
+    //        message:消息
+    //        state:成功:2000/失败:-3000
+    //        data:数据
+    name: 'login',
+    desc: '登录',
+    path: '/app/login',
+    mockPath: '/common/auth/login',
+    params: {
+      loginName: '', // 用户名
+      loginPwdS: '', // 密码SHA256加密
+      loginPwdM: '' // 密码MD5加密
+    },
+    cache: false
+  }
+]

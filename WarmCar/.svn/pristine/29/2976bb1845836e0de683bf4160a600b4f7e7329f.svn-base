@@ -1,0 +1,25 @@
+import _ from 'lodash'
+
+const mutations = {
+  userInfo: function (state, value) {
+    let obj = _.pick(value, _.keys(state.userInfo))
+    Object.assign(state.userInfo, obj)
+  },
+  userStatus: function (state, value) {
+    let obj = _.pick(value, _.keys(state.userStatus))
+    Object.assign(state.userStatus, obj)
+  },
+  appInfo: function (state, value) {
+    let obj = _.pick(value, _.keys(state.appInfo))
+    Object.assign(state.appInfo, obj)
+  },
+  location: function (state, value) {
+    let obj = _.pick(value, _.keys(state.location))
+    Object.assign(state.location, obj)
+  },
+  wxAuth (state, value) {
+    state.wxAuthStatus = value
+  }
+}
+
+export default mutations

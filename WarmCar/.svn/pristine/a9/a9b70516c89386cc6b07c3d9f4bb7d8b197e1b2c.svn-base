@@ -1,0 +1,253 @@
+<style lang="scss">
+  @import "~vue-xy-ui/dist/mixin";
+  @import "~assets/scss/value";
+
+  .wc-login {
+    padding-top: rsh(50);
+    .wc-login__input--after {
+      &:after {
+        content: "";
+        display: block;
+        position: relative;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background-color: $inputLineColor;
+        transform: scale(1, 0.5);
+      }
+    }
+    .wc-login__input {
+      font-size: rsh(30);
+      display: block;
+      padding: 0 rsh(54);
+      .wc-login-input--pad {
+        padding: rsh(30) 0;
+      }
+      .wc-login__input__ver {
+        position: relative;
+        display: flex;
+        align-items: center;
+        .wc-login__input__ver--after {
+          display: flex;
+          width: 0;
+          flex-grow: 1;
+          position: relative;
+          padding: rsh(40) rsh(10) rsh(40) 0;
+          flex-shrink: 0;
+          &:after {
+            content: "";
+            display: block;
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 1px;
+            height: 100%;
+            background-color: $inputLineColor;
+            transform: scale(0.5, 0.3);
+          }
+        }
+        & > button {
+          color: #facd00;
+          font-size: rsh(26);
+          margin-left: rsh(50);
+          flex-shrink: 0;
+        }
+      }
+    }
+    .wc-btn--m170 {
+      margin-top: rsh(170);
+    }
+    .wc-login__span {
+      font-size: rsh(24);
+      color: #333333;
+      margin-top: rsh(30);
+      text-align: center;
+      .wc-login__span--yellow {
+        color: #facd00;
+      }
+    }
+  }
+</style>
+
+<template>
+  <div class="wc-login">
+    <!-- 用vux的input吧, 通过覆盖样式满足需求 -->
+    <div class='wc-card wc-login-card'>
+      <div class="wc-login__input wc-login__input--after">
+        <div>
+          <x-input placeholder="输入手机号"
+                   v-model="phone"
+                   class="wc-login-input--pad "
+          >
+          </x-input>
+        </div>
+      </div>
+      <div class="wc-login__input">
+        <div class="wc-login__input__ver">
+          <x-input placeholder="输入验证码"
+                   v-model="verificationCode"
+                   class="wc-login__input__ver--after"
+          >
+          </x-input>
+          <button slot="right"
+                  @click="onVerificationCode"
+                  v-xy-moving-btn>获取验证码
+          </button>
+        </div>
+      </div>
+    </div>
+    <button class="wc-btn wc-btn--yellow wc-btn--w600 wc-btn--h85 wc-btn--m170"
+            @click="onSign"
+            v-xy-moving-btn>立即登录
+    </button>
+    <div class="wc-login__span">
+      <span>点击登录，即代表您同意</span><span class="wc-login__span--yellow">《WarmCar用户使用协议》</span>
+    </div>
+  </div>
+</template>
+
+<script>
+  import common from '~/mixins/common'
+  import seo from '~/mixins/seo'
+  import wxMixin from '~/mixins/wx-mixin'
+  import parseData from '~/service/parseData'
+  import wcService from '~/mixins/service'
+  import {
+    Box,
+    Icon
+  } from 'vux'
+
+  export default {
+    mixins: [common, wxMixin, seo, wcService],
+    components: {},
+    data () {
+      return {
+        pageTitle: '登陆',
+        phone: '',
+        verificationCode: '',
+        terminalType: '',
+        signed: ''
+      }
+    },
+    watch: {
+      '$store.state.wxAuthStatus': function (v) {
+        let that = this
+        // 需要授权才可以加载的数据(授权比页面装载慢)
+        if (v) {
+          // console.log(`%c${that.$route.fullPath} wxAuthStatus`, 'font-size:20px;color:blue;')
+        }
+      }
+    },
+    methods: {
+      //发送验证码
+      async onVerificationCode () {
+        let that = this
+        if (!that.phone) {
+          that.$wc.toast('请输入手机号码')
+          return
+        }
+        let {success} = await that.$api.warmcar[
+          'customer/send_verification_code'
+          ]({
+          phone: that.phone
+        })
+        // 发送验证码成功
+        if (success) {
+          that.$wc.toast('验证码发送成功')
+        }
+      },
+      //登陆
+      async onSign () {
+        let that = this
+        //        that.signed = parseData({
+        //          phone: that.phone,
+        //          verificationCode: that.verificationCode,
+        //          terminalType: that.terminalType
+        //        })
+        if (!that.phone || !that.verificationCode) {
+          that.$wc.toast('请输入验证码')
+          return
+        }
+        let {success, bizContent, customerId} = await that.$api.warmcar[
+          'customer/login_register'
+          ]({
+          phone: that.phone,
+          verificationCode: that.verificationCode,
+          terminalType: that.terminalType,
+          cityCode: that.$store.state.location.cityCode
+        })
+        // 登录成功
+        if (success) {
+          // console.log(bizContent)
+          let {session, moneyStatus} = bizContent
+
+          // bizContent示例:
+          //          certificationStatus: "01"
+          //          headImg: ""
+          //          moneyStatus: "01"
+          //          nickName: "18507567676"
+          //          phone: "18507567676"
+          //          session: "4c4c200054680cc52d0a5b6efb6313a5"
+          //          sex: ""
+
+          // 保存身份凭证:
+          that.$cookie.set('session', session)
+          that.$cookie.set('customerId', customerId)
+
+          // 其余保存至store
+          // 参考:/store/index.js(定义初始状态)
+          // 参考:/store/mutations.js(提取数据, 保存状态)
+          // 参考:/store/action.js(提取数据, 保存状态, 异步)
+
+          // 用户信息
+          that.$store.commit('userInfo', bizContent)
+          // 用户状态
+          that.$store.commit('userStatus', bizContent)
+          // 异步action用:
+          //          that.$store.dispatch('xxx', '123,456')
+          that.$wc.toast('登录成功')
+          switch (moneyStatus) {
+            case '01':
+              that.$router.replace({path: '/auth/license'})
+              break
+            case '03':
+              that.$router.replace({path: '/auth/license'})
+              break
+            case '99':
+              that.$wc.alert('您的账号被冻结，请联系客服', {
+                title: '提示',
+                confirmButtonText: '确定',
+                onConfirm () {
+                  console.log(`wc-confirm onConfirm callback 1`)
+                }
+              })
+              break
+            default:
+              that.$router.replace({path: '/home'})
+              break
+          }
+          // that.$router.go(-1);
+        }
+      }
+    },
+    async created () {
+      let that = this
+      // 需要授权才可以加载的数据(授权比页面装载快)
+      if (that.$store.state.wxAuthStatus) {
+        // console.log(`%c${that.$route.fullPath} created`, 'font-size:20px;color:blue;')
+      }
+      // 无需授权可以提前加载的数据
+      //获取设备类型
+      let browser = that.$xyTools.browser()
+      if (browser.type === 'android') {
+        that.terminalType = '01'
+      } else if (browser.type === 'ios') {
+        that.terminalType = '02'
+      }
+
+      await that.wcService.updateSystemInfo()
+      await that.wcService.updateLocation()
+    }
+  }
+</script>

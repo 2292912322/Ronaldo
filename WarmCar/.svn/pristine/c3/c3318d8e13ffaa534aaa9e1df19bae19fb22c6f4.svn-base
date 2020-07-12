@@ -1,0 +1,414 @@
+<style lang="scss">
+  @import "~vue-xy-ui/dist/mixin";
+  @import "~assets/scss/value";
+
+  .wc-find-car {
+    color: #666;
+    button {
+      color: #666;
+      text-align: center;
+    }
+    .wc-find-car__location {
+      display: flex;
+      align-items: center;
+      margin: 0 rsh(20);
+      padding: rsh(25);
+      position: relative;
+      font-size: rsh(24);
+      &:after {
+        content: '';
+        display: block;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 1px;
+        background-color: $lineColor;
+        transform: scale(1, .5);
+      }
+      & > section {
+        width: 0;
+        flex-grow: 1;
+        line-height: rsh(36);
+        .wc-find-car__location__place {
+          & > b {
+            font-size: rsh(26);
+            color: #333;
+            font-weight: normal;
+          }
+          & > i {
+            display: inline-block;
+            margin: 0 rsh(6);
+            vertical-align: top;
+            position: relative;
+            top: 1px;
+          }
+        }
+      }
+      & > button {
+        & > div {
+          font-size: rsh(20);
+          color: #666;
+          line-height: rsh(28);
+          margin-top: rsh(6);
+        }
+      }
+    }
+    .wc-find-car__btns {
+      position: relative;
+      margin: 0 rsh(20);
+      padding: rsh(20) 0;
+      font-size: rsh(20);
+      line-height: rsh(40);
+      display: flex;
+      align-items: center;
+      & > b {
+        width: 1px;
+        height: rsh(40);
+        background-color: $lineColor;
+        transform: scale(.5, 1);
+        flex-shrink: 0;
+      }
+      & > button {
+        width: 0;
+        flex-grow: 1;
+        & > i, & > span {
+          display: inline-block;
+          vertical-align: middle;
+        }
+        & > span {
+          margin-left: rsh(10);
+        }
+      }
+      &:before, &:after {
+        content: '';
+        display: block;
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background-color: $lineColor;
+        transform: scale(1, .5);
+      }
+      &:before {
+        top: 0;
+      }
+      &:after {
+        bottom: 0;
+      }
+    }
+    .wc-find-car__list {
+      & > section {
+        margin: 0 rsh(30) 0 rsh(40);
+        padding: rsh(35) 0 rsh(25) 0;
+        display: flex;
+        align-items: center;
+        .wc-find-car__list__face {
+          text-align: center;
+          flex-shrink: 0;
+          & > span {
+            line-height: rsh(28);
+            font-size: rsh(20);
+            color: #999;
+          }
+          & > i {
+            width: rsh(175);
+            height: rsh(90);
+          }
+        }
+        .wc-find-car__list__info {
+          width: 0;
+          flex-grow: 1;
+          margin: 0 rsh(30);
+          & > div {
+            display: flex;
+            align-items: center;
+            line-height: rsh(30);
+            font-size: rsh(24);
+            color: #999;
+            &:nth-child(2) {
+              margin: rsh(15) 0;
+            }
+            i {
+              display: inline-block;
+            }
+            .wc-find-car__list__info__num {
+              font-size: rsh(26);
+              color: #333;
+            }
+            .wc-find-car__list__info__place {
+              color: #bbb;
+              font-size: rsh(18);
+              border: 1px solid $lineColor;
+              border-radius: rsh(6);
+              padding: 0 rsh(5);
+              margin-left: rsh(10);
+            }
+            .wc-find-car__list__info__battery {
+              color: $batteryGreen;
+              margin-left: rsh(10);
+              margin-right: rsh(20);
+              font-size: rsh(26);
+              &.wc-find-car__list__info__battery--low {
+                color: $batteryRed;
+              }
+            }
+            .wc-find-car__list__info__distance {
+              font-size: rsh(20);
+              color: #666;
+            }
+            .wc-find-car__list__info__money {
+              color: $mainColor;
+            }
+          }
+        }
+        & > button {
+          flex-shrink: 0;
+          font-size: rsh(34);
+          color: #333;
+          width: rsh(100);
+          height: rsh(100);
+          border-radius: 50%;
+          line-height: rsh(100);
+          background: linear-gradient(120deg, #fce43d, #facd00);
+          box-shadow: 0 0 rsh(20) $baseShadowColor;
+        }
+      }
+    }
+  }
+</style>
+
+<template>
+  <div class="wc-find-car"
+       v-xy-pull-refresh="pullRefresh">
+    <div class="wc-card wc-card--full">
+      <div class="wc-find-car__location">
+        <section>
+          <div class="wc-find-car__location__place">
+            <b>{{detail.branchName}}</b>
+            <i class="icons-common-location-main-outer">
+              <div class="icons-common icons-common-location-main-inner"></div>
+            </i>
+            <span>距您 {{detail.distance | wcDistance}}</span>
+          </div>
+          <div class="wc-find-car__location__address">
+            {{detail.branchAddress}}
+          </div>
+        </section>
+        <button @click="onNav"
+                v-xy-moving-btn>
+          <i class="icons-common-nav-main-outer">
+            <div class="icons-common icons-common-nav-main-inner"></div>
+          </i>
+          <div>导航</div>
+        </button>
+      </div>
+      <div class="wc-find-car__btns"
+           style="display: none">
+        <button>
+          <i class="icons-common-car-main-outer">
+            <div class="icons-common icons-common-car-main-inner"></div>
+          </i>
+          <span>车辆数</span><span>{{detail.cars ? detail.cars.length : 0}}</span>
+        </button>
+        <b></b>
+        <button>
+          <i class="icons-common-p-main-outer">
+            <div class="icons-common icons-common-p-main-inner"></div>
+          </i>
+          <span>停车位</span><span>10</span>
+        </button>
+        <b></b>
+        <button>
+          <i class="icons-common-charger-main-outer">
+            <div class="icons-common icons-common-charger-main-inner"></div>
+          </i>
+          <span>充电桩</span><span>10</span>
+        </button>
+      </div>
+      <div class="wc-find-car__list">
+        <section v-for="item in detail.cars"
+                 :key="item.carId">
+          <div class="wc-find-car__list__face">
+            <i class="lazy-load">
+              <img v-lazy="item.carImg"
+                   class="lazy-contain">
+            </i>
+            <span>{{item.carModelName}}</span>
+          </div>
+          <div class="wc-find-car__list__info">
+            <div>
+              <span class="wc-find-car__list__info__num">{{item.carLpn}}</span>
+              <span class="wc-find-car__list__info__place">{{item.carSeatNum}}座</span>
+            </div>
+            <div>
+              <i :class="`icons-common-battery-${item.restBatteryRound}-outer`">
+                <div :class="`icons-common icons-common-battery-${item.restBatteryRound}-inner`"></div>
+              </i>
+              <span class="wc-find-car__list__info__battery"
+                    :class="{'wc-find-car__list__info__battery--low':item.restBattery<=20}">{{item.restBattery}}%</span>
+              <span class="wc-find-car__list__info__distance">续航{{item.enduranceMileage}}km</span>
+            </div>
+            <div>
+              <span class="wc-find-car__list__info__money">{{item.timeMoney}}</span>
+              <span>元/{{item.timeUnit > 1 ? item.timeUnit : ''}}分钟+ </span>
+              <span class="wc-find-car__list__info__money">{{item.mileageMoney}}</span>
+              <span>元/{{item.mileageUnit}}</span>
+            </div>
+          </div>
+          <button @click="onCar(item)"
+                  v-xy-moving-btn>
+            用车
+          </button>
+        </section>
+        <xy-list-status :status="status"
+                        :bottom="2">
+          <span slot="nomore">~ 没有更多了 ~</span>
+          <div class="wc-list-empty"
+               slot="empty">
+            <i class="icons-list-car-outer">
+              <div class="icons-list icons-list-car-inner"></div>
+            </i>
+            <span class="mall-list-status__span">亲，对不起，未能找到可用车辆...</span>
+          </div>
+        </xy-list-status>
+      </div>
+    </div>
+    <actionsheet v-model="addressShow"
+                 :menus="addressSelections"
+                 @on-click-menu="onAddressClick"></actionsheet>
+  </div>
+</template>
+
+<script>
+  import common from '~/mixins/common'
+  import seo from '~/mixins/seo'
+  import wxMixin from '~/mixins/wx-mixin'
+
+  export default {
+    mixins: [common, wxMixin, seo],
+    components: {},
+    data () {
+      return {
+        pageTitle: '网点选车',
+        startLoad: false,
+        //
+        id: '',
+        detail: {
+          fencePoints: [],
+          pictures: [],
+          car: []
+        },
+        status: '',
+        latitude: 0,
+        longitude: 0,
+        addressShow: false,
+        addressSelections: [
+          {
+            label: '百度地图',
+            value: 'baidu'
+          },
+          {
+            label: '高德地图',
+            value: 'gaode'
+          },
+          {
+            label: '腾讯地图',
+            value: 'tengxu'
+          }
+        ]
+      }
+    },
+    watch: {
+      '$store.state.wxAuthStatus': async function (v) {
+        let that = this
+        // 需要授权才可以加载的数据(授权比页面装载慢)
+        if (v && !that.startLoad) {
+          that.startLoad = true
+          //
+          await that.loadList()
+        }
+      }
+    },
+    methods: {
+      async pullRefresh (stop) {
+        let that = this
+        that.stop = stop
+        await that.loadList()
+        that.stop()
+      },
+      onNav () {
+        let that = this
+        that.addressShow = true
+      },
+      async onAddressClick (key) {
+        let that = this
+        that.$vux.loading.show({text: '请稍候'})
+        let temp = that.detail.gps.split(',')
+        await that.$wc.goToMap(key, parseFloat(temp[1]), parseFloat(temp[0]), that.detail.branchName, that.detail.branchAddress)
+        that.$vux.loading.hide()
+      },
+      async loadList () {
+        let that = this
+        if (that.id) {
+          let {success, bizContent} = await that.$api.warmcar['query/branch']({
+            branchId: that.id
+          })
+          if (success && bizContent) {
+            that.detail = bizContent
+            if (that.detail.cars && that.detail.cars.length > 0) {
+              that.status = ''
+              that.detail.cars = that.detail.cars.map(o => Object.assign(o, {
+                restBatteryRound: Math.ceil((o.restBattery <= 0 ? 1 : o.restBattery) / 20) * 20
+              }))
+            } else {
+              that.status = 'empty'
+            }
+            let temp = that.detail.gps.split(',')
+            let distance = 0
+            if (temp.length === 2) {
+              if (that.latitude && that.longitude) {
+                distance = that.$wc.getDistance(that.latitude, that.longitude, parseFloat(temp[1]), parseFloat(temp[0]))
+              } else {
+                distance = that.$wc.getDistance(that.$store.state.getCar.latitude, that.$store.state.getCar.longitude, parseFloat(temp[1]), parseFloat(temp[0]))
+              }
+            }
+            that.detail.distance = distance
+          } else {
+            that.detail = {
+              fencePoints: [],
+              pictures: [],
+              car: []
+            }
+            that.status = 'empty'
+          }
+        } else {
+          that.$router.go(-1)
+        }
+      },
+      onCar (item) {
+        let that = this
+        that.$store.commit('getCar', {
+          branchDetail: that.detail,
+          carDetail: item
+        })
+        that.$store.dispatch('clearState', 'returnCar')
+        that.$router.push(`/car?id=${item.carId}`)
+      }
+    },
+    async created () {
+      let that = this
+      that.id = that.$route.query.id
+      that.latitude = parseFloat(that.$route.query.la)
+      that.longitude = parseFloat(that.$route.query.lo)
+      // 需要授权才可以加载的数据(授权比页面装载快)
+      if (that.$store.state.wxAuthStatus && !that.startLoad) {
+        that.startLoad = true
+        //
+        await that.loadList()
+      }
+      // 无需授权可以提前加载的数据
+
+    }
+  }
+</script>

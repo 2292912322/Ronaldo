@@ -1,0 +1,170 @@
+export default [
+  {
+    //   phone	手机号码	是	String	用户登录手机号码	纯11位的数字
+    //   nickName	客户昵称	是	String
+    //   headImg	头像	是	String		URL
+    //   certificationStatus	用户认证状态	是	String		0
+    //   moneyStatus	资产状态	是	String		0
+    //   sex	性别	是	String		0
+    name: 'login_register',
+    desc: '会员注册接口',
+    path: '/v206/home/warmcar_customer_login_register_service',
+    mockPath: '',
+    params: {
+      phone: '', // 手机号码	是	String	用户登录手机号码	纯11位的数字
+      verificationCode: '', // 验证码	是	String	用户收到的短信验证码	纯数字
+      terminalType: '06', // 终端类型	是	String	"01"android "02"IOS
+      cityCode: ''
+    },
+    cache: false
+  },
+  {
+    name: 'send_verification_code',
+    desc: '发送验证码',
+    path: '/v206/home/warmcar_customer_send_verification_code_service',
+    mockPath: '',
+    params: {
+      phone: '' // 手机号码	是	String	用户登录手机号码	纯11位的数字
+    },
+    cache: false
+  },
+  {
+    // orderId	订单号	是	int
+    // currentTimeStamp	服务器当前时间(本地时间)	是	long
+    // appointmentTimeStamp	订单预约时间	是	long
+    // sysCancelTimeStamp	系统自动取消时间	是	long		1
+    name: 'appointment_car',
+    desc: '预约车辆',
+    path: '/v206/control/warmcar_customer_appointment_car_service',
+    mockPath: '',
+    params: {
+      carId: 0,//	车辆ID	是	int
+      appointmentType: '',//	预约方式	是	String		01表示APP终端下单，02表示平台下单
+      appointmentReturnCarBranchId: 0,//	预约还车网点	是	int		1
+      switchDisregard: '',//	是否选择不计免赔	是	String		1 选择， 0不选择
+      packagesId: 0,//	价格套餐ID	是	int		1
+      disregardId: 0//	不计免赔ID	是	int		1
+    },
+    cache: false
+  },
+  {
+    name: 'cancel_appointment_car',
+    desc: '取消预约车辆',
+    path: '/v206/control/warmcar_customer_cancel_appointment_car_service',
+    mockPath: '',
+    params: {
+      orderId: 0,//		订单号	是	int
+      cancelStatus: '',//		取消状态	是	string		APP端固定值为： 02
+      cancelOrderRemark: '',//		取消备注	是	string
+      cancelOrderReason: ''//		取消原因（多个用英文逗号相隔）	是	string		参照37号接口
+    },
+    cache: false
+  },
+  {
+    name: 'whistle_find_car',
+    desc: '鸣笛找车',
+    path: '/v206/control/warmcar_customer_whistle_find_car_service',
+    mockPath: '',
+    params: {
+      orderId: 0//		订单号	是	int
+    },
+    cache: false
+  },
+  {
+    name: 'open_door',
+    desc: '开门',
+    path: '/v206/control/warmcar_customer_open_door_service',
+    mockPath: '',
+    params: {
+      orderId: 0//		订单号	是	int
+    },
+    cache: false
+  },
+  {
+    name: 'close_door',
+    desc: '关门',
+    path: '/v206/control/warmcar_customer_close_door_service',
+    mockPath: '',
+    params: {
+      orderId: 0//		订单号	是	int
+    },
+    cache: false
+  },
+  {
+    name: 'balance_unified_order',
+    desc: '充值余额',
+    path: '/v206/customer/warmcar_customer_balance_unified_order_service',
+    mockPath: '',
+    params: {
+      money:'',//金额	是	int		单位分
+      bankType:''//	银行类型	是	String		01支付宝， 02微信
+    },
+    cache: false
+  },
+  {
+    name: 'deposit_unified_order',
+    desc: '充值保证金',
+    path: '/v206/customer/warmcar_customer_deposit_unified_order_service',
+    mockPath: '',
+    params: {
+      money:'',//金额	是	int		单位分
+      bankType:''//	银行类型	是	String		01支付宝， 02微信
+    },
+    cache: false
+  },
+  {
+    // [正常]
+    // takeCarTime	取车时间	是	long	取车时间的时间戳
+    //
+    // [异常]
+    // orderStatus	订单状态	是	String	订单状态
+    name: 'take_car',
+    desc: '取车',
+    path: '/v206/control/warmcar_customer_take_car_service',
+    mockPath: '',
+    params: {
+      orderId: 0,//	订单ID	是	int
+      imgs: []//	照片数组	是	Array, fileURL	文件路径	是	String
+    },
+    cache: false
+  },
+  {
+    // orderId	订单号	是	int		
+    // carId	车辆ID	是	int		
+    // orderMny	需要支付金额	是	int		
+    // costList	费用清单	是	array		- // name	名称	是	String		// value	值	是	int		-
+    // switchCoupon	是否开启优惠券入口	是	string		1 选择， 0不选择
+    //[异常] orderStatus	订单状态	是	String	订单状态	-
+    name: 'return_car',
+    desc: '还车',
+    path: '/v206/control/warmcar_customer_return_car_service',
+    mockPath: '',
+    params: {
+      orderId:'',//	订单号	是	int		
+      returnBranchId:'',//		还车网点ID	是	int		
+      returnCarType:'',//		还车方式	是	String	01 app还车	01
+      phoneLng:'',//		手机精度	是	String		-
+      phoneLat:'',//		手机纬度	是	String		-
+      imgs:[],//		照片数组	是	Array		-
+    },
+    cache: false
+  },
+  {
+    // orderId	订单号	是	int		
+    // carId	车辆ID	是	int		
+    // orderMny	需要支付金额	是	int		
+    // costList	费用清单	是	array		- // name	名称	是	String		// value	值	是	int		-
+    // switchCoupon	是否开启优惠券入口	是	string		1 选择， 0不选择
+    //[异常] orderStatus	订单状态	是	String	订单状态	-
+    name: 'coerce_return_car',
+    desc: '强制还车',
+    path: '/v206/control/warmcar_customer_coerce_return_car_service',
+    mockPath: '',
+    params: {
+      orderId:'',//	订单号	是	int		
+      returnBranchId:'',//	还车网点ID	是	int		1
+      imgs:'',//	照片数组	是	Array		-
+    },
+    cache: false
+  }
+]

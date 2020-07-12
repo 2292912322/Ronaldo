@@ -1,0 +1,168 @@
+<style lang="scss">
+  @import "~vue-xy-ui/dist/mixin";
+  @import "~assets/scss/value";
+
+  .wc-find-city {
+    font-size: rsh(24);
+    line-height: rsh(100);
+    & > header {
+      padding: 0 rsh(40);
+      display: flex;
+      align-items: center;
+      & > span {
+        width: 0;
+        flex-grow: 1;
+      }
+      & > i {
+        flex-shrink: 0;
+      }
+    }
+    & > label {
+      display: flex;
+      background-color: #f1f1f1;
+      line-height: rsh(60);
+      font-size: rsh(24);
+      padding: 0 rsh(40);
+      & > div {
+        width: 0;
+        flex-grow: 1;
+      }
+      & > a {
+        flex-shrink: 0;
+        color: #999;
+        display: flex;
+        align-items: center;
+        & > i {
+          margin-left: rsh(15);
+        }
+      }
+    }
+    .wc-find-city__list {
+      position: relative;
+      & > section {
+        padding: 0 rsh(40);
+        position: relative;
+        &:after {
+          content: '';
+          display: block;
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          height: 1px;
+          background-color: $lineColor;
+          transform: scale(1, .5);
+        }
+        & > i {
+          font-style: normal;
+          line-height: rsh(25);
+          color: $mainColor;
+          font-size: rsh(18);
+          border: 1px solid $mainColor;
+          border-radius: rsh(6);
+          padding: 0 rsh(6);
+          margin-left: rsh(10);
+        }
+      }
+    }
+  }
+</style>
+
+<template>
+  <div class="wc-find-city">
+    <header>
+      <span v-show="current">取车城市:&nbsp;{{current}}</span>
+    </header>
+    <label>
+      <div>选择还车城市</div>
+      <a :href="$store.state.systemInfo.params['warmcar.price.config.info']"
+         v-xy-moving-btn>
+        <span>跨区服务费详情</span>
+        <i class="icons-common-question-small-outer">
+          <div class="icons-common icons-common-question-small-inner"></div>
+        </i>
+      </a>
+    </label>
+    <div class="wc-find-city__list">
+      <section v-for="item in list"
+               @click="onSelect(item)"
+               :key="item.cityCode"
+               v-xy-hover-btn>
+        <span>
+          {{item.returnTeamShowName}}
+        </span>
+        <i v-if="item.money>0">
+          跨城服务费
+        </i>
+      </section>
+    </div>
+  </div>
+</template>
+
+<script>
+  import common from '~/mixins/common'
+  import seo from '~/mixins/seo'
+  import wxMixin from '~/mixins/wx-mixin'
+  import pinyin from 'js-pinyin'
+  import wcService from '~/mixins/service'
+
+  export default {
+    mixins: [common, wxMixin, seo, wcService],
+    components: {},
+    data () {
+      return {
+        pageTitle: '选择城市',
+        startLoad: false,
+        //
+        list: [],
+        current: ''
+      }
+    },
+    watch: {
+      '$store.state.wxAuthStatus': async function (v) {
+        let that = this
+        // 需要授权才可以加载的数据(授权比页面装载慢)
+        if (v && !that.startLoad) {
+          that.startLoad = true
+          //
+          await that.loadList()
+        }
+      }
+    },
+    methods: {
+      async loadList () {
+        let that = this
+        let {success, bizContent} = await that.$api.warmcar['query/return_car_city_list']({
+          carId: that.$store.state.getCar.carDetail.carId,
+          appointmentBranchId: that.$store.state.getCar.branchId
+        })
+        if (success && bizContent) {
+          let {cityInfo, appointmentTeamShowName} = bizContent
+          that.current = appointmentTeamShowName
+          let pl = cityInfo.map(o => Object.assign(o, {
+            char: pinyin.getCamelChars(o.returnTeamShowName)[0],
+            latitude: parseFloat(o.teamGps.split(',')[1]),
+            longitude: parseFloat(o.teamGps.split(',')[0])
+          }))
+          that.list = pl
+        }
+      },
+      onSelect (item) {
+        let that = this
+        that.$store.dispatch('clearState', 'returnCar')
+        that.$store.commit('returnCar', item)
+        that.$router.go(-1)
+      }
+    },
+    async mounted () {
+      let that = this
+      // 需要授权才可以加载的数据(授权比页面装载快)
+      if (that.$store.state.wxAuthStatus && !that.startLoad) {
+        that.startLoad = true
+        //
+        await that.loadList()
+      }
+      // 无需授权可以提前加载的数据
+    }
+  }
+</script>

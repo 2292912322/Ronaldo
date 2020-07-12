@@ -1,0 +1,66 @@
+<style lang="scss">
+  @import "~vue-xy-ui/dist/mixin";
+</style>
+
+<template>
+  <div>
+    <!-- 用vux的input吧, 通过覆盖样式满足需求 -->
+    <x-input placeholder="输入手机号"
+             v-model="phone"></x-input>
+    <x-input placeholder="输入验证码"
+             v-model="captcha">
+      <button slot="right"
+              @click="onCaptcha"
+              v-xy-moving-btn>获取验证码
+      </button>
+    </x-input>
+    <button class="wc-btn wc-btn--yellow wc-btn--w600 wc-btn--h85"
+            @click="onSubmit"
+            v-xy-moving-btn>立即登录
+    </button>
+  </div>
+</template>
+
+<script>
+  import common from '~/mixins/common'
+  import seo from '~/mixins/seo'
+  import wxMixin from '~/mixins/wx-mixin'
+
+  export default {
+    mixins: [common, wxMixin, seo],
+    components: {},
+    data () {
+      return {
+        pageTitle: '登录',
+        phone: '',
+        captcha: ''
+      }
+    },
+    watch: {
+      '$store.state.wxAuthStatus': function (v) {
+        let that = this
+        // 需要授权才可以加载的数据(授权比页面装载慢)
+        if (v) {
+          // console.log(`%c${that.$route.fullPath} wxAuthStatus`, 'font-size:20px;color:blue;')
+        }
+      }
+    },
+    methods: {
+      onCaptcha () {
+        let that = this
+      },
+      onSubmit () {
+        let that = this
+      }
+    },
+    created () {
+      let that = this
+      that.type = that.$route.params.type
+      // 需要授权才可以加载的数据(授权比页面装载快)
+      if (that.$store.state.wxAuthStatus) {
+        // console.log(`%c${that.$route.fullPath} created`, 'font-size:20px;color:blue;')
+      }
+      // 无需授权可以提前加载的数据
+    }
+  }
+</script>

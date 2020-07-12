@@ -1,0 +1,156 @@
+<style lang="scss">
+@import "~vue-xy-ui/dist/mixin";
+@import "~assets/scss/value";
+
+.wc-charge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .wc-charge-card {
+    width: rsh(710);
+    display: flex;
+    flex-direction: column;
+    .wc-charge__top {
+      display: flex;
+      flex-direction: row;
+
+      & > i {
+        margin: rsh(20) rsh(10) rsh(10) rsh(20);
+      }
+
+      & > span {
+        font-size: rsh(25);
+        color: #666666;
+        margin-top: rsh(20);
+      }
+    }
+    & > span {
+      font-size: rsh(20);
+      color: #c3c3c3;
+      margin-left: rsh(22);
+      margin-bottom: rsh(20);
+      letter-spacing: rsh(2);
+    }
+    .wc-charge__photo {
+      display: flex;
+      flex-direction: row;
+      width: rsh(710);
+      .wc-charge__photo__item {
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        & > span{
+          font-size: rsh(22);
+          color: #666666;
+          margin-top: rsh(10)
+        }
+      }
+    }
+    .wc-charge__input{
+      display: flex;
+      flex-direction: column;
+      padding-bottom: rsh(30);
+      & > label{
+        font-size: rsh(28);
+        color: #666666;
+        margin: rsh(40) 0 rsh(20) rsh(30);
+      }
+      .wc-charge__input--border{
+        width: rsh(645);
+        height: rsh(72);
+        margin: 0 auto;
+        border: 2px solid #e5e5e5;
+        border-radius:5px; 
+      }
+      
+    }
+  }
+  & > span{
+    font-size: rsh(24);
+    color: #999999;
+    width: rsh(668);
+    text-indent: rsh(20);
+  }
+  & > button{
+    margin-top: rsh(380)
+  }
+}
+</style>
+
+<template>
+  <div class="wc-charge">
+    <div class="wc-card wc-charge-card">
+      <div class="wc-charge__top">
+          <i class="icons-common-camera-outer">
+            <div class="icons-common icons-common-camera-inner"></div>
+          </i>
+          <span>车辆内饰拍照</span>
+          <span>&nbsp; &nbsp; 0/2</span>
+        </div>
+        <span>请按以下示意图拍摄车辆内饰照片&nbsp;&nbsp;(必选)</span>
+        <div class="wc-charge__photo">
+          <div class="wc-charge__photo__item">
+             <i class="icons-car-charge-gun-outer">
+            <div class="icons-car icons-car-charge-gun-inner"></div>
+          </i>
+          <span>正确插入充电枪且仪表盘灯亮</span>
+          </div>
+          <div class="wc-charge__photo__item">
+             <i class="icons-car-serial-num-outer">
+            <div class="icons-car icons-car-serial-num-inner"></div>
+          </i>
+          <span>请确保序列号拍摄清晰</span>
+          </div>
+        </div>
+        <div class="wc-charge__input">
+          <label >输入枪编码:</label>
+          <div>
+            <x-input class="wc-charge__input--border"></x-input>
+          </div>
+        </div>
+    </div>
+    <span>提交申请后，我们将在1个工作日内核实并发放优惠劵，如有疑问，请联系客服</span>
+     <button class="wc-btn wc-btn--yellow wc-btn--w600 wc-btn--h85"
+            v-xy-moving-btn>提交
+    </button>
+  </div>
+</template>
+
+<script>
+import common from "~/mixins/common";
+import seo from "~/mixins/seo";
+import wxMixin from "~/mixins/wx-mixin";
+
+export default {
+  mixins: [common, wxMixin, seo],
+  components: {},
+  data() {
+    return {
+      pageTitle: "充电领红包",
+      startLoad: false
+      //
+    };
+  },
+  watch: {
+    "$store.state.wxAuthStatus": function(v) {
+      let that = this;
+      // 需要授权才可以加载的数据(授权比页面装载慢)
+      if (v && !that.startLoad) {
+        that.startLoad = true;
+        //
+      }
+    }
+  },
+  methods: {},
+  created() {
+    let that = this;
+    // 需要授权才可以加载的数据(授权比页面装载快)
+    if (that.$store.state.wxAuthStatus && !that.startLoad) {
+      that.startLoad = true;
+      //
+    }
+    // 无需授权可以提前加载的数据
+  }
+};
+</script>

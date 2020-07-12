@@ -1,0 +1,4 @@
+var XY_APP_NAME = ''
+var XY_WX_APPID = 'wxeef3ba2a59f4aa5e'
+var XY_API = 'https://warmcar.com/'
+var XY_KEY = 'bb6c3e32c79862e135fe55bb20ce90f9'

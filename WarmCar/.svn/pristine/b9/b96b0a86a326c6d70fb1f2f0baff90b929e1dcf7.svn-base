@@ -1,0 +1,341 @@
+let cfg = require('./static/config')
+let path = require('path')
+const vuxLoader = require('vux-loader')
+// const CleanWebpackPlugin = require('clean-webpack-plugin')
+let SpritesmithPlugin = require('webpack-spritesmith')
+let SpritesmithConfig = {
+  spritesmithOptions: {
+    padding: 6
+  },
+  customTemplates: {
+    'function_based_template': function (data) {
+      // console.log(data)
+      // console.log('spritesheet:', data.spritesheet.width, data.spritesheet.height)
+      let name = data.spritesheet.image.match(/\/([^\/]*?)\.png$/)[1]
+      if (data.sprites.length > 0) {
+        var shared = `.${name} { background-image: url(${data.sprites[0].image}); background-size: ${(data.spritesheet.width / 750 * 100).toFixed(2)}vw ${(data.spritesheet.height / 750 * 100).toFixed(2)}vw; background-repeat: no-repeat; }`
+        // var shared = '.icons { background-image: url(I); background-size: Wpx Hpx; transform:scale(0.5);transform-origin: 0 0;}'
+        // .replace('W', data.spritesheet.width)
+        // .replace('H', data.spritesheet.height)
+
+        var perSprite = data.sprites.map(function (sprite) {
+          // console.log(sprite.name + ':' + sprite.width + ',' + sprite.height)
+          // return '.icons-N { width: Wvw; height: Hvw; background-position: Xvw Yvw; }'
+          return `.${name}-${sprite.name}-outer {width: calc(${(sprite.width / 750 * 100).toFixed(2)}vw + 2px); height: calc(${(sprite.height / 750 * 100).toFixed(2)}vw + 2px);}\n.${name}-${sprite.name}-inner { width: calc(${(sprite.width / 750 * 100).toFixed(2)}vw + 2px); height: calc(${(sprite.height / 750 * 100).toFixed(2)}vw + 2px); background-position: calc(${(sprite.offset_x / 750 * 100).toFixed(2)}vw + 1px) calc(${(sprite.offset_y / 750 * 100).toFixed(2)}vw + 1px); }`
+          // return '.icons-N { width: Wpx; height: Hpx; background-position: Xpx Ypx; } .icons-ct-N2 {width: W2px; height: H2px;}'
+          // .replace('W', sprite.width)
+          // .replace('H', sprite.height)
+          // .replace('W2', sprite.width / 2)
+          // .replace('H2', sprite.height / 2)
+          // .replace('X', sprite.offset_x)
+          // .replace('Y', sprite.offset_y)
+        })
+                            .join('\n')
+
+        return shared + '\n' + perSprite
+      } else {
+        return ''
+      }
+    }
+  }
+}
+
+let routeBase = ''
+
+module.exports = {
+  // cache: true,
+  // transition: {
+  //   name: 'page',
+  //   mode: 'out-in',
+  //   css:true,
+  //   beforeEnter (el) {
+  //   },
+  //   enter (el, done) {
+  //   },
+  //   afterEnter (el) {
+  //   },
+  //   enterCancelled (el) {
+  //   },
+  //   beforeLeave (el) {
+  //   },
+  //   leave (el, done) {
+  //   },
+  //   afterLeave (el) {
+  //   },
+  //   leaveCancelled (el) {
+  //   }
+  // },
+  /*
+  ** Headers of the page
+  */
+  head: {
+    title: '',
+    meta: [
+      {charset: 'utf-8'},
+      {
+        name: 'viewport',
+        content: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover'
+      },
+      {
+        hid: 'description',
+        name: 'description',
+        content: ''
+      },
+      {
+        name: 'apple-mobile-web-app-capable',
+        content: 'yes'
+      },
+      {
+        name: 'apple-mobile-web-app-status-bar-style',
+        content: 'black'
+      },
+      {
+        name: 'format-detection',
+        content: 'telephone=no'
+      },
+      {
+        'http-equiv': 'x-rim-auto-match',
+        content: 'none'
+      }
+    ],
+    link: [
+      {
+        rel: 'icon',
+        type: 'image/x-icon',
+        href: `${routeBase}/favicon.ico`
+      }
+    ],
+    script: [
+      {src: `${routeBase}/config.js?${(new Date()).getTime()}`},
+      {src: `${routeBase}/jweixin-1.4.0.js`},
+      {src: `//api.map.baidu.com/api?ak=EkXGzQKEDKNgkDvx50vGQTiExI35OIUH&type=lite&v=1.0`},
+      {src: 'http://api.map.baidu.com/library/EventWrapper/1.2/src/EventWrapper.js'}
+    ]
+  },
+  /*
+  ** Customize the progress bar color
+  */
+  loading: './node_modules/vue-xy-ui/dist/nuxt/xy-page-progress.vue',
+  /*
+  ** Build configuration
+  */
+  build: {
+    /*
+    ** Run ESLint on save
+    */
+    extend (config, {isDev, isClient}) {
+      // 此处用于支持内部使用Vue.extend
+      config.resolve.alias['vue'] = 'vue/dist/vue.esm.js'
+      if (isDev && isClient) {
+        config.module.rules.push({
+          enforce: 'pre',
+          test: /\.(js|vue)$/,
+          loader: 'eslint-loader',
+          exclude: /(node_modules)/
+        })
+        // config.module.rules.push({
+        //   rules: [
+        //     {
+        //       test: /\.postcss$/,
+        //       use: [
+        //         'vue-style-loader',
+        //         'css-loader',
+        //         {
+        //           loader: 'postcss-loader'
+        //         }
+        //       ]
+        //     }
+        //   ]
+        // })
+      }
+      // 这里主要为vux坑爹没有转换的坑, 导致就安卓运行失败.
+      config.module.rules.push({
+        test: /\.js$/,
+        loader: 'babel-loader',
+        include: path.resolve(__dirname, './node_modules/vux/src'),
+        options: {
+          'presets': ['vue-app']
+        }
+      })
+      config.plugins.push(new SpritesmithPlugin(Object.assign(SpritesmithConfig, {
+        src: {
+          cwd: path.resolve(__dirname, 'assets/imgs/common/icons'),
+          glob: '*.png'
+        },
+        target: {
+          image: path.resolve(__dirname, 'assets/imgs/icons-common.png'),
+          css: [
+            [
+              path.resolve(__dirname, 'assets/style/icons-common.css'), {format: 'function_based_template'}
+            ]
+          ]
+        },
+        apiOptions: {
+          cssImageRef: '~/assets/imgs/icons-common.png',
+          name: 'common'
+        },
+        options: {
+          test: '123'
+        }
+      })))
+      config.plugins.push(new SpritesmithPlugin(Object.assign(SpritesmithConfig, {
+        src: {
+          cwd: path.resolve(__dirname, 'assets/imgs/auth/icons'),
+          glob: '*.png'
+        },
+        target: {
+          image: path.resolve(__dirname, 'assets/imgs/icons-auth.png'),
+          css: [
+            [
+              path.resolve(__dirname, 'assets/style/icons-auth.css'), {format: 'function_based_template'}
+            ]
+          ]
+        },
+        apiOptions: {
+          cssImageRef: '~/assets/imgs/icons-auth.png',
+          name: 'auth'
+        },
+        options: {
+          test: '123'
+        }
+      })))
+      config.plugins.push(new SpritesmithPlugin(Object.assign(SpritesmithConfig, {
+        src: {
+          cwd: path.resolve(__dirname, 'assets/imgs/car/icons'),
+          glob: '*.png'
+        },
+        target: {
+          image: path.resolve(__dirname, 'assets/imgs/icons-car.png'),
+          css: [
+            [
+              path.resolve(__dirname, 'assets/style/icons-car.css'), {format: 'function_based_template'}
+            ]
+          ]
+        },
+        apiOptions: {
+          cssImageRef: '~/assets/imgs/icons-car.png',
+          name: 'car'
+        },
+        options: {
+          test: '123'
+        }
+      })))
+      config.plugins.push(new SpritesmithPlugin(Object.assign(SpritesmithConfig, {
+        src: {
+          cwd: path.resolve(__dirname, 'assets/imgs/list/icons'),
+          glob: '*.png'
+        },
+        target: {
+          image: path.resolve(__dirname, 'assets/imgs/icons-list.png'),
+          css: [
+            [
+              path.resolve(__dirname, 'assets/style/icons-list.css'), {format: 'function_based_template'}
+            ]
+          ]
+        },
+        apiOptions: {
+          cssImageRef: '~/assets/imgs/icons-list.png',
+          name: 'list'
+        },
+        options: {
+          test: '123'
+        }
+      })))
+
+      config = vuxLoader.merge(config, {
+        plugins: ['vux-ui']
+      })
+
+      // if (!isDev) {
+      //   config.plugins.push(new CleanWebpackPlugin(['dist/test.mp4', 'dist/test.pdf'], {}))
+      // }
+    },
+    // babel: {
+    // 'presets': [
+    //   [
+    //     'env', {
+    //     'targets': {
+    //       'browsers': ['Android >= 4.0', 'ios >= 6']
+    //     },
+    //     'debug': true
+    //   }
+    //   ]
+    //   'vue-app',
+    //   [
+    //     'env', {
+    //     'targets': {
+    //       'browsers': ['Android >= 4.0', 'ios >= 6']
+    //     },
+    //     'debug': true
+    //   }
+    //   ]
+    // ],
+    // 'plugins': [
+    //   [
+    //     'transform-runtime', {
+    //     'polyfill': true,
+    //     'regenerator': true
+    //   }
+    //   ]
+    // ]
+    // },
+    vendor: [
+      // 兼容公用
+      'babel-polyfill',
+      // 功能相关公用
+      './plugins',
+      './service/api',
+      './mixins/common',
+      './mixins/wx-mixin',
+      './mixins/seo',
+      './mixins/vux-validate'
+    ],
+    //抽出"css"中设置的第三方样式
+    extractCSS: true,
+    //修改打包路径
+    publicPath: '/site/',
+    // assetsPublicPath
+    // postcss: [
+    //   require('postcss-for')(),// 必须在postcss-nested和postcss-simple-vars之上
+    //   require('postcss-nested')(),
+    //   require('postcss-simple-vars')()
+    //
+    //   //   require('postcss-responsive-type')(),
+    //   //   require('postcss-hexrgba')(),
+    //   //   require('postcss-salad')()
+    // ]
+  },
+  //...无需重复打包的包(可以通过"npm run build-a"对比打包结果)
+  //EventSource的polyfill
+  //先注释掉生成一次, 再取消注释, 就不会报错了
+  css: [
+    './node_modules/vue-xy-ui/dist/style/normalize-8.0.0.css',
+    '~/assets/style/icons-common.css',
+    '~/assets/style/icons-car.css',
+    '~/assets/style/icons-list.css',
+    '~/assets/style/icons-auth.css'
+  ],
+  router: {
+    // middleware: ['test'],
+    mode: 'hash',
+    base: routeBase,
+    scrollBehavior: function (to, from, savedPosition) {
+      return {
+        x: 0,
+        y: 0
+      }
+    },
+    middleware: ['stats', 'point']
+  },
+  render: {
+    //取消预读prefetch功能(就是首次加载, prefetch一堆后续可能会加载的js, 真正跳转到需要这些js的页面就可以直接从缓存中获取已经预读过的js文件)
+    //首次加载会预读多一堆的js, 虽然优先级低, 不过如果浏览器当前性能低, 并发下载js时可能会卡顿.
+    //这一堆的js, 是每个page的独立的逻辑js, size都很小, 即使不prefetch, 暂时几乎无感.
+    //如果出现了跳转的卡顿, 可以考虑恢复为true
+    //该配置会影响一些网站测试工具, 误以为过多的js文件.
+    resourceHints: false
+  },
+  plugins: [
+    '~/plugins/route-record', '~/plugins/http', '~/plugins'
+  ]
+}

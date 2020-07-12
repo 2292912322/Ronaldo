@@ -1,0 +1,18 @@
+@import "~vue-xy-ui/dist/mixin";
+@import "~assets/scss/value";
+
+.container {
+  .weui-input {
+    &::-webkit-input-placeholder {
+      font-size: rsh(26);
+      color: $placeholderColor;
+    }
+  }
+
+  .weui-cell {
+    &:before {
+      border-top: 1px solid $inputLineColor;
+      left: 0;
+    }
+  }
+}

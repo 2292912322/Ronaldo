@@ -1,0 +1,24 @@
+export default [
+  {
+    // session
+    //
+    name: 'file_upload',
+    desc: '文件上传接口',
+    path: '/v206/file/warmcar_file_update_service',
+    mockPath: '',
+    params: {
+      fileDir: '',//服务器文件目录
+      file: [] //图片
+    },
+    cache: false,
+    contentType: 'multipart/form-data'
+  },
+  {
+    name: 'get_baiduai_access_token',
+    desc: '获取百度AI access_token',
+    path: '/v206/home/wamcar_get_baiduai_access_token_service',
+    mockPath: '',
+    params: {},
+    cache: false
+  }
+]

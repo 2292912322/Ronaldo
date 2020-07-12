@@ -1,0 +1,153 @@
+<style lang="scss">
+@import "~vue-xy-ui/dist/mixin";
+
+.wc-upload {
+  /*width: rsh(710);*/
+  /*height: rsh(200);*/
+  & > i {
+    display: block;
+    position: relative;
+    & > input {
+      display: block;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+    }
+  }
+  .lazy-img {
+    width: rsh(320);
+    height: rsh(190);
+  }
+}
+</style>
+
+<template>
+  <div class="wc-upload">
+    <i :class="!fileURL['1'] ? 'icons-auth-cn-back-outer' : 'lazy-load lazy-img'">
+      <div class="icons-auth icons-auth-cn-back-inner"
+           v-if="!fileURL['1']"></div>
+      <img v-lazy="fileURL['1']"
+           class="lazy-cover"
+           v-if="fileURL['1']">
+      <input type="file"
+             @change="onUploadChange"
+             :data-id='1'
+             accept="image/*">
+    </i>
+    <!-- <i :class="fileURL['2'] ?'lazy-load lazy-img' :'icons-auth-cn-front-outer'">
+      <div class="icons-auth icons-auth-cn-front-inner"
+           v-if="!fileURL['2']"></div>
+      <img v-lazy="fileURL['2']"
+           class="lazy-cover"
+           v-if="fileURL['2']">
+      <input type="file"
+             @change="onUploadChange"
+             :data-id='2'
+             accept="image/*">
+    </i> -->
+    <div>
+      <!-- {{JSON.stringify(accessToken)}} -->
+       <!-- {{JSON.stringify(imageBase)}} -->
+    </div>
+  </div>
+</template>
+
+<script>
+  import common from '~/mixins/common'
+  import seo from '~/mixins/seo'
+  import wxMixin from '~/mixins/wx-mixin'
+  import parseData from '~/service/parseData'
+  import components from "~/plugins/components"
+
+  export default {
+    mixins: [common, wxMixin, seo],
+    components: {},
+    data () {
+      return {
+        pageTitle: '图片上传demo',
+        startLoad: false,
+        phone: '',
+        verificationCode: '',
+        terminalType: '',
+        signed: '',
+        fileDir: 'userValidateCarH5',
+        fileURL: {},
+        accessToken:'',
+        imageBase:''
+      }
+    },
+    watch: {
+      '$store.state.wxAuthStatus': function (v) {
+        let that = this
+        // 需要授权才可以加载的数据(授权比页面装载慢)
+        if (v && !that.startLoad) {
+          that.startLoad = true
+          //
+        }
+      }
+    },
+    methods: {
+      //获取百度AI access_token
+       async getAccessToken(){
+         let that = this
+         let {
+            success,
+            bizContent
+          } = await that.$api.common["upload/get_baiduai_access_token"]({});
+          if(success){
+            let {accessToken} = bizContent
+            that.accessToken = accessToken
+          }
+      },
+      //单图片上传
+       onUploadChange ({currentTarget}) {
+        let {
+              files,
+              dataset: {id}
+            } = currentTarget
+        let that = this
+        var reader = new FileReader();
+            reader.readAsDataURL(files[0]);
+            reader.onload = function (e) {
+            var imageBase = encodeURIComponent(e.target.result.replace("data:image/png;base64,",""));
+            // let accessToken = that.accessToken;
+            var id_card_side = 'front';
+            components.getIdcard(that.accessToken,'front',imageBase).then(function(values){
+          console.log(values)
+        })
+            }
+      //   let valid = false
+      //   for (let f of files) {
+      //     if (!valid && !/^image\//.test(f.type)) {
+      //       valid = true
+      //     }
+      //   }
+      //   if (valid) {
+      //     that.$wc.toast(`仅能上传图片文件`)
+      //   } else {
+      //     that.$vux.loading.show({text: '正在上传'})
+      //     let {bizContent} = await that.$api.common['upload/file_upload']({
+      //       file: files,
+      //       fileDir: that.fileDir
+      //     })
+      //      that.$set(that.fileURL, id, bizContent[0].fileURL)
+      //   }
+      //   that.$vux.loading.hide()
+      }
+    },
+    created () {
+      let that = this
+      that.getAccessToken();
+      that.type = that.$route.params.type
+      // 需要授权才可以加载的数据(授权比页面装载快)
+      if (that.$store.state.wxAuthStatus && !that.startLoad) {
+        that.startLoad = true
+        //
+      }
+      // 无需授权可以提前加载的数据
+    }
+  }
+</script>

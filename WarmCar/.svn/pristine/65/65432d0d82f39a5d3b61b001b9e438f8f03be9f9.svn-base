@@ -1,0 +1,339 @@
+<style lang="scss">
+@import "~vue-xy-ui/dist/mixin";
+@import "~assets/scss/value";
+.wc-returnCar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .wc-returnCar-card__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    width: rsh(710);
+    font-size: rsh(30);
+    color: #333333;
+    .wc-returnCar-card__header__item {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      width: rsh(663);
+      height: rsh(125);
+      &:first-child {
+        &:after {
+          content: "";
+          display: block;
+          position: absolute;
+          top: rsh(125);
+          left: rsh((710-663)/2);
+          width: rsh(663);
+          height: 1px;
+          background-color: $inputLineColor;
+          transform: scale(1, 0.5);
+        }
+      }
+      & > label {
+        margin-left: rsh(20);
+      }
+      & > span {
+        &:first-of-type {
+          width: 0;
+          flex-grow: 1;
+        }
+      }
+      & > i {
+        margin-right: rsh(8);
+        margin-left: rsh(20);
+      }
+      .wc-nav-text {
+        font-size: rsh(28);
+        color: #666666;
+      }
+    }
+  }
+  .wc-returnCar-card__body {
+    width: rsh(710);
+    height: rsh(120);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    & > i {
+      margin-left: rsh((710-663)/2+20);
+      margin-right: rsh(20);
+    }
+    .wc-returnCar-card__body__block {
+      display: block;
+      font-size: rsh(18);
+      color: #fe5f53;
+      width: rsh(49);
+      height: rsh(30);
+      text-align: center;
+      line-height: rsh(28);
+      margin-left: rsh(20);
+      border: 1px solid #fe5f53;
+      border-radius: rsh(5);
+    }
+    .wc-nav-text {
+      font-size: rsh(28);
+      color: #666666;
+      margin-left: rsh(190);
+      margin-right: rsh(20);
+    }
+  }
+  .wc-returnCar-card__foot {
+    display: flex;
+    flex-direction: row;
+    // align-items: center;
+    width: rsh(710);
+    height: rsh(144);
+    & > i {
+      margin: rsh(40) rsh(20) rsh(60) rsh(30);
+    }
+    .wc-returnCar-card__foot__content {
+      display: flex;
+      flex-direction: column;
+      margin-top: rsh(40);
+      .wc-returnCar-card__foot__content__t {
+        display: flex;
+        flex-direction: row;
+        & > label {
+          font-size: rsh(30);
+          color: #333333;
+          margin-right: rsh(20);
+        }
+        & > span {
+          font-size: rsh(36);
+          color: #ffcc00;
+        }
+      }
+      & > span {
+        font-size: rsh(24);
+        color: #666666;
+      }
+    }
+    .wc-nav-text {
+      font-size: rsh(28);
+      margin: auto rsh(20) auto rsh(120);
+      color: #666666;
+    }
+  }
+  & > button {
+    margin-top: rsh(467);
+  }
+}
+</style>
+
+<template>
+  <div>
+    <div class="wc-returnCar">
+      <div class="wc-card wc-returnCar-card__header">
+        <div class="wc-returnCar-card__header__item">
+          <label>附近网点:</label>
+          <span>{{current.branchName}}</span>
+        </div>
+        <router-link tag="div" to="/find/branchReturn" class="wc-returnCar-card__header__item">
+          <label>当前还车网点:</label>
+          <span>{{$store.state.returnCar.detail.branchName ? $store.state.returnCar.detail.branchName : $store.state.currentOrder.returnBranchInfo.branchName}}</span>
+          <span class="wc-nav-text">更改</span>
+          <i class="icons-common-gt-outer">
+            <div class="icons-common icons-common-gt-inner"></div>
+          </i>
+        </router-link>
+        <!-- <div class="wc-returnCar-card__header__item">
+          <label>当前还车网点:</label>
+          <span>{{$store.state.currentOrder.returnBranchInfo.branchName}}</span>
+          <span class="wc-nav-text" >更改</span>
+          <button class="wc-box__link">
+              <i class="icons-common-gt-outer">
+                <div class="icons-common icons-common-gt-inner"></div>
+              </i>
+            </button>
+        </div>-->
+      </div>
+      <div class="wc-card wc-returnCar-card__body">
+        <i class="icons-common-tips-outer">
+          <div class="icons-common icons-common-tips-inner"></div>
+        </i>
+        <span>完成还车拍照</span>
+        <div class="wc-returnCar-card__body__block">必要</div>
+        <span class="wc-nav-text" @click="toPhoto">去拍照</span>
+        <button class="wc-box__link">
+          <i class="icons-common-gt-outer">
+            <div class="icons-common icons-common-gt-inner"></div>
+          </i>
+        </button>
+      </div>
+      <!-- <div class="wc-card wc-returnCar-card__foot">
+        <i class="icons-common-red-packet-outer">
+            <div class="icons-common icons-common-red-packet-inner"></div>
+          </i>
+        <div class="wc-returnCar-card__foot__content">
+          <div class="wc-returnCar-card__foot__content__t">
+           <label>充电优惠劵</label>
+           <span>￥5</span>
+          </div>
+          <span>还车时充电，可以获得5元优惠劵</span> 
+        </div>
+        <span class="wc-nav-text">去充电</span>
+          <button class="wc-box__link">
+              <i class="icons-common-gt-outer">
+                <div class="icons-common icons-common-gt-inner"></div>
+              </i>
+            </button>
+      </div>-->
+      <button
+        class="wc-btn wc-btn--yellow wc-btn--w600 wc-btn--h85"
+        v-xy-moving-btn
+        @click="returnCar"
+      >确定还车</button>
+    </div>
+  </div>
+</template>
+
+<script>
+import common from "~/mixins/common";
+import seo from "~/mixins/seo";
+import wxMixin from "~/mixins/wx-mixin";
+import vuxValidate from "~/mixins/vux-validate";
+import wcService from "~/mixins/service";
+import { setTimeout } from "timers";
+
+export default {
+  mixins: [common, wxMixin, seo, wcService],
+  components: {},
+  data() {
+    let that = this;
+    return {
+      pageTitle: "确认还车",
+      startLoad: false,
+      locations: {
+        lat: parseFloat(that.$store.state.location.latitude), //纬度
+        lng: parseFloat(that.$store.state.location.longitude) //精度
+      },
+      imgs: [],
+      current: []
+      //
+    };
+  },
+  watch: {
+    "$store.state.wxAuthStatus": function(v) {
+      let that = this;
+      // 需要授权才可以加载的数据(授权比页面装载慢)
+      if (v && !that.startLoad) {
+        that.startLoad = true;
+        //
+      }
+    }
+  },
+  methods: {
+    //跳到还车拍照页面
+    toPhoto() {
+      this.$router.push({ path: "/car/return/photo" });
+    },
+    //确定还车
+    async returnCar() {
+      let that = this;
+      await that.wcService.updateLocation();
+      if (that.imgs) {
+        let { success, bizContent, rspCode } = await that.$api.warmcar[
+          "customer/return_car"
+        ]({
+          orderId: that.$store.state.currentOrder.orderId, //	订单号	是	int
+          returnBranchId: that.$store.state.returnCar.detail.branchId
+            ? that.$store.state.returnCar.detail.branchId
+            : that.$store.state.currentOrder.returnBranchInfo.branchId, //		还车网点ID	是	int
+          returnCarType: that.$store.state.returnCar.detail.branchReturnType
+            ? that.$store.state.returnCar.detail.branchReturnType
+            : "01", //		还车方式	是	String	01 app还车	01
+          //手机经纬度需在规定的如何一个网点的电子围栏范围里面才能还车
+          phoneLng: 22.376122,//that.locations.lng, //		手机精度
+          phoneLat: 113.570815,//that.locations.lat, //		手机纬度
+          imgs: that.imgs.map(o => {
+            return { fileURL: o };
+          }) //		照片数组	是	Array		-
+        });
+        if (rspCode == 1064) {
+            // 网点与位置不一致的错误提示
+            var Str =
+              "系统检测到离您选择的还车网点和手机当前定位网点不一致,请再次确认选择的还车网点是否正确";
+            let result = that.$wc.confirm(Str, {
+              title: "温馨提示",
+              confirmButtonText: "继续还车",
+              cancelButtonText: "修改还车网点",
+              onConfirm() {
+                that.$router.push({path:'/car/return/fail',query:{imgs:that.imgs}});
+              }
+            });
+          }
+        if (success && bizContent) {      
+             let { orderId } = bizContent;
+             that.$router.push(`/car/return/pay?orderId=${orderId}`);
+        }
+      } else {
+        that.$wc.toast(`请上传车辆外观照片`);
+        setTimeout(function() {
+          that.$router.replace("/car/return/photo");
+        }, 1500);
+      }
+    },
+    async loadAll() {
+      let that = this;
+      let result = await that.wcService.updateLocation();
+      if (result) {
+        let { success, bizContent } = await that.$api.warmcar[
+          "query/all_branch_by_city_code"
+        ]({
+          cityCode: that.$store.state.location.cityCode
+        });
+        if (success) {
+          that.branches = that._.sortBy(
+            bizContent.map(o => {
+              let temp = o.gps.split(",");
+              let distance = 0;
+              if (temp.length === 2) {
+                distance = that.$wc.getDistance(
+                  that.locations.lat,
+                  that.locations.lng,
+                  parseFloat(temp[1]),
+                  parseFloat(temp[0])
+                );
+              }
+              return Object.assign(o, {
+                distance: distance,
+                num: o.leisureCarNum,
+                lng: parseFloat(temp[0]),
+                lat: parseFloat(temp[1])
+              });
+            }),
+            o => o.distance
+          );
+          // that.list = [...that.branches]
+
+          // if (that.$store.state.getCar.branchId) {
+          //   let temp = that.branches.find(o => o.branchId === that.$store.state.getCar.branchId)
+          //   if (temp) {
+          //     that.current = temp
+          //   }
+          // }
+          //取最近的一个网点信息
+          if (!that.current.branchId) {
+            that.current = that.branches[0];
+          }
+        }
+      }
+    }
+  },
+  async created() {
+    let that = this;
+    that.imgs = that.$route.query.imgs;
+    // 需要授权才可以加载的数据(授权比页面装载快)
+    if (that.$store.state.wxAuthStatus && !that.startLoad) {
+      that.startLoad = true;
+      //
+      await that.loadAll();
+    }
+    // 无需授权可以提前加载的数据
+    await that.wcService.updateCurrentOrder();
+  }
+};
+</script>

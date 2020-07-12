@@ -1,0 +1,196 @@
+<style lang="scss">
+  @import "~vue-xy-ui/dist/mixin";
+  @import "~assets/scss/value";
+
+  .wc-find-city {
+    font-size: rsh(24);
+    line-height: rsh(100);
+    & > header {
+      padding: 0 rsh(40);
+      display: flex;
+      align-items: center;
+      & > span {
+        width: 0;
+        flex-grow: 1;
+      }
+      & > i {
+        flex-shrink: 0;
+      }
+    }
+    .wc-find-city__list {
+      position: relative;
+      & > section {
+        & > label, a {
+          display: block;
+          padding: 0 rsh(40);
+        }
+        & > label {
+          display: block;
+          background-color: #f1f1f1;
+          line-height: rsh(60);
+        }
+        a {
+          position: relative;
+          &:not(:first-child) {
+            &:before {
+              content: '';
+              display: block;
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 1px;
+              background-color: $lineColor;
+              transform: scale(1, .5);
+            }
+          }
+        }
+        &:after {
+          content: '';
+          display: block;
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          height: 1px;
+          background-color: $lineColor;
+          transform: scale(1, .5);
+        }
+      }
+    }
+  }
+</style>
+
+<template>
+  <div class="wc-find-city">
+    <header @click="onSelectCurrent"
+            v-xy-hover-btn>
+      <span v-show="current">当前定位城市:&nbsp;{{current ? current.cityName.replace('市', '') : ''}}</span>
+      <span v-show="!current">{{locateStatus}}</span>
+      <i class="icons-common-current-location-outer">
+        <div class="icons-common icons-common-current-location-inner"></div>
+      </i>
+    </header>
+    <div class="wc-find-city__list">
+      <section v-for="p in list">
+        <label v-text="p.char"></label>
+        <div>
+          <a v-for="item in p.list"
+             :key="item.cityCode"
+             @click="onSelect(item)"
+             v-xy-hover-btn>
+            {{item.cityName}}
+          </a>
+        </div>
+      </section>
+    </div>
+  </div>
+</template>
+
+<script>
+  import common from '~/mixins/common'
+  import seo from '~/mixins/seo'
+  import wxMixin from '~/mixins/wx-mixin'
+  import pinyin from 'js-pinyin'
+  import location from '~/mixins/location'
+
+  export default {
+    mixins: [common, wxMixin, seo, location],
+    components: {},
+    data () {
+      return {
+        startLoad: false,
+        pageTitle: '选择城市',
+        rawList: [],
+        list: [],
+        locateStatus: '正在获取定位',
+        current: null
+      }
+    },
+    watch: {
+      '$store.state.wxAuthStatus': async function (v) {
+        let that = this
+        // 需要授权才可以加载的数据(授权比页面装载慢)
+        if (v && !that.startLoad) {
+          that.startLoad = true
+          //
+          await that.loadList()
+          await that.getCurrentCity()
+        }
+      }
+    },
+    methods: {
+      onUse () {
+        let that = this
+        that.$router.push('/test/box')
+      },
+      async loadList () {
+        let that = this
+        let {success, bizContent} = await that.$api.warmcar['query/open-city-list']()
+        if (success) {
+          that.rawList = bizContent
+          let pl = bizContent.map(o => Object.assign(o, {char: pinyin.getCamelChars(o.cityName)[0]}))
+          let gl = _.groupBy(pl, 'char')
+          let ml = []
+          for (let p in gl) {
+            ml.push({
+              char: p,
+              list: gl[p]
+            })
+          }
+          let sl = _.sortBy(ml, o => o.char)
+          that.list = sl
+        }
+      },
+      async getCurrentCity () {
+        let that = this
+        let location = null
+        try {
+          location = await that.location()
+        } catch (e) {
+          that.locateStatus = '定位失败'
+        }
+
+        if (location) {
+          let city = await that.$wc.getCity(location.latitude, location.longitude)
+          that.$store.commit('location', {
+            ...location,
+            ...city
+          })
+          that.current = city
+        }
+      },
+      onSelect (item) {
+        let that = this
+        that.$store.commit('appInfo', item)
+        that.$router.go(-1)
+      },
+      onSelectCurrent () {
+        let that = this
+        if (that.current) {
+          let loc = that.rawList.find(o => {
+            return o.cityCode === that.current.cityCode
+          })
+          if (loc) {
+            that.current = loc
+            that.$store.commit('appInfo', loc)
+            that.$router.go(-1)
+          } else {
+            that.$wc.toast('该城市尚未开通服务')
+          }
+        }
+      }
+    },
+    async created () {
+      let that = this
+      // 需要授权才可以加载的数据(授权比页面装载快)
+      if (that.$store.state.wxAuthStatus && !that.startLoad) {
+        that.startLoad = true
+        //
+        await that.loadList()
+        await that.getCurrentCity()
+      }
+      // 无需授权可以提前加载的数据
+    }
+  }
+</script>

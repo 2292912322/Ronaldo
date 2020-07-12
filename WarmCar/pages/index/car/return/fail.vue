@@ -1,0 +1,134 @@
+<style lang="scss">
+@import "~vue-xy-ui/dist/mixin";
+@import "~assets/scss/value";
+.wc-failCar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .wc-failCar-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: rsh(710);
+    height: rsh(395);
+    & > i{
+      margin: rsh(50) 0;
+    }
+    & > span {
+      font-size: rsh(30);
+      color: #333333;
+    }
+    & > div {
+      display: flex;
+      flex-direction: row;
+      text-align: center;
+      font-size: rsh(20);
+      margin-top: rsh(25);
+      & > span {
+        color:#666666;
+        margin-right: rsh(10);
+      }
+      & > span:last-of-type{
+        color:#ffcc00;
+        margin-right: rsh(10);
+      }
+    }
+  }
+   & > button:first-of-type{
+      margin-top: rsh(100)
+    }
+    & > button:last-of-type{
+      margin-top: rsh(40);
+      background: #999999;
+      color: #fff;
+    }
+}
+</style>
+
+<template>
+  <div>
+    <div class="wc-failCar">
+      <div class="wc-card wc-failCar-card">
+        <i class="icons-list-point-outer">
+          <div class="icons-list icons-list-point-inner"></div>
+        </i>
+        <span>系统检测到您并未依靠在我们的网点</span>
+        <div>
+          <span>请您再次确定是否停靠在warmcar网点</span>
+          <span>查看网点信息</span>
+          <i class="icons-common-gt-main-outer">
+            <div class="icons-common icons-common-gt-main-inner"></div>
+          </i>
+        </div>
+      </div>
+      <button class="wc-btn wc-btn--yellow wc-btn--w650 wc-btn--h105 wc-btn--f36 wc-btn__failCar--m100" 
+              v-xy-moving-btn
+              @click="OnReturn">已重新停好，再次还车
+      </button>
+      <button class="wc-btn wc-btn--yellow wc-btn--w650 wc-btn--h105 wc-btn--f36 wc-btn__failCar--m60" 
+              v-xy-moving-btn
+              @click="OnForce">无法还车，申请强制还车
+      </button>
+    </div>
+  </div>
+</template>
+
+<script>
+import common from "~/mixins/common";
+import seo from "~/mixins/seo";
+import wxMixin from "~/mixins/wx-mixin";
+
+export default {
+  mixins: [common, wxMixin, seo],
+  components: {},
+  data() {
+    return {
+      pageTitle: "还车失败",
+      startLoad: false,
+      imgs:[]
+      //
+    };
+  },
+  watch: {
+    "$store.state.wxAuthStatus": function(v) {
+      let that = this;
+      // 需要授权才可以加载的数据(授权比页面装载慢)
+      if (v && !that.startLoad) {
+        that.startLoad = true;
+        //
+      }
+    }
+  },
+  methods: {
+    OnReturn(){
+      let that = this
+      that.$router.replace(`/car/return`)
+    },
+   async OnForce(){
+      let that = this
+      let { success } = await that.$api.warmcar["customer/coerce_return_car"]({
+         orderId:that.$store.state.currentOrder.orderId,//	订单号	是	int		
+         returnBranchId:that.$store.state.currentOrder.returnBranchInfo.branchId,//	还车网点ID	是	int		1
+         imgs: that.imgs.map(o => {
+                        return {fileURL: o}
+                      }) //		照片数组	是	Array		-
+        });
+        if(success){
+          that.$router.replace(`/home`);
+        }
+    }
+  },
+    created() {
+    let that = this;
+    that.imgs = that.$route.query.imgs;
+    that.orderId = that.$route.query.orderId
+    console.log(that.orderId)
+    // 需要授权才可以加载的数据(授权比页面装载快)
+    if (that.$store.state.wxAuthStatus && !that.startLoad) {
+      that.startLoad = true;
+      //
+    }
+    // 无需授权可以提前加载的数据
+  }
+};
+</script>

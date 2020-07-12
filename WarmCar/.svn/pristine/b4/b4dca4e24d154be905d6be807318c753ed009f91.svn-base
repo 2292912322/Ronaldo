@@ -1,0 +1,145 @@
+<style lang="scss">
+  @import "~vue-xy-ui/dist/mixin";
+  @import "~assets/scss/value";
+
+  .wc-my-info {
+    .wc-card {
+      &:first-child {
+        .wc-box {
+          &:first-child {
+            .wc-box__ct {
+              padding-top: rsh(50);
+              padding-bottom: rsh(50);
+            }
+          }
+        }
+      }
+    }
+    .wc-btn {
+      margin-top: rsh(70);
+    }
+  }
+</style>
+
+<template>
+  <div class="wc-my-info">
+    <div class="wc-card">
+      <a @click="onClick"
+         class="wc-box wc-box--pl15 wc-box--ph95"
+         v-xy-hover-btn>
+        <div class="wc-box__ct">
+          <i class="wc-box__icon icons-common-my-user-outer">
+            <div class="icons-common icons-common-my-user-inner"></div>
+          </i>
+          <div class="wc-box__title">
+            头像
+          </div>
+          <button class="wc-box__select">
+            <i class="icons-common-gt-outer">
+              <div class="icons-common icons-common-gt-inner"></div>
+            </i>
+          </button>
+        </div>
+      </a>
+      <a class="wc-box wc-box--pl15 wc-box--ph95"
+         @click="onClick"
+         v-xy-hover-btn>
+        <div class="wc-box__ct">
+          <div class="wc-box__title wc-box__title--f30">用户名</div>
+          <div class="wc-box__text">xachary</div>
+          <button class="wc-box__link">
+            <i class="icons-common-gt-outer">
+              <div class="icons-common icons-common-gt-inner"></div>
+            </i>
+          </button>
+        </div>
+      </a>
+      <a class="wc-box wc-box--pl15 wc-box--ph95"
+         @click="onClick"
+         v-xy-hover-btn>
+        <div class="wc-box__ct">
+          <div class="wc-box__title wc-box__title--f30">性别</div>
+          <div class="wc-box__text">男</div>
+          <button class="wc-box__link">
+            <i class="icons-common-gt-outer">
+              <div class="icons-common icons-common-gt-inner"></div>
+            </i>
+          </button>
+        </div>
+      </a>
+      <a class="wc-box wc-box--pl15 wc-box--ph95"
+         @click="onClick"
+         v-xy-hover-btn>
+        <div class="wc-box__ct">
+          <div class="wc-box__title wc-box__title--f30">手机号</div>
+          <div class="wc-box__text">18507567777</div>
+          <button class="wc-box__link">
+            <i class="icons-common-gt-outer">
+              <div class="icons-common icons-common-gt-inner"></div>
+            </i>
+          </button>
+        </div>
+      </a>
+    </div>
+    <div class="wc-card">
+      <router-link tag="a"
+                   to="/my/info/license"
+                   class="wc-box wc-box--pl15 wc-box--ph95"
+                   v-xy-hover-btn>
+        <div class="wc-box__ct">
+          <div class="wc-box__title wc-box__title--f30">身份认证</div>
+          <div class="wc-box__text">已认证</div>
+          <button class="wc-box__link">
+            <i class="icons-common-gt-outer">
+              <div class="icons-common icons-common-gt-inner"></div>
+            </i>
+          </button>
+        </div>
+      </router-link>
+    </div>
+    <button class="wc-btn wc-btn--gray wc-btn--w600 wc-btn--h85 wc-btn--cfff"
+            v-xy-moving-btn>退出登录
+    </button>
+  </div>
+</template>
+
+<script>
+  import common from '~/mixins/common'
+  import seo from '~/mixins/seo'
+  import wxMixin from '~/mixins/wx-mixin'
+
+  export default {
+    mixins: [common, wxMixin, seo],
+    components: {},
+    data () {
+      return {
+        pageTitle: '账户信息',
+        startLoad: false,
+        //
+      }
+    },
+    watch: {
+      '$store.state.wxAuthStatus': function (v) {
+        let that = this
+        // 需要授权才可以加载的数据(授权比页面装载慢)
+        if (v && !that.startLoad) {
+          that.startLoad = true
+          //
+        }
+      }
+    },
+    methods: {
+      onClick () {
+      }
+    },
+    created () {
+      let that = this
+      // 需要授权才可以加载的数据(授权比页面装载快)
+      if (that.$store.state.wxAuthStatus && !that.startLoad) {
+        that.startLoad = true
+        //
+      }
+      // 无需授权可以提前加载的数据
+    }
+  }
+</script>

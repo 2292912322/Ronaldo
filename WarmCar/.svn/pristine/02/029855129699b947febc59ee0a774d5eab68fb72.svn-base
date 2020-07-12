@@ -1,0 +1,91 @@
+<style lang="scss">
+  @import "~vue-xy-ui/dist/mixin";
+  .wc-refund{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .wc-refund-card{
+      width: rsh(710);
+      height: rsh(295);
+      margin: rsh(40) auto rsh(90);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .wc-refund-card__span{
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        font-size: rsh(26);
+        color: #333333;
+        & > span:first-of-type{
+            font-size: rsh(51);
+            color: #333333;
+            margin-bottom: rsh(15)
+        }
+      }
+    }
+    .wc-refund__span{
+      font-size: rsh(24);
+      color: #666666
+    }
+    & > button {
+      margin-top: rsh(360)
+    } 
+  }
+  
+</style>
+
+<template>
+  <div class="wc-refund">
+    <div class="wc-card wc-refund-card">
+        <div class="wc-refund-card__span">
+            <span>500元</span>
+            <span>已缴纳押金</span>
+        </div>
+     </div>
+        <span class="wc-refund__span">
+        充值押金不可抵扣用车费用、违章罚款、不可开具发票
+        </span>
+        <span class="wc-refund__span">
+        用车结束后10个工作日，未产生违章即可申请
+        </span>
+        <button class="wc-btn wc-btn--yellow wc-btn--w600 wc-btn--h85"
+                v-xy-moving-btn>退押金请下载APP
+        </button>
+    </div>
+</template>
+
+<script>
+  import common from '~/mixins/common'
+  import seo from '~/mixins/seo'
+  import wxMixin from '~/mixins/wx-mixin'
+
+  export default {
+    mixins: [common, wxMixin, seo],
+    components: {},
+    data () {
+      return {
+        pageTitle: '登录'
+      }
+    },
+    watch: {
+      '$store.state.wxAuthStatus': function (v) {
+        let that = this
+        // 需要授权才可以加载的数据(授权比页面装载慢)
+        if (v) {
+          // console.log(`%c${that.$route.fullPath} wxAuthStatus`, 'font-size:20px;color:blue;')
+        }
+      }
+    },
+    methods: {},
+    created () {
+      let that = this
+      that.type = that.$route.params.type
+      // 需要授权才可以加载的数据(授权比页面装载快)
+      if (that.$store.state.wxAuthStatus) {
+        // console.log(`%c${that.$route.fullPath} created`, 'font-size:20px;color:blue;')
+      }
+      // 无需授权可以提前加载的数据
+    }
+  }
+</script>

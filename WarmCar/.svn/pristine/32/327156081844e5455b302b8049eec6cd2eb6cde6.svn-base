@@ -1,0 +1,117 @@
+@import "~vue-xy-ui/dist/mixin";
+@import "~assets/scss/value";
+
+.wc-btn {
+  display: block;
+  color: #333;
+  font-size: rsh(28);
+  margin: rsh(20) auto;
+  // 颜色
+  &.wc-btn--yellow {
+    background: linear-gradient(90deg, #fce43d, #facd00);
+  }
+  &.wc-btn--gray {
+    background: #ddd;
+  }
+  // 高度
+  &.wc-btn--h40 {
+    height: rsh(40);
+    line-height: rsh(40);
+    border-radius: rsh(40/2);
+  }
+  &.wc-btn--h50 {
+    height: rsh(50);
+    line-height: rsh(50);
+    border-radius: rsh(50/2);
+  }
+  &.wc-btn--h60 {
+    height: rsh(60);
+    line-height: rsh(60);
+    border-radius: rsh(60/2);
+  }
+  &.wc-btn--h80 {
+    height: rsh(80);
+    line-height: rsh(80);
+    border-radius: rsh(80/2);
+  }
+  &.wc-btn--h85 {
+    height: rsh(85);
+    line-height: rsh(85);
+    border-radius: rsh(85/2);
+  }
+  &.wc-btn--h105 {
+    height: rsh(105);
+    line-height: rsh(105);
+    border-radius: rsh(105/2);
+  }
+  &.wc-btn--h110 {
+    height: rsh(110);
+    line-height: rsh(110);
+    border-radius: rsh(110/2);
+  }
+  // 宽度
+  &.wc-btn--w180 {
+    width: rsh(180);
+  }
+  &.wc-btn--w215 {
+    width: rsh(215);
+  }
+  &.wc-btn--w280 {
+    width: rsh(280);
+  }
+  &.wc-btn--w430 {
+    width: rsh(430);
+  }
+  &.wc-btn--w450 {
+    width: rsh(450);
+  }
+  &.wc-btn--w470 {
+    width: rsh(470);
+  }
+  &.wc-btn--w600 {
+    width: rsh(600);
+  }
+  &.wc-btn--w650 {
+    width: rsh(650);
+  }
+  // padding
+  &.wc-btn--p20 {
+    padding: 0 rsh(20);
+  }
+  &.wc-btn--p50 {
+    padding: 0 rsh(50);
+  }
+  &.wc-btn--p60 {
+    padding: 0 rsh(60);
+  }
+  &.wc-btn--p80 {
+    padding: 0 rsh(80);
+  }
+  // 字体大小
+  &.wc-btn--f22 {
+    font-size: rsh(22);
+  }
+  &.wc-btn--f24 {
+    font-size: rsh(24);
+  }
+  &.wc-btn--f26 {
+    font-size: rsh(26);
+  }
+  &.wc-btn--f30 {
+    font-size: rsh(30);
+  }
+  &.wc-btn--f36 {
+    font-size: rsh(36);
+  }
+  // 字体颜色
+  &.wc-btn--c666 {
+    color: #666;
+  }
+  &.wc-btn--cfff {
+    color: #fff;
+  }
+  // 圆角
+  &.wc-btn--r25 {
+    border-radius: rsh(25);
+  }
+}

@@ -1,0 +1,277 @@
+<style lang="scss">
+  @import "~vue-xy-ui/dist/mixin";
+  @import "~assets/scss/value";
+
+  .wc-coupon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .wc-coupon__navbar {
+      width: rsh(750);
+      height: rsh(81);
+      position: fixed;
+      top: 0;
+      left: 0;
+      box-shadow: rsh(0) rsh(0) rsh(30) rgba($baseShadowColor, 1);
+      font-size: rsh(26);
+      color: #666666;
+      background: #fff;
+      display: flex;
+      flex-direction: row;
+      z-index: 100;
+
+      .wc-coupon__navbar__item {
+        width: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: rsh(24);
+        color: #999999;
+        position: relative;
+      }
+
+      .wc-coupon__navbar__item--active {
+        font-size: rsh(26);
+        color: #666666;
+        font-weight: bold;
+
+        &:after {
+          content: '';
+          position: absolute;
+          left: rsh((750/2-131)/2);
+          top: rsh(81-8);
+          width: rsh(131);
+          height: rsh(8);
+          background: #ffcc00;
+          border-radius: 3px;
+        }
+      }
+    }
+
+     .wc-coupon__content--useing {
+      display: flex;
+      flex-direction: column;
+      margin-top: rsh(81);
+
+      .wc-coupon__content__item {
+        width: rsh(710);
+        height: rsh(202);
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        border-bottom: rsh(8) solid #ffcc00;
+        margin-bottom: 0;
+        position: relative;
+        
+        .wc-coupon__item__money {
+          font-size: rsh(60);
+          color: #facd00;
+          font-weight: bold;
+          height: rsh(134);
+          min-width: rsh(240);
+          text-align: center;
+          line-height: rsh(134);
+          margin-right: rsh(20);
+          position: relative;
+
+          &:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 100%;
+            width: 1px;
+            background: $inputLineColor;
+            transform: scale(0.5, 1)
+          }
+        }
+
+        .wc-coupon__item__content {
+          display: flex;
+          flex-direction: column;
+          font-size: rsh(30);
+          color: #666666;
+          font-weight: bold;
+
+          &>span:first-of-type {
+            font-size: rsh(35);
+            color: #333333;
+
+            margin-bottom: rsh(12);
+          }
+
+          &>span:last-child {
+            font-size: rsh(24);
+            color: #999999;
+            margin-top: rsh(12);
+          }
+        }
+      }
+    }
+
+    .wc-coupon__content--history {
+      display: flex;
+      flex-direction: column;
+      margin-top: rsh(81);
+
+      .wc-coupon__content__item {
+        width: rsh(710);
+        height: rsh(202);
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        border-bottom: rsh(8) solid #cccccc;
+        margin-bottom: 0;
+        position: relative;
+        &>i {
+          position: absolute;
+          right: rsh(64);
+          top: rsh(15);
+        }
+        .wc-coupon__item__money {
+          font-size: rsh(60);
+          color: #cccccc;
+          font-weight: bold;
+          height: rsh(134);
+          min-width: rsh(240);
+          text-align: center;
+          line-height: rsh(134);
+          margin-right: rsh(20);
+          position: relative;
+
+          &:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 100%;
+            width: 1px;
+            background: $inputLineColor;
+            transform: scale(0.5, 1)
+          }
+        }
+
+        .wc-coupon__item__content {
+          display: flex;
+          flex-direction: column;
+          font-size: rsh(30);
+          color: #666666;
+          font-weight: bold;
+
+          &>span:first-of-type {
+            font-size: rsh(35);
+            color: #333333;
+
+            margin-bottom: rsh(12);
+          }
+
+          &>span:last-child {
+            font-size: rsh(24);
+            color: #999999;
+            margin-top: rsh(12);
+          }
+        }
+      }
+    }
+
+  }
+
+</style>
+
+<template>
+  <div class="wc-coupon">
+    <div class="wc-coupon__navbar">
+      <div :class=" available=='01' ? 'wc-coupon__navbar__item wc-coupon__navbar__item--active' : 'wc-coupon__navbar__item'"
+        @click="clickNavbar($event)" data-id='01'>可用优惠劵</div>
+      <div :class=" available=='02' ? 'wc-coupon__navbar__item wc-coupon__navbar__item--active' : 'wc-coupon__navbar__item'"
+        @click="clickNavbar($event)" data-id='02'>历史优惠劵</div>
+    </div>
+    <div class="wc-coupon__content--useing" v-if="isClick">
+      <div class="wc-card wc-coupon__content__item" v-for="item in list">
+        <div class="wc-coupon__item__money">{{item.couponMoney}}元</div>
+        <div class="wc-coupon__item__content">
+          <span>{{item.couponName}}</span>
+          <span>{{item.describe}}</span>
+          <span>有效期：{{item.couponStartTime| formatDate('yyyy-mm-dd')}}至{{item.couponEndTime| formatDate('yyyy-mm-dd')}}</span>
+        </div>
+      </div>
+    </div>
+    <div class="wc-coupon__content--history" v-if="!isClick">
+      <div class="wc-card wc-coupon__content__item" v-for="item in list">
+        <div class="wc-coupon__item__money">{{item.couponMoney}}元</div>
+        <div class="wc-coupon__item__content">
+          <span>{{item.couponName}}</span>
+          <span>{{item.describe}}</span>
+          <span>有效期：{{item.couponStartTime| formatDate('yyyy-mm-dd')}}至{{item.couponEndTime| formatDate('yyyy-mm-dd')}}</span>
+        </div>
+        <i class="icons-common-due-outer">
+          <div class="icons-common icons-common-due-inner"></div>
+        </i>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  import common from '~/mixins/common'
+  import seo from '~/mixins/seo'
+  import wxMixin from '~/mixins/wx-mixin'
+
+  export default {
+    mixins: [common, wxMixin, seo],
+    components: {},
+    data() {
+      return {
+        pageTitle: '优惠劵',
+        startLoad: false,
+        isClick: true,
+        list:{},
+        available:'01'
+        //
+      }
+    },
+    watch: {
+      '$store.state.wxAuthStatus': function (v) {
+        let that = this
+        // 需要授权才可以加载的数据(授权比页面装载慢)
+        if (v && !that.startLoad) {
+          that.startLoad = true
+          //
+        }
+      }
+    },
+    methods: {
+      clickNavbar($event) {
+        this.available = $event.target.dataset.id
+        // console.log(typeof this.available)
+        this.getCouponList();
+      },
+      //查询优惠券列表
+      async getCouponList(){
+        let that = this
+        if(!that.isClick){
+         that.isClick = '02'
+        }
+        let {success,bizContent} = await that.$api.warmcar['query/customer_coupon']({
+          available:that.available
+        })
+        if(success&&bizContent){
+          let {rows} = bizContent
+          that.list = rows
+        }
+      }
+    },
+    created() {
+      let that = this
+      // 需要授权才可以加载的数据(授权比页面装载快)
+      if (that.$store.state.wxAuthStatus && !that.startLoad) {
+        that.startLoad = true
+        //
+      }
+      // 无需授权可以提前加载的数据
+      that.getCouponList();
+    }
+  }
+
+</script>

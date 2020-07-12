@@ -1,0 +1,25 @@
+.icons-common { background-image: url(~/assets/imgs/icons-common.png); background-size: 23.47vw 17.20vw; background-repeat: no-repeat; }
+.icons-common-gt-small-outer {width: calc(1.47vw + 2px); height: calc(2.67vw + 2px);}
+.icons-common-gt-small-inner { width: calc(1.47vw + 2px); height: calc(2.67vw + 2px); background-position: calc(-21.87vw + 1px) calc(-3.47vw + 1px); }
+.icons-common-gt-outer {width: calc(2.27vw + 2px); height: calc(3.87vw + 2px);}
+.icons-common-gt-inner { width: calc(2.27vw + 2px); height: calc(3.87vw + 2px); background-position: calc(-19.07vw + 1px) calc(-3.47vw + 1px); }
+.icons-common-liulan-outer {width: calc(4.40vw + 2px); height: calc(2.93vw + 2px);}
+.icons-common-liulan-inner { width: calc(4.40vw + 2px); height: calc(2.93vw + 2px); background-position: calc(-19.07vw + 1px) calc(0.00vw + 1px); }
+.icons-common-nav-bar-car-outer {width: calc(6.40vw + 2px); height: calc(5.07vw + 2px);}
+.icons-common-nav-bar-car-inner { width: calc(6.40vw + 2px); height: calc(5.07vw + 2px); background-position: calc(-6.27vw + 1px) calc(0.00vw + 1px); }
+.icons-common-nav-bar-order-outer {width: calc(4.80vw + 2px); height: calc(5.73vw + 2px);}
+.icons-common-nav-bar-order-inner { width: calc(4.80vw + 2px); height: calc(5.73vw + 2px); background-position: calc(-13.20vw + 1px) calc(-5.87vw + 1px); }
+.icons-common-nav-bar-user-outer {width: calc(5.73vw + 2px); height: calc(5.73vw + 2px);}
+.icons-common-nav-bar-user-inner { width: calc(5.73vw + 2px); height: calc(5.73vw + 2px); background-position: calc(0.00vw + 1px) calc(0.00vw + 1px); }
+.icons-common-pay-type-account-outer {width: calc(5.33vw + 2px); height: calc(5.33vw + 2px);}
+.icons-common-pay-type-account-inner { width: calc(5.33vw + 2px); height: calc(5.33vw + 2px); background-position: calc(0.00vw + 1px) calc(-6.27vw + 1px); }
+.icons-common-pay-type-group-outer {width: calc(5.33vw + 2px); height: calc(5.33vw + 2px);}
+.icons-common-pay-type-group-inner { width: calc(5.33vw + 2px); height: calc(5.33vw + 2px); background-position: calc(-5.87vw + 1px) calc(-6.27vw + 1px); }
+.icons-common-pay-type-wx-outer {width: calc(5.33vw + 2px); height: calc(5.33vw + 2px);}
+.icons-common-pay-type-wx-inner { width: calc(5.33vw + 2px); height: calc(5.33vw + 2px); background-position: calc(-13.20vw + 1px) calc(0.00vw + 1px); }
+.icons-common-pay-unselected-outer {width: calc(5.07vw + 2px); height: calc(5.07vw + 2px);}
+.icons-common-pay-unselected-inner { width: calc(5.07vw + 2px); height: calc(5.07vw + 2px); background-position: calc(0.00vw + 1px) calc(-12.13vw + 1px); }
+.icons-common-selected-outer {width: calc(5.07vw + 2px); height: calc(5.07vw + 2px);}
+.icons-common-selected-inner { width: calc(5.07vw + 2px); height: calc(5.07vw + 2px); background-position: calc(-5.60vw + 1px) calc(-12.13vw + 1px); }
+.icons-common-unselected-outer {width: calc(5.07vw + 2px); height: calc(5.07vw + 2px);}
+.icons-common-unselected-inner { width: calc(5.07vw + 2px); height: calc(5.07vw + 2px); background-position: calc(-11.20vw + 1px) calc(-12.13vw + 1px); }

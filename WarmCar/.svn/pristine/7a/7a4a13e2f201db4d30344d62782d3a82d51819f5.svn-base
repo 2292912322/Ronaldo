@@ -1,0 +1,21 @@
+@import "~vue-xy-ui/dist/mixin";
+
+.container {
+  font-size: rsh(32);
+  &:before {
+    content: '';
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: rsh(10);
+    background: linear-gradient(#efefef, transparent);
+  }
+  .wc-card {
+    box-shadow: 0 0 rsh(20) #efefef;
+    margin: rsh(20);
+    padding: rsh(15);
+    border-radius: rsh(10);
+  }
+}

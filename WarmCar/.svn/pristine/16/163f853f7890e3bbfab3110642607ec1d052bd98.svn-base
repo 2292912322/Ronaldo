@@ -1,0 +1,310 @@
+import cookie from 'js-cookie'
+import _ from 'lodash'
+import {
+  WX_APPID,
+  API_CONFIG_BASE,
+  APP_NAME
+} from '~/config'
+
+import queryString from '@/plugins/query-string'
+
+export default {
+  name: 'xy-wx',
+  data () {
+    let that = this
+    let base = `${window.location.origin}${that.$router.options.base}`
+    let url = window.location.href
+
+    return {
+      wxTitle: '',
+      wxDes: '',
+      wxImg: '',
+      wxLink: '',
+      wxLocation: null,
+      wxHasConfig: false,
+      wxShareInfo: {
+        title: document.title, // 分享标题
+        desc: '', // 分享描述
+        link: url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+        imgUrl: `${base}/logo.png`, // 分享图标
+        type: 'link', // 分享类型,music、video或link，不填默认为link
+        dataUrl: ''
+      },
+      validAlert: true,
+      startLoad: false
+    }
+  },
+  methods: {
+    async wxJsConfig () {
+      let that = this
+      let browser = that.$xyTools.browser()
+      let url = (browser.wx && browser.type === 'ios') ? window.entryUrl : that.wxShareInfo.link
+      // let url = (browser.wx && browser.type === 'ios') ? window.entryUrl : window.location.href
+      // if (window.isPay) {
+      //   url = window.entryUrl.replace('/#/', '/?#/')
+      // }
+      // alert(url)
+      let {data} = await that.$api.common['wx/jssdk']({}, {}, `?url=${encodeURIComponent(url)}`)
+      // debugger
+      if (data) {
+        if (wx && that.validAlert) {
+          wx.config({
+            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: data.appId, // 必填，公众号的唯一标识
+            timestamp: parseInt(data.timestamp), // 必填，生成签名的时间戳
+            nonceStr: data.nonceStr, // 必填，生成签名的随机串
+            signature: data.signature,// 必填，签名
+            jsApiList: [
+              'onMenuShareAppMessage',
+              'onMenuShareTimeline',
+              'onMenuShareQQ',
+              'onMenuShareWeibo',
+              'onMenuShareQZone',
+              'hideMenuItems',
+              'showMenuItems',
+              'getLocation',
+              'openLocation',
+              'uploadImage',
+              'chooseImage',
+              'downloadImage',
+              'chooseWXPay'
+            ] // 必填，需要使用的JS接口列表
+          })
+
+          wx.ready(function (res) {
+            // alert(`wx.ready:${JSON.stringify(res)}`)
+            that.wxHasConfig = true
+            that.wxShareSet()
+            // https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421141115
+            // 界面操作&附录3
+            wx.hideMenuItems({
+              menuList: ['menuItem:copyUrl', 'menuItem:share:email'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+            })
+            wx.showMenuItems({
+              menuList: ['menuItem:share:weiboApp'] // 要显示的菜单项，所有menu项见附录3
+            })
+            wx.getLocation({
+              type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+              success: function (res) {
+                console.warn(JSON.stringify({
+                  latitude: res.latitude,
+                  longitude: res.longitude
+                }))
+                that.wxLocation = {
+                  latitude: res.latitude,
+                  longitude: res.longitude
+                }
+              }
+            })
+            // }, 2000)
+          })
+          wx.error(function (res) {
+            console.warn('配置sdk失败:')
+            console.warn(res)
+            if (that.validAlert) {
+              // alert(`配置sdk失败`)
+            }
+          })
+        }
+      }
+    },
+    wxShareSet () {
+      let that = this
+      _.assignWith(that.wxShareInfo, {
+        title: that.wxTitle,
+        desc: that.wxDes,
+        imgUrl: that.wxImg,
+        link: that.wxLink
+      }, function (objValue, srcValue) {
+        if (srcValue && srcValue !== undefined) {
+          return srcValue
+        }
+        return objValue
+      })
+      // alert(JSON.stringify(that.wxShareInfo))
+      // 更新分享配置
+      if (wx && that.wxHasConfig) {
+        if (wx.updateAppMessageShareData) {
+          wx.updateAppMessageShareData({
+            title: that.wxShareInfo.title, // 分享标题
+            desc: that.wxShareInfo.desc.slice(0, 50), // 分享描述
+            link: that.wxShareInfo.link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+            imgUrl: that.wxShareInfo.imgUrl, // 分享图标
+          }, function () {
+            that.$vux.toast.show({
+              text: '分享成功'
+            })
+          })
+        }
+        if (wx.updateTimelineShareData) {
+          wx.updateTimelineShareData({
+            title: that.wxShareInfo.title, // 分享标题
+            link: that.wxShareInfo.link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+            imgUrl: that.wxShareInfo.imgUrl, // 分享图标
+          }, function () {
+            that.$vux.toast.show({
+              text: '分享成功'
+            })
+          })
+        }
+        if (wx.onMenuShareTimeline) {
+          // alert('更新分享配置:' + JSON.stringify(that.wxShareInfo))
+          // alert('更新分享配置:' + that.wxShareInfo.desc.slice(0, 20))
+          // 获取“分享到朋友圈”按钮点击状态及自定义分享内容接口（即将废弃）
+          wx.onMenuShareTimeline({
+            title: that.wxShareInfo.title, // 分享标题
+            link: that.wxShareInfo.link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+            imgUrl: that.wxShareInfo.imgUrl, // 分享图标
+            success: function () {
+              // 用户点击了分享后执行的回调函数
+              // alert('分享到朋友圈 - 成功')
+              that.$vux.toast.show({
+                text: '分享成功'
+              })
+            }
+          })
+        }
+        if (wx.onMenuShareAppMessage) {
+          // 获取“分享给朋友”按钮点击状态及自定义分享内容接口（即将废弃）
+          wx.onMenuShareAppMessage({
+            title: that.wxShareInfo.title, // 分享标题
+            desc: that.wxShareInfo.desc.slice(0, 50), // 分享描述
+            link: that.wxShareInfo.link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+            imgUrl: that.wxShareInfo.imgUrl, // 分享图标
+            type: that.wxShareInfo.type, // 分享类型,music、video或link，不填默认为link
+            dataUrl: that.wxShareInfo.dataUrl, // 如果type是music或video，则要提供数据链接，默认为空
+            success: function () {
+              // 用户点击了分享后执行的回调函数
+              that.$vux.toast.show({
+                text: '分享成功'
+              })
+            }
+          })
+        }
+        if (wx.onMenuShareQQ) {
+          // 获取“分享到QQ”按钮点击状态及自定义分享内容接口
+          wx.onMenuShareQQ({
+            title: that.wxShareInfo.title, // 分享标题
+            desc: that.wxShareInfo.desc.slice(0, 50), // 分享描述
+            link: that.wxShareInfo.link, // 分享链接
+            imgUrl: that.wxShareInfo.imgUrl, // 分享图标
+            success: function () {
+              // 用户确认分享后执行的回调函数
+              that.$vux.toast.show({
+                text: '分享成功'
+              })
+            },
+            cancel: function () {
+              // 用户取消分享后执行的回调函数
+            }
+          })
+        }
+        if (wx.onMenuShareWeibo) {
+          // 获取“分享到腾讯微博”按钮点击状态及自定义分享内容接口
+          wx.onMenuShareWeibo({
+            title: that.wxShareInfo.title, // 分享标题
+            desc: that.wxShareInfo.desc.slice(0, 50), // 分享描述
+            link: that.wxShareInfo.link, // 分享链接
+            imgUrl: that.wxShareInfo.imgUrl, // 分享图标
+            success: function () {
+              // 用户确认分享后执行的回调函数
+              that.$vux.toast.show({
+                text: '分享成功'
+              })
+            },
+            cancel: function () {
+              // 用户取消分享后执行的回调函数
+            }
+          })
+        }
+        if (wx.onMenuShareQZone) {
+          // 获取“分享到QQ空间”按钮点击状态及自定义分享内容接口
+          wx.onMenuShareQZone({
+            title: that.wxShareInfo.title, // 分享标题
+            desc: that.wxShareInfo.desc.slice(0, 50), // 分享描述
+            link: that.wxShareInfo.link, // 分享链接
+            imgUrl: that.wxShareInfo.imgUrl, // 分享图标
+            success: function () {
+              // 用户确认分享后执行的回调函数
+              that.$vux.toast.show({
+                text: '分享成功'
+              })
+            },
+            cancel: function () {
+              // 用户取消分享后执行的回调函数
+            }
+          })
+        }
+      }
+    },
+    wxShareUpdate ({title, des, img, link}) {
+      let that = this
+      that.wxTitle = title
+      that.wxDes = des
+      that.wxImg = img
+      that.wxLink = link
+      // debugger
+      that.wxShareSet()
+    }
+  },
+  async mounted () {
+    let that = this
+    let session = API_CONFIG_BASE.session ? API_CONFIG_BASE.session : cookie.get('session')
+    if (session !== null && session !== undefined && session !== '') {
+      cookie.set('session', session)
+    }
+    if (that.$xyTools.browser().wx) {
+      if (cookie.get('session')) {
+        setTimeout(async function () {
+          if (that.validAlert) {
+            await that.wxJsConfig()
+          }
+        }, 1000)
+        // console.log(`%cmixin wxAuth: true(wx)`, 'font-size:20px;color:blue;')
+        that.$store.commit('wxAuth', true)
+      } else {
+        // console.log(`%cmixin wxAuth: false(wx)`, 'font-size:20px;color:blue;')
+        that.$store.commit('wxAuth', false)
+        const query = queryString.parse(location.search)
+        // alert(query.code)
+        if (query.code) {
+          let {success, data, message} = await that.$api.common['wx/session']({
+            code: query.code
+          })
+          if (success && data && data.session) {
+            cookie.set('session', data.session)
+            // console.log(`%c获得accessToken: ${data.accessToken}`, 'font-size:20px;color:blue;')
+            // console.log(`%cmixin wxAuth: true(wx)`, 'font-size:20px;color:blue;')
+            setTimeout(async function () {
+              if (that.validAlert) {
+                await that.wxJsConfig()
+              }
+            }, 1000)
+            that.$store.commit('wxAuth', true)
+          } else {
+            // window.location.href = `${API_CONFIG_BASE.baseUrl}${API_CONFIG_BASE.dir}${that.$route.fullPath}`
+            window.location.replace(`${API_CONFIG_BASE.dir}${that.$route.fullPath}`)
+          }
+        } else {
+          // snsapi_base
+          // snsapi_userinfo
+          window.location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${WX_APPID}&redirect_uri=${encodeURIComponent(window.location.href)}&response_type=code&scope=snsapi_userinfo&state=wx_redirect#wechat_redirect`
+        }
+      }
+    } else {
+      if (cookie.get('session')) {
+        // console.log(`%cmixin wxAuth: true(not wx)`, 'font-size:20px;color:blue;')
+        that.$store.commit('wxAuth', true)
+      } else {
+        // console.log(`%cmixin wxAuth: false(not wx)`, 'font-size:20px;color:blue;')
+        that.$store.commit('wxAuth', false)
+        that.$router.push('/auth/login')
+      }
+      // that.$store.commit('wxAuth', false)
+    }
+  },
+  beforeDestroy () {
+    let that = this
+    that.validAlert = false
+  }
+}

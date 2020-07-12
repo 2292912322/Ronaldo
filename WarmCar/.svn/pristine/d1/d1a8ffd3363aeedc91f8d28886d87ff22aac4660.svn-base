@@ -1,0 +1,3 @@
+.icons-list { background-image: url(~/assets/imgs/icons-list.png); background-size: 34.40vw 20.67vw; background-repeat: no-repeat; }
+.icons-list-car-outer {width: calc(34.40vw + 2px); height: calc(20.67vw + 2px);}
+.icons-list-car-inner { width: calc(34.40vw + 2px); height: calc(20.67vw + 2px); background-position: calc(0.00vw + 1px) calc(0.00vw + 1px); }

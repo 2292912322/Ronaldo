@@ -1,0 +1,7 @@
+import HttpClass from '../service/HttpClass'
+
+const api = (new HttpClass()).api
+
+const actions = {}
+
+export default actions

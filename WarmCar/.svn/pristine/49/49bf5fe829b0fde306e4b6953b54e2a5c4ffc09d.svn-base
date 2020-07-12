@@ -1,0 +1,12 @@
+export default [
+  {
+    name: 'car_check',
+    desc: '修改性别',
+    path: '/v206/control/warmcar_immediate_car_check_service',
+    mockPath: '',
+    params: {
+      carId: '0'
+    },
+    cache: false
+  }
+]

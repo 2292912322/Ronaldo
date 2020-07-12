@@ -1,0 +1,86 @@
+import Vue from 'vue'
+import _ from 'lodash'
+
+// 自定义插件
+import ConfirmComponent from '~/components/common/confirm.vue'
+import AlertComponent from '~/components/common/alert.vue'
+import ToastComponent from '~/components/common/toast.vue'
+
+let ConfirmConstructor = Vue.extend(ConfirmComponent)
+let AlertConstructor = Vue.extend(AlertComponent)
+let ToastConstructor = Vue.extend(ToastComponent)
+
+let ConfirmInstance = new ConfirmConstructor({
+  el: document.createElement('div')
+})
+let AlertInstance = new AlertConstructor({
+  el: document.createElement('div')
+})
+let ToastInstance = new ToastConstructor({
+  el: document.createElement('div')
+})
+
+document.body.appendChild(ConfirmInstance.$el)
+document.body.appendChild(AlertInstance.$el)
+document.body.appendChild(ToastInstance.$el)
+
+const Confirm = function (content, opts = {}) {
+  return new Promise(function (resolve) {
+    _.assignWith(ConfirmInstance.opts, {
+      ...opts,
+      content
+    }, function (objValue, srcValue) {
+      if (srcValue !== undefined) {
+        return srcValue
+      }
+      return objValue
+    })
+    ConfirmInstance.show = true
+    ConfirmInstance.onFinish = (result) => {
+      resolve(result)
+    }
+  })
+}
+
+const Alert = function (content, opts = {}) {
+  return new Promise(function (resolve) {
+    _.assignWith(AlertInstance.opts, {
+      ...opts,
+      content
+    }, function (objValue, srcValue) {
+      if (srcValue !== undefined) {
+        return srcValue
+      }
+      return objValue
+    })
+    AlertInstance.show = true
+    AlertInstance.onFinish = () => {
+      resolve()
+    }
+  })
+}
+
+const Toast = _.throttle(function (content, opts = {}) {
+  _.assignWith(ToastInstance.opts, {
+    ...opts,
+    content
+  }, function (objValue, srcValue) {
+    if (srcValue !== undefined) {
+      return srcValue
+    }
+    return objValue
+  })
+  ToastInstance.show = true
+  setTimeout(function () {
+    ToastInstance.show = false
+  }, 1500)
+}, 1500, {
+  leading: true,
+  trailing: false
+})
+
+export default {
+  confirm: Confirm,
+  alert: Alert,
+  toast: Toast
+}

@@ -1,0 +1,3 @@
+.icons-car { background-image: url(~/assets/imgs/icons-car.png); background-size: 22.80vw 13.47vw; background-repeat: no-repeat; }
+.icons-car-众泰云100S-outer {width: calc(22.80vw + 2px); height: calc(13.47vw + 2px);}
+.icons-car-众泰云100S-inner { width: calc(22.80vw + 2px); height: calc(13.47vw + 2px); background-position: calc(0.00vw + 1px) calc(0.00vw + 1px); }

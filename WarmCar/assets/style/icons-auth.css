@@ -1,0 +1,23 @@
+.icons-auth { background-image: url(~/assets/imgs/icons-auth.png); background-size: 133.73vw 105.33vw; background-repeat: no-repeat; }
+.icons-auth-cn-back-outer {width: calc(42.67vw + 2px); height: calc(25.33vw + 2px);}
+.icons-auth-cn-back-inner { width: calc(42.67vw + 2px); height: calc(25.33vw + 2px); background-position: calc(-44.93vw + 1px) calc(-52.80vw + 1px); }
+.icons-auth-cn-front-outer {width: calc(42.67vw + 2px); height: calc(25.33vw + 2px);}
+.icons-auth-cn-front-inner { width: calc(42.67vw + 2px); height: calc(25.33vw + 2px); background-position: calc(0.00vw + 1px) calc(-80.00vw + 1px); }
+.icons-auth-cn-photo-outer {width: calc(44.00vw + 2px); height: calc(52.00vw + 2px);}
+.icons-auth-cn-photo-inner { width: calc(44.00vw + 2px); height: calc(52.00vw + 2px); background-position: calc(0.00vw + 1px) calc(0.00vw + 1px); }
+.icons-auth-left-outer {width: calc(3.07vw + 2px); height: calc(2.67vw + 2px);}
+.icons-auth-left-inner { width: calc(3.07vw + 2px); height: calc(2.67vw + 2px); background-position: calc(-51.60vw + 1px) calc(-80.00vw + 1px); }
+.icons-auth-license-back-outer {width: calc(44.13vw + 2px); height: calc(26.40vw + 2px);}
+.icons-auth-license-back-inner { width: calc(44.13vw + 2px); height: calc(26.40vw + 2px); background-position: calc(-89.60vw + 1px) calc(0.00vw + 1px); }
+.icons-auth-license-front-outer {width: calc(44.13vw + 2px); height: calc(26.40vw + 2px);}
+.icons-auth-license-front-inner { width: calc(44.13vw + 2px); height: calc(26.40vw + 2px); background-position: calc(0.00vw + 1px) calc(-52.80vw + 1px); }
+.icons-auth-ot-back-outer {width: calc(42.80vw + 2px); height: calc(25.60vw + 2px);}
+.icons-auth-ot-back-inner { width: calc(42.80vw + 2px); height: calc(25.60vw + 2px); background-position: calc(-89.60vw + 1px) calc(-27.20vw + 1px); }
+.icons-auth-ot-face-outer {width: calc(44.00vw + 2px); height: calc(52.00vw + 2px);}
+.icons-auth-ot-face-inner { width: calc(44.00vw + 2px); height: calc(52.00vw + 2px); background-position: calc(-44.80vw + 1px) calc(0.00vw + 1px); }
+.icons-auth-ot-front-outer {width: calc(42.80vw + 2px); height: calc(25.33vw + 2px);}
+.icons-auth-ot-front-inner { width: calc(42.80vw + 2px); height: calc(25.33vw + 2px); background-position: calc(-89.60vw + 1px) calc(-53.60vw + 1px); }
+.icons-auth-proc-ing-outer {width: calc(3.20vw + 2px); height: calc(3.20vw + 2px);}
+.icons-auth-proc-ing-inner { width: calc(3.20vw + 2px); height: calc(3.20vw + 2px); background-position: calc(-47.60vw + 1px) calc(-80.00vw + 1px); }
+.icons-auth-proc-wait-outer {width: calc(3.33vw + 2px); height: calc(3.33vw + 2px);}
+.icons-auth-proc-wait-inner { width: calc(3.33vw + 2px); height: calc(3.33vw + 2px); background-position: calc(-43.47vw + 1px) calc(-80.00vw + 1px); }

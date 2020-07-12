@@ -1,0 +1,16 @@
+export default [
+  {
+    // session
+    //
+    name: 'file_upload',
+    desc: '文件上传接口',
+    path: '/v206/file/warmcar_file_update_service',
+    mockPath: '',
+    params: {
+      fileDir: '',
+      file: []
+    },
+    cache: false,
+    contentType: 'multipart/form-data'
+  }
+]

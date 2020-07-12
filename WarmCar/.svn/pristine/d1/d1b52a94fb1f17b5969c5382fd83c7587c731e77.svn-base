@@ -1,0 +1,12 @@
+<template>
+  <div></div>
+</template>
+
+<script>
+  // 此页必须有, 否则导致发布报错
+  export default {
+    data () {
+      return {}
+    }
+  }
+</script>

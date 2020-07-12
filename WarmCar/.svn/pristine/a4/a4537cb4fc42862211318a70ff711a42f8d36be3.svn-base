@@ -1,0 +1,77 @@
+export default [
+  {
+    // cityName	城市区域名称	是	String
+    // longitude	经度	是	String
+    // latitude	纬度	是	String
+    // level	级别	是	int		2市 3区
+    name: 'open-city-list',
+    desc: '获取开放的城市区列表',
+    path: '/v206/home/warmcar_query_open_city_list_service',
+    mockPath: '',
+    params: {},
+    cache: true
+  },
+  {
+    // gps	服务网点GPS	是	String
+    // leisureCarNum	网点空闲车辆数	是	int
+    // branchId	网点ID	是	int
+    // branchName	网点名称	是	String
+    // branchAddress	网点地址	是	String
+    name: 'all_branch_by_city_code',
+    desc: '获取所有网点信息',
+    path: '/v206/home/warmcar_query_all_branch_by_city_code_service',
+    mockPath: '',
+    params: {
+      cityCode: '' // 城市编码	是	String		深圳:440300
+    },
+    cache: true
+  },
+  {
+    // branchId	网点ID	是	int
+    // branchName	网点名称	是	String
+    // branchAddress	网点详细地址	是	String
+    // isOtherReturn	是否异地取还	是	String
+    // notifyId	网点提醒ID	是	int
+    // notifyStartTimestamp	提醒开始时间戳	是	long
+    // notifyEndTimestamp	提醒结束时间戳	是	long
+    // fenceType	电子围栏类型	是	String
+    // fenceRadius	电子围栏半径	是	int
+    // gps	网点GPS	是	String
+    // pictures	现场图片集合	是	List
+    // cars	网点可用车辆集合	是	List
+    // fencePoints	电子围栏	是	List
+
+    // <pictures>
+    // url	图片链接	是	String		URL
+
+    // <cars>
+    // carId	车辆ID	是	int
+    // carImg	车辆图片	是	String
+    // gps	车辆GPS	是	String
+    // carLpn	车牌号	是	String		0
+    // carModelName	车型名称	是	String		0
+    // restBattery	剩余电量	是	int		0
+    // chargeState	车辆充电状态	是	String		0
+    // enduranceMileage	剩余里程	是	int		0
+    // timeMoney	时间计费	是	int		0
+    // timeUnit	时间单位	是	int		0
+    // mileageMoney	里程计费	是	int	直接显示	0
+    // mileageUnit	里程计费单位	是	String		0
+    // carColor	车辆颜色	是	string		0
+    // carSeatNum	车辆座位数	是	string		0
+    // carTagName	车辆标签	是	String	原点取还	0
+    // carTagNameTips	车辆标签提示	是	string		0
+
+    // <fencePoints>
+    // longitude	longitude	是	String		longitude
+    // latitude	longitude	是	String		longitude
+    name: 'branch',
+    desc: '查询单个网点',
+    path: '/v206/home/warmcar_query_branch_service',
+    mockPath: '',
+    params: {
+      branchId: '' // 网点ID	是	int		1
+    },
+    cache: true
+  }
+]

@@ -1,0 +1,133 @@
+<style lang="scss">
+  @import "~vue-xy-ui/dist/mixin";
+</style>
+
+<template>
+  <div>
+    <button @click="onTestConfirm">点我:测试confirm(同步)</button>
+    <br>
+    <br>
+    <button @click="onTestAlert">点我:测试alert(同步)</button>
+    <br>
+    <br>
+    <button @click="onTestToast">点我:测试Toast(显示1.5s,限流1.5s)</button>
+    <br>
+    <br>
+    <p>
+      confirm: 用于确认类的交互<br>
+      alert: 用于重要信息的提示<br>
+      toast: 大多数信息的提示<br>
+      <br>
+      使用原则可以参考: <a href="https://my.oschina.net/u/726807/blog/1807478">https://my.oschina.net/u/726807/blog/1807478</a>
+      <br>
+      <br>
+      多选择确认, 使用Vux的Actionsheet
+      <br>
+      <br>
+      复杂内容的弹窗, 可以重用confirm的样式, 然后单独实现(在页面中或做成component)
+    </p>
+  </div>
+</template>
+
+<script>
+  import common from '~/mixins/common'
+  import seo from '~/mixins/seo'
+  import wxMixin from '~/mixins/wx-mixin'
+  import vuxValidate from '~/mixins/vux-validate'
+
+  export default {
+    mixins: [common/*, wxMixin*/, seo],
+    components: {},
+    data () {
+      return {
+        pageTitle: '弹窗demo'
+      }
+    },
+    watch: {
+      '$store.state.wxAuthStatus': function (v) {
+        let that = this
+        // 需要授权才可以加载的数据(授权比页面装载慢)
+        if (v) {
+          //
+        }
+      }
+    },
+    methods: {
+      async onTestConfirm () {
+        let that = this
+        // 同步
+        let result = await that.$wc.confirm('是否显示下一个confirm?', {
+          title: '测试标题1',
+          confirmButtonText: '自定义确定文字',
+          cancelButtonText: '自定义取消文字',
+          onConfirm () {
+            console.log(`wc-confirm onConfirm callback 1`)
+          }
+        })
+
+        if (result) {
+          // 同步
+          await that.$wc.confirm('测试内容2测试内容2测试内容2测试内容2测试内容2测试内容2测试内容2测试内容2', {
+            title: '测试标题2',
+            onConfirm () {
+              console.log(`wc-confirm onConfirm callback 2`)
+            }
+          })
+        }
+      },
+      async onTestAlert () {
+        let that = this
+        // 同步
+        await that.$wc.alert('测试内容1', {
+          title: '测试标题1',
+          confirmButtonText: '自定义确定文字',
+          onConfirm () {
+            console.log(`wc-confirm onConfirm callback 1`)
+          }
+        })
+        // 同步
+        await that.$wc.alert('测试内容2', {
+          title: '测试标题2',
+          onConfirm () {
+            console.log(`wc-confirm onConfirm callback 2`)
+          }
+        })
+      },
+      onTestToast () {
+        let that = this
+        // 同步
+        that.$wc.toast('测试内容1', {
+          title: '测试标题1',
+          onConfirm () {
+            console.log(`wc-toast onConfirm callback 1`)
+          }
+        })
+        that.$wc.toast('测试内容2', {
+          title: '测试标题2',
+          onConfirm () {
+            console.log(`wc-toast onConfirm callback 2`)
+          }
+        })
+        setTimeout(function () {
+          that.$wc.toast('测试内容3测试内容3测试内容3测试内容3测试内容3测试内容3测试内容3测试内容3测试内容3测试内容3', {
+            title: '测试标题3',
+            time: 3000,
+            position: 'bottom',
+            onConfirm () {
+              console.log(`wc-toast onConfirm callback 3`)
+            }
+          })
+        }, 1500)
+      }
+    },
+    created () {
+      let that = this
+      that.type = that.$route.params.type
+      // 需要授权才可以加载的数据(授权比页面装载快)
+      if (that.$store.state.wxAuthStatus) {
+        //
+      }
+      // 无需授权可以提前加载的数据
+    }
+  }
+</script>

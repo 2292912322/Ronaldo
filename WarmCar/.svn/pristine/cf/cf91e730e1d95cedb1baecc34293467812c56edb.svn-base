@@ -1,0 +1,31 @@
+function wcDistance (value) {
+  if (typeof value === 'number') {
+    if (value < 1000) {
+      return `${Math.floor(value)}m`
+    }
+    return `${Math.floor(value / 1000)}km`
+  }
+  return '0m'
+}
+
+function wcTimeByMin (min) {
+  let hour = Math.floor(min / 60)
+  let minLeft = min % 60
+  if (hour > 1) {
+    return `${hour}:${minLeft.toString()
+                             .padEnd(2, '0')}`
+  }
+  return min
+}
+
+function wcNumFormat (value){
+  if(typeof value === 'number'){
+    return value/100
+  }
+}
+
+export default {
+  wcDistance,
+  wcTimeByMin,
+  wcNumFormat
+}

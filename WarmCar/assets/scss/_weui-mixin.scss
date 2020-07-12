@@ -1,0 +1,13 @@
+@mixin weui-cell__left-angle($degree:45deg) {
+  &:after {
+    content: " ";
+    display: inline-block;
+    height: 6px;
+    width: 6px;
+    border-width: 2px 2px 0 0;
+    border-color: #C8C8CD;
+    border-style: solid;
+    transform: rotate($degree);
+    flex-shrink: 0;
+  }
+}

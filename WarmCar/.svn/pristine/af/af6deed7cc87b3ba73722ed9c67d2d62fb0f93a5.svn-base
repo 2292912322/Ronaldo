@@ -1,0 +1,76 @@
+<style lang="scss">
+  @import "~vue-xy-ui/dist/mixin";
+
+  .wc-alert {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, .5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    visibility: hidden;
+    color: #fff;
+    button {
+      color: #fff;
+    }
+    &.wc-alert--show {
+      visibility: visible;
+    }
+  }
+</style>
+<template>
+  <div class="wc-alert"
+       :class="{'wc-alert--show':show}">
+    <div>title:{{opts.title}}</div>
+    <div>content:{{opts.content}}</div>
+    <button @click="onConfirm"
+            v-xy-moving-btn>{{opts.confirmButtonText}}
+    </button>
+  </div>
+</template>
+<script>
+  import Vue from 'vue'
+  import xyUI from 'vue-xy-ui'
+
+  Vue.use(xyUI)
+
+  export default {
+    name: 'wc-alert',
+    props: {},
+    watch: {},
+    data () {
+      return {
+        opts: {
+          title: '提示',
+          content: '',
+          confirmButtonText: '确定',
+          onConfirm: null
+        },
+        show: false,
+        onFinish: null
+      }
+    },
+    computed: {},
+    methods: {
+      onConfirm () {
+        let that = this
+        if (that.opts.onConfirm) {
+          that.opts.onConfirm.call(that)
+        } else {
+          console.log(`wc-alert onConfirm default`)
+        }
+        that.show = false
+        if (that.onFinish) {
+          that.onFinish()
+        }
+      }
+    },
+    mounted: function () {
+      let that = this
+    }
+  }
+</script>

@@ -1,0 +1,83 @@
+<style lang="scss">
+  @import "~vue-xy-ui/dist/mixin";
+</style>
+
+<template>
+  <div>
+    <x-input placeholder="输入手机号"
+             v-model="phone"></x-input>
+    <x-input placeholder="输入验证码"
+             v-model="verificationCode"></x-input>
+    <div style="text-align: center;">
+      <button style="border: 1px solid black;"
+              @click="onSign">测试登录
+      </button>
+    </div>
+    <div>提交的参数:</div>
+    <div style="word-break: break-all;"
+         v-text="signed"></div>
+  </div>
+</template>
+
+<script>
+  import common from '~/mixins/common'
+  import seo from '~/mixins/seo'
+  import wxMixin from '~/mixins/wx-mixin'
+  import parseData from '~/service/parseData'
+
+  export default {
+    mixins: [common/*, wxMixin*/, seo],
+    components: {},
+    data () {
+      return {
+        pageTitle: '签名demo',
+        phone: '12345678901',
+        verificationCode: '1234',
+        terminalType: '',
+        signed: ''
+      }
+    },
+    watch: {
+      '$store.state.wxAuthStatus': function (v) {
+        let that = this
+        // 需要授权才可以加载的数据(授权比页面装载慢)
+        if (v) {
+          // console.log(`%c${that.$route.fullPath} wxAuthStatus`, 'font-size:20px;color:blue;')
+        }
+      }
+    },
+    methods: {
+      async onSign () {
+        let that = this
+        that.signed = parseData({
+          phone: that.phone,
+          verificationCode: that.verificationCode,
+          terminalType: that.terminalType
+        })
+
+        let result = await that.$api.warmcar['customer/login-register']({
+          phone: that.phone,
+          verificationCode: that.verificationCode,
+          terminalType: that.terminalType
+        })
+        console.log(result)
+      }
+    },
+    created () {
+      let that = this
+      that.type = that.$route.params.type
+      // 需要授权才可以加载的数据(授权比页面装载快)
+      if (that.$store.state.wxAuthStatus) {
+        // console.log(`%c${that.$route.fullPath} created`, 'font-size:20px;color:blue;')
+      }
+      // 无需授权可以提前加载的数据
+
+      let browser = that.$xyTools.browser()
+      if (browser.type === 'android') {
+        that.terminalType = '01'
+      } else if (browser.type === 'ios') {
+        that.terminalType = '02'
+      }
+    }
+  }
+</script>

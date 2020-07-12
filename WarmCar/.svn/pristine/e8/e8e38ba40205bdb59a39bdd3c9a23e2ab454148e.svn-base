@@ -1,0 +1,86 @@
+<style lang="scss">
+  @import "~vue-xy-ui/dist/mixin";
+</style>
+
+<template>
+  <div>
+    <button class="wc-btn wc-btn--yellow wc-btn--w600 wc-btn--h85"
+            v-xy-moving-btn>立即用车
+    </button>
+    <button class="wc-btn wc-btn--yellow wc-btn--w280 wc-btn--h85 wc-btn--f30"
+            v-xy-moving-btn>选择车辆
+    </button>
+    <button class="wc-btn wc-btn--gray wc-btn--w600 wc-btn--h85"
+            v-xy-moving-btn>申请退款
+    </button>
+    <button class="wc-btn wc-btn--gray wc-btn--w600 wc-btn--h85 wc-btn--cfff"
+            v-xy-moving-btn>退出登录
+    </button>
+    <button class="wc-btn wc-btn--yellow wc-btn--p50 wc-btn--h50"
+            v-xy-moving-btn>充值
+    </button>
+    <button class="wc-btn wc-btn--yellow wc-btn--p20 wc-btn--h40 wc-btn--c666 wc-btn--f24"
+            v-xy-moving-btn>已结束
+    </button>
+    <button class="wc-btn wc-btn--yellow wc-btn--w180 wc-btn--h60 wc-btn--c666 wc-btn--f22"
+            v-xy-moving-btn>车身太脏
+    </button>
+    <button class="wc-btn wc-btn--yellow wc-btn--w650 wc-btn--h105 wc-btn--f36"
+            v-xy-moving-btn>再次还车
+    </button>
+    <button class="wc-btn wc-btn--gray wc-btn--w650 wc-btn--h105 wc-btn--f36 wc-btn--cfff"
+            v-xy-moving-btn>无法还车
+    </button>
+    <button class="wc-btn wc-btn--yellow wc-btn--w450 wc-btn--h105 wc-btn--f36"
+            v-xy-moving-btn>确定
+    </button>
+    <button class="wc-btn wc-btn--yellow wc-btn--w650 wc-btn--h110 wc-btn--f36"
+            v-xy-moving-btn>提交
+    </button>
+    <button class="wc-btn wc-btn--yellow wc-btn--w470 wc-btn--h80 wc-btn--f26"
+            v-xy-moving-btn>提交
+    </button>
+    <button class="wc-btn wc-btn--yellow wc-btn--w215 wc-btn--h60 wc-btn--f30"
+            v-xy-moving-btn>开车
+    </button>
+    <button class="wc-btn wc-btn--yellow wc-btn--w430 wc-btn--h85 wc-btn--f36 wc-btn--r25"
+            v-xy-moving-btn>确定
+    </button>
+  </div>
+</template>
+
+<script>
+  import common from '~/mixins/common'
+  import seo from '~/mixins/seo'
+  import wxMixin from '~/mixins/wx-mixin'
+  import vuxValidate from '~/mixins/vux-validate'
+
+  export default {
+    mixins: [common/*, wxMixin*/, seo],
+    components: {},
+    data () {
+      return {
+        pageTitle: '按钮demo'
+      }
+    },
+    watch: {
+      '$store.state.wxAuthStatus': function (v) {
+        let that = this
+        // 需要授权才可以加载的数据(授权比页面装载慢)
+        if (v) {
+          // console.log(`%c${that.$route.fullPath} wxAuthStatus`, 'font-size:20px;color:blue;')
+        }
+      }
+    },
+    methods: {},
+    created () {
+      let that = this
+      that.type = that.$route.params.type
+      // 需要授权才可以加载的数据(授权比页面装载快)
+      if (that.$store.state.wxAuthStatus) {
+        // console.log(`%c${that.$route.fullPath} created`, 'font-size:20px;color:blue;')
+      }
+      // 无需授权可以提前加载的数据
+    }
+  }
+</script>

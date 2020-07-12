@@ -1,0 +1,11 @@
+.container {
+  .weui-cells {
+    font-size: 14px;
+    &:before {
+      border-top: none;
+    }
+    &:after {
+      border-bottom: none;
+    }
+  }
+}

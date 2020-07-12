@@ -1,0 +1,17 @@
+.icons-car { background-image: url(~/assets/imgs/icons-car.png); background-size: 145.87vw 94.80vw; background-repeat: no-repeat; }
+.icons-car-charge-gun-outer {width: calc(40.00vw + 2px); height: calc(29.20vw + 2px);}
+.icons-car-charge-gun-inner { width: calc(40.00vw + 2px); height: calc(29.20vw + 2px); background-position: calc(-59.07vw + 1px) calc(-52.40vw + 1px); }
+.icons-car-check-code-outer {width: calc(58.27vw + 2px); height: calc(42.40vw + 2px);}
+.icons-car-check-code-inner { width: calc(58.27vw + 2px); height: calc(42.40vw + 2px); background-position: calc(0.00vw + 1px) calc(-52.40vw + 1px); }
+.icons-car-flashlight-outer {width: calc(15.73vw + 2px); height: calc(15.73vw + 2px);}
+.icons-car-flashlight-inner { width: calc(15.73vw + 2px); height: calc(15.73vw + 2px); background-position: calc(-105.87vw + 1px) calc(-44.27vw + 1px); }
+.icons-car-orthogon-outer {width: calc(52.13vw + 2px); height: calc(51.60vw + 2px);}
+.icons-car-orthogon-inner { width: calc(52.13vw + 2px); height: calc(51.60vw + 2px); background-position: calc(0.00vw + 1px) calc(0.00vw + 1px); }
+.icons-car-push-logo-outer {width: calc(52.13vw + 2px); height: calc(51.33vw + 2px);}
+.icons-car-push-logo-inner { width: calc(52.13vw + 2px); height: calc(51.33vw + 2px); background-position: calc(-52.93vw + 1px) calc(0.00vw + 1px); }
+.icons-car-serial-num-outer {width: calc(40.00vw + 2px); height: calc(29.20vw + 2px);}
+.icons-car-serial-num-inner { width: calc(40.00vw + 2px); height: calc(29.20vw + 2px); background-position: calc(-105.87vw + 1px) calc(0.00vw + 1px); }
+.icons-car-shutting-down-outer {width: calc(15.73vw + 2px); height: calc(15.73vw + 2px);}
+.icons-car-shutting-down-inner { width: calc(15.73vw + 2px); height: calc(15.73vw + 2px); background-position: calc(-122.40vw + 1px) calc(-44.27vw + 1px); }
+.icons-car-众泰云100S-outer {width: calc(22.80vw + 2px); height: calc(13.47vw + 2px);}
+.icons-car-众泰云100S-inner { width: calc(22.80vw + 2px); height: calc(13.47vw + 2px); background-position: calc(-105.87vw + 1px) calc(-30.00vw + 1px); }

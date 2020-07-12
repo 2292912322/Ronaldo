@@ -1,0 +1,139 @@
+<style lang="scss">
+  @import "~vue-xy-ui/dist/mixin";
+  @import "~assets/scss/value";
+
+  .wc-my-wallet {
+    .wc-my-wallet__info {
+      display: flex;
+      justify-content: space-between;
+      padding: rsh(55) rsh(55) rsh(55) rsh(60);
+      & > section {
+        & > label, & > b {
+          display: block;
+        }
+        & > label {
+          font-size: rsh(26);
+          line-height: rsh(30);
+        }
+        & > b {
+          font-size: rsh(51);
+          line-height: rsh(54);
+        }
+      }
+      & > button {
+        margin: 0;
+      }
+    }
+    .wc-my-wallet__pay {
+
+    }
+  }
+</style>
+
+<template>
+  <div class="wc-my-wallet">
+    <div class="wc-card">
+      <a class="wc-box">
+        <div class="wc-box__ct wc-my-wallet__info">
+          <section>
+            <label>我的余额</label>
+            <b>500元</b>
+          </section>
+          <!--<button class="wc-my-wallet__pay"-->
+          <!--v-xy-moving-btn>-->
+          <!--充值-->
+          <!--</button>-->
+          <button class="wc-btn wc-btn--yellow wc-btn--p50 wc-btn--h50"
+                  v-xy-moving-btn>充值
+          </button>
+        </div>
+      </a>
+      <router-link class="wc-box"
+                   tag="a"
+                   to="/my/wallet/deposit"
+                   v-xy-hover-btn>
+        <div class="wc-box__ct">
+          <i class="wc-box__icon icons-common-wallet-deposit-outer">
+            <div class="icons-common icons-common-wallet-deposit-inner"></div>
+          </i>
+          <div class="wc-box__title">押金</div>
+          <button class="wc-box__select">
+            <i class="icons-common-gt-outer">
+              <div class="icons-common icons-common-gt-inner"></div>
+            </i>
+          </button>
+        </div>
+      </router-link>
+      <router-link class="wc-box"
+                   tag="a"
+                   to="/my/wallet/coupon"
+                   v-xy-hover-btn>
+        <div class="wc-box__ct">
+          <i class="wc-box__icon icons-common-wallet-coupon-outer">
+            <div class="icons-common icons-common-wallet-coupon-inner"></div>
+          </i>
+          <div class="wc-box__title">优惠券</div>
+          <button class="wc-box__select">
+            <i class="icons-common-gt-outer">
+              <div class="icons-common icons-common-gt-inner"></div>
+            </i>
+          </button>
+        </div>
+      </router-link>
+      <router-link class="wc-box"
+                   tag="a"
+                   to="/my/wallet/group"
+                   v-xy-hover-btn>
+        <div class="wc-box__ct">
+          <i class="wc-box__icon icons-common-wallet-group-outer">
+            <div class="icons-common icons-common-wallet-group-inner"></div>
+          </i>
+          <div class="wc-box__title">团队余额</div>
+          <button class="wc-box__select">
+            <i class="icons-common-gt-outer">
+              <div class="icons-common icons-common-gt-inner"></div>
+            </i>
+          </button>
+        </div>
+      </router-link>
+    </div>
+  </div>
+</template>
+
+<script>
+  import common from '~/mixins/common'
+  import seo from '~/mixins/seo'
+  import wxMixin from '~/mixins/wx-mixin'
+
+  export default {
+    mixins: [common, wxMixin, seo],
+    components: {},
+    data () {
+      return {
+        pageTitle: '我的钱包',
+        startLoad: false,
+        //
+      }
+    },
+    watch: {
+      '$store.state.wxAuthStatus': function (v) {
+        let that = this
+        // 需要授权才可以加载的数据(授权比页面装载慢)
+        if (v && !that.startLoad) {
+          that.startLoad = true
+          //
+        }
+      }
+    },
+    methods: {},
+    created () {
+      let that = this
+      // 需要授权才可以加载的数据(授权比页面装载快)
+      if (that.$store.state.wxAuthStatus && !that.startLoad) {
+        that.startLoad = true
+        //
+      }
+      // 无需授权可以提前加载的数据
+    }
+  }
+</script>

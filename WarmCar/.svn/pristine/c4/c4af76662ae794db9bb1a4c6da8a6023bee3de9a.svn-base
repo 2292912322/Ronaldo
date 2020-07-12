@@ -1,0 +1,17 @@
+export default [
+  {
+    // accessToken
+    //
+    // [“文件名1”,”文件名2”]
+    name: 'uploadFile',
+    desc: '1.2.6、指定类型文件上传',
+    path: '/app/uploader/uploadFile',
+    mockPath: '/common/uploadFile',
+    params: {
+      cate: '',// string 是 chat=语音下单分类文件，不传参则当做临时文件进行上传
+      file: ''// string 是 单文件或多文件
+    },
+    cache: false,
+    contentType: 'multipart/form-data'
+  }
+]

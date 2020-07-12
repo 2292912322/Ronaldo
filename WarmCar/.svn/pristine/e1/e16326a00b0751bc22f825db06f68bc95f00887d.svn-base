@@ -1,0 +1,27 @@
+<template>
+  <div class="container"
+       :class="{'route-out':$router.currentRoute.meta.move==='out','route-in':$router.currentRoute.meta.move==='in'}">
+    <!-- 页面容器 -->
+    <nuxt-child/>
+  </div>
+</template>
+
+<script>
+  export default {
+    data () {
+      return {}
+    },
+    created () {
+      // 默认重定向至首页
+      if (this.$route.fullPath === '/') {
+        this.$router.replace('/home')
+      }
+    }
+  }
+</script>
+
+<style lang="scss">
+  @import "~assets/scss/common";
+  @import "~assets/scss/pop";
+  @import "~assets/scss/btn";
+</style>

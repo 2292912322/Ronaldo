@@ -1,0 +1,290 @@
+<style lang="scss">
+@import "~vue-xy-ui/dist/mixin";
+@import "~assets/scss/value";
+@import "../../../assets/style/icons-auth.css";
+.wc-recharge {
+  display: flex;
+  flex-direction: column;
+  .wc-recharge-card {
+    display: flex;
+    flex-direction: column;
+    width: rsh(710);
+    .wc-recharge-card__title1 {
+      font-size: rsh(24);
+      color: #333333;
+      font-family: "PingFang-SC-Regular";
+      padding: rsh(40) 0 0 rsh(25);
+    }
+    .wc-recharge-card__title2 {
+      font-size: rsh(24);
+      color: #333333;
+      font-family: "PingFang-SC-Regular";
+      padding: rsh(50) 0 rsh(30) rsh(25);
+    }
+    .wc-recharge-card__content {
+      display: flex;
+      flex-direction: row;
+      flex-flow: wrap;
+      .wc-recharge-card__content--cell {
+        width: rsh(203);
+        height: rsh(94);
+        margin-left: rsh(25);
+        margin-top: rsh(25);
+        border: 1px solid #e3e3e3;
+        border-radius: rsh(10);
+        text-align: center;
+        line-height: rsh(94);
+      }
+      .wc-recharge-card__content--cell--active {
+        background: #ffcc00;
+        color: #fff;
+        width: rsh(203);
+        height: rsh(94);
+        margin-left: rsh(25);
+        margin-top: rsh(25);
+        border: 1px solid #e3e3e3;
+        border-radius: rsh(10);
+        text-align: center;
+        line-height: rsh(94);
+      }
+    }
+    & > span {
+      font-size: rsh(20);
+      color: #666666;
+      margin-left: rsh(25);
+      margin-top: rsh(20);
+    }
+  }
+  .wc-recharge-card__item {
+    width: rsh(646);
+    height: rsh(100);
+    margin: 0 auto;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    &:after {
+      content: "";
+      width: rsh(646);
+      height: 1px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background-color: #f3f3f3;
+      transform: scale(1, 0.5);
+    }
+    .wc-recharge-card__item--left {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      & > i {
+        margin: 0 rsh(30) 0 rsh(20);
+      }
+      & > span {
+        font-size: rsh(30);
+        color: #333333;
+      }
+    }
+    .wc-recharge-card__item--right {
+      margin-right: rsh(25);
+    }
+  }
+  & > button {
+    margin-top: rsh(200);
+  }
+}
+.wc-paySuccess-card {
+  width: rsh(710);
+  height: rsh(334);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  & > i {
+    margin: rsh(50) auto rsh(40);
+  }
+  & > span:first-of-type {
+    font-size: rsh(24);
+    color: #666666;
+    margin-bottom: rsh(15);
+  }
+  & > span:last-of-type {
+    font-size: rsh(20);
+    color: #999999;
+  }
+}
+</style>
+
+<template>
+  <div>
+    <div class="wc-recharge" v-if="!isRecharge">
+      <div class="wc-card wc-recharge-card">
+        <div class="wc-recharge-card__title1">选择充值金额</div>
+        <div class="wc-recharge-card__content">
+          <div
+            :class="isActive==index ? 'wc-recharge-card__content--cell--active' : 'wc-recharge-card__content--cell'"
+            v-for="(a,index) in moneyArr"
+            @click="chooseMoney(index)"
+          >{{a}}元</div>
+        </div>
+        <span>*充值金额不可退款</span>
+        <div class="wc-recharge-card__title2">支付方式</div>
+        <div class="wc-recharge-card__item" @click="changeisZFB">
+          <div class="wc-recharge-card__item--left">
+            <i class="icons-common-pay-type-ali-outer">
+              <div class="icons-common icons-common-pay-type-ali-inner"></div>
+            </i>
+            <span>支付宝</span>
+          </div>
+          <div class="wc-recharge-card__item--right">
+            <i
+              :class="{'icons-common-selected-outer':isZFB,'icons-common-pay-unselected-outer':!isZFB}"
+            >
+              <div
+                :class="{'icons-common':true,'icons-common-selected-inner':isZFB,'icons-common-pay-unselected-inner':!isZFB }"
+              ></div>
+            </i>
+          </div>
+        </div>
+        <div class="wc-recharge-card__item" @click="changeisZFB">
+          <div class="wc-recharge-card__item--left">
+            <i class="icons-common-pay-type-wx-outer">
+              <div class="icons-common icons-common-pay-type-wx-inner"></div>
+            </i>
+            <span>微信支付</span>
+          </div>
+          <div class="wc-recharge-card__item--right">
+            <i
+              :class="{'icons-common-selected-outer':!isZFB,'icons-common-pay-unselected-outer':isZFB}"
+            >
+              <div
+                :class="{'icons-common':true,'icons-common-selected-inner':!isZFB,'icons-common-pay-unselected-inner':isZFB }"
+              ></div>
+            </i>
+          </div>
+        </div>
+      </div>
+      <button
+        class="wc-btn wc-btn--yellow wc-btn--w600 wc-btn--h85"
+        v-xy-moving-btn
+        @click="rechargeSuccess"
+      >提交</button>
+    </div>
+    <!-- 充值成功 -->
+    <div v-if="isRecharge">
+      <div class="wc-card wc-paySuccess-card">
+        <i class="icons-common-selected-main-outer">
+          <div class="icons-common icons-common-selected-main-inner"></div>
+        </i>
+        <span>充值成功</span>
+        <span>充值金额500.00元整</span>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import common from "~/mixins/common";
+import seo from "~/mixins/seo";
+import wxMixin from "~/mixins/wx-mixin";
+
+export default {
+  mixins: [common, wxMixin, seo],
+  components: {},
+  data() {
+    return {
+      pageTitle: "充值",
+      startLoad: false,
+      isZFB: true,
+      moneyArr: [50, 100, 200, 300, 500, 1000],
+      isActive: 0,
+      isRecharge: false,
+      bankType: "",
+      money: null
+    };
+  },
+  watch: {
+    "$store.state.wxAuthStatus": function(v) {
+      let that = this;
+      // 需要授权才可以加载的数据(授权比页面装载慢)
+      if (v) {
+        // console.log(`%c${that.$route.fullPath} wxAuthStatus`, 'font-size:20px;color:blue;')
+      }
+    }
+  },
+  methods: {
+    changeisZFB() {
+      this.isZFB = !this.isZFB;
+    },
+    chooseMoney(index) {
+      this.isActive = index;
+    },
+    async rechargeSuccess() {
+      let that = this;
+      if (that.isZFB) {
+        that.bankType = "01";
+      } else {
+        that.bankType = "02";
+      }
+      var money = that.moneyArr[that.isActive];
+      let { success, bizContent } = await that.$api.warmcar[
+        "customer/balance_unified_order"
+      ]({
+        money: money,
+        bankType: that.bankType
+      });
+      if (success && bizContent) {
+        let { bankType, paymentData } = bizContent;
+        if (bankType == "01") {
+          //支付宝
+          window.location.href = `/warmcar/pay.html?trade_mode=ALIPAY&${paymentData}`;
+          window.prepay = {
+            cancelPayment() {
+              // 支付失败/取消
+              that.$wc.toast(`支付失败`);
+            },
+            confirmPayment() {
+              // 支付成功
+              that.isRecharge = true;
+              setTimeout(function() {
+                that.$router.replace({ path: "/home" });
+              }, 1500);
+            }
+          };
+        } else if (bankType == "02") {
+          //微信支付
+          let payData = JSON.parse(paymentData);
+          window.location.href = `/warmcar/pay.html?trade_mode=WXPAY&appid=${
+            payData.appid
+          }&noncestr=${payData.noncestr}&package=${payData.package}&partnerid=${
+            payData.partnerid
+          }&prepayid=${payData.prepayid}&timestamp=${payData.timestamp}&sign=${
+            payData.sign
+          }`;
+          window.prepay = {
+            cancelPayment() {
+              // 支付失败/取消
+            },
+            confirmPayment() {
+              // 支付成功
+              that.isRecharge = true;
+              setTimeout(function() {
+                that.$router.replace({ path: "/home" });
+              }, 1500);
+            }
+          };
+        }
+      }
+    }
+  },
+  created() {
+    let that = this;
+    that.type = that.$route.params.type;
+    // 需要授权才可以加载的数据(授权比页面装载快)
+    if (that.$store.state.wxAuthStatus) {
+      // console.log(`%c${that.$route.fullPath} created`, 'font-size:20px;color:blue;')
+    }
+    // 无需授权可以提前加载的数据
+  }
+};
+</script>

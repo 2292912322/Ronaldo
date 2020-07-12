@@ -1,0 +1,180 @@
+import _ from 'lodash'
+import HttpClass from '../service/HttpClass'
+
+import Vue from 'vue'
+import cookie from 'js-cookie'
+import {
+  WX_APPID,
+  LONG_WAIT_SEC,
+  API_CONFIG_BASE
+} from '~/config'
+import moreHeaders from '~/config/moreHeaders'
+
+import { xyTools } from 'vue-xy-ui'
+
+/*++++++++++ some component insert ++++++++++*/
+import wcComponents from './components'
+import LoadingComponent from '~/node_modules/vux/src/components/loading/index.vue'
+
+let that = {
+  $wc: wcComponents
+}
+
+let LoadingConstructor = Vue.extend(LoadingComponent)
+let LoadingInstance = new LoadingConstructor({
+  el: document.createElement('div')
+})
+document.body.appendChild(LoadingInstance.$el)
+/*---------- some component insert ----------*/
+
+// show	boolean	false	显示状态，在 v2.5.7 前使用v-model绑定，后面直接使用 :show 绑定	--
+// text	string	加载中	提示文字，值为空字符时隐藏提示文字	--
+// position	string	fixed	定位方式，默认为fixed，在100%的布局下用absolute可以避免抖动	--
+let Loading = {
+  show: _.throttle((text = '') => {
+    LoadingInstance.text = text
+    LoadingInstance.show = true
+  }, 2000),
+  hide () {
+    LoadingInstance.show = false
+  }
+}
+
+let LoadingTimer = new Map()
+let LoadingIndex = 0
+
+// 加载慢的效果队列处理
+function addLoading (index) {
+  LoadingTimer.set(index, setTimeout(function () {
+    Loading.show()
+  }, LONG_WAIT_SEC))
+}
+
+function clearLoadingTimer (index) {
+  let target = LoadingTimer.get(index)
+  if (target) {
+    clearTimeout(target)
+    target = null
+    LoadingTimer.delete(index)
+  }
+  Loading.hide()
+}
+
+/*++++++++++ axios interceptors ++++++++++*/
+
+class HttpWithUIClass extends HttpClass {
+  requestSuccessFunc (requestObj) {
+    addLoading(LoadingIndex)
+    requestObj.loadingIndex = LoadingIndex++
+    moreHeaders(requestObj.headers)
+
+    return requestObj
+  }
+
+  requestFailFunc (requestError) {
+    clearLoadingTimer(requestError.config.loadingIndex)
+
+    console.error(`requestFailFunc:${requestError}`)
+
+    that.$wc.toast(requestError)
+    return Promise.reject(requestError)
+  }
+
+  responseSuccessFunc (res) {
+    clearLoadingTimer(res.config.loadingIndex)
+    let {data, config: {url}} = res
+
+    let {rspCode, rspMsg} = data
+    Object.assign(data, {
+      success: rspCode === 0,
+      message: rspMsg,
+      code: rspCode
+    })
+
+    // console.log(`%crequest data:${JSON.stringify(data)}`, 'font-size:20px;color:red;')
+    if (data.success || data.code === '0') {
+      // console.log(`%crequest success`, 'font-size:20px;color:red;')
+      return Promise.resolve(data)
+    } else if (data.code.toString() === '1021') {
+      cookie.remove('session')
+      let dels = []
+      // 清除缓存
+      for (let i = 0; i < sessionStorage.length; i++) {
+        let key = sessionStorage.key(i)
+        if (key.includes('"url"')) {
+          dels.push(key)
+        }
+      }
+      for (let i = 0; i < dels.length; i++) {
+        sessionStorage.removeItem(dels[i])
+      }
+      if (xyTools.browser().wx) {
+        window.location.reload()
+      } else {
+        // TODO: 过期重新登录页(非微信)
+        // 防止多个promise产多多次跳转
+        // if (!window.location.href.includes(`loginIndex.do.html`)) {
+        //   window.location.href = `${API_CONFIG_BASE.dir.replace('/#', '')}/common/loginIndex.do.html`
+        // }
+        window.location.href = `${API_CONFIG_BASE.dir}/auth/login`
+      }
+    } else {
+      // 特殊
+      if (data.message === '特殊返回信息') {
+        console.log(`%crequest other`, '特殊返回信息')
+      } else {
+        that.$wc.toast(data.message)
+      }
+    }
+    console.error({
+      message: data.message,
+      code: data.code
+    })
+    return Promise.resolve(data)
+  }
+
+  responseFailFunc (responseError) {
+    clearLoadingTimer(responseError.config.loadingIndex)
+
+    console.error(`responseFailFunc:${responseError}`)
+    let {response} = responseError
+
+    let msg = responseError ? responseError : (response ? (response.data ? response.data : response.statusText) : '未知错误')
+    if (response) {
+      response.message = msg
+      response.code = response.status
+    }
+
+    if (responseError.code === 'ECONNABORTED' && responseError.request.readyState === 4) {
+      that.$wc.toast('网络异常！')
+    } else {
+      that.$wc.toast('网络异常！', {title: '错误'})
+    }
+    return Promise.reject(responseError)
+  }
+
+  constructor () {
+    super()
+  }
+}
+
+/*---------- axios interceptors ----------*/
+
+/*---------- some component control ----------*/
+
+function init ({next, base, app}) {
+
+  // let {router} = app
+
+  /*++++++++++ api create ++++++++++*/
+
+  let httpInstance = new HttpWithUIClass()
+
+  app.$api = httpInstance.api
+
+  Vue.prototype.$api = httpInstance.api
+
+  /*---------- api create ----------*/
+}
+
+export default init

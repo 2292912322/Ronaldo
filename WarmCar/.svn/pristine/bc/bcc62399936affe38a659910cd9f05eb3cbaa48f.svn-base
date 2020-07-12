@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+# 准备好仓库, 如: git clone https://git.dev.tencent.com/xachary/warmcar_dist.git
+# 删除旧文件
+if [ -d "../warmcar_dist" ]; then
+    rm -rf ../warmcar_dist/*
+
+    # 复制新文件
+    cp -r ./dist/* ../warmcar_dist
+
+    # 自动发布
+    cd ../warmcar_dist
+
+    git add .
+
+    git commit -m 'publish'
+
+    git push
+fi

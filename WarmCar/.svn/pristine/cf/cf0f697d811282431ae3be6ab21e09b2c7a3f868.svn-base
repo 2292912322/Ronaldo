@@ -1,0 +1,204 @@
+<style lang="scss">
+  @import "~vue-xy-ui/dist/mixin";
+  @import "~assets/scss/value";
+
+  .wc-car-check {
+    position: relative;
+    .wc-card {
+      padding: rsh(15);
+    }
+    .wc-car-check__btn {
+      position: absolute;
+      bottom: rsh(50);
+      bottom: calc(env(safe-area-inset-bottom) + #{rsh(50)});
+      width: 100%;
+      left: 0;
+    }
+    .wc-car-check__title {
+      font-size: rsh(24);
+      color: #666;
+      display: flex;
+      align-items: center;
+      line-height: rsh(34);
+      & > i {
+        margin-right: rsh(8);
+      }
+      & > span {
+        margin-right: rsh(15);
+      }
+    }
+    .wc-car-check__tips {
+      line-height: rsh(30);
+      color: #c3c3c3;
+      font-size: rsh(20);
+    }
+    .wc-car-check__line {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      margin-top: rsh(10);
+      .wc-car-check__line__item {
+        width: calc(50% - #{rsh(5)});
+        & > i {
+          padding-top: 56.7%;
+        }
+        & > div {
+          border-radius: rsh(8);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: rsh(23);
+          color: #666;
+          line-height: rsh(32);
+          background-color: #fce43d;
+          padding: rsh(10) 0;
+          margin-top: rsh(3);
+          & > i {
+            margin-right: rsh(8);
+          }
+        }
+      }
+    }
+    .wc-car-check__upload {
+      border: 1px solid #ccc;
+      border-radius: rsh(10);
+      width: rsh(108);
+      height: rsh(108);
+      margin-top: rsh(5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+</style>
+
+<template>
+  <div class="wc-car-check">
+    <div class="wc-card">
+      <div class="wc-car-check__title">
+        <i class="icons-common-camera-outer">
+          <div class="icons-common icons-common-camera-inner"></div>
+        </i>
+        <span>车辆外观拍照</span>
+        <span>0/4</span>
+      </div>
+      <div class="wc-car-check__tips">
+        请按以下示意图拍摄车辆外观照片（必选）
+      </div>
+      <div class="wc-car-check__line">
+        <div class="wc-car-check__line__item">
+          <i class="lazy-load">
+            <img v-lazy="'http://dummyimage.com/335x190/cffbfd/000'"
+                 class="lazy-contain">
+          </i>
+          <div>
+            <i class="icons-common-camera-outer">
+              <div class="icons-common icons-common-camera-inner"></div>
+            </i>
+            <span>车辆左前方照片</span>
+          </div>
+        </div>
+        <div class="wc-car-check__line__item">
+          <i class="lazy-load">
+            <img v-lazy="'http://dummyimage.com/335x190/cffbfd/000'"
+                 class="lazy-contain">
+          </i>
+          <div>
+            <i class="icons-common-camera-outer">
+              <div class="icons-common icons-common-camera-inner"></div>
+            </i>
+            <span>车辆右前方照片</span>
+          </div>
+        </div>
+      </div>
+      <div class="wc-car-check__line">
+        <div class="wc-car-check__line__item">
+          <i class="lazy-load">
+            <img v-lazy="'http://dummyimage.com/335x190/cffbfd/000'"
+                 class="lazy-contain">
+          </i>
+          <div>
+            <i class="icons-common-camera-outer">
+              <div class="icons-common icons-common-camera-inner"></div>
+            </i>
+            <span>车辆正后方照片</span>
+          </div>
+        </div>
+        <div class="wc-car-check__line__item">
+          <i class="lazy-load">
+            <img v-lazy="'http://dummyimage.com/335x190/cffbfd/000'"
+                 class="lazy-contain">
+          </i>
+          <div>
+            <i class="icons-common-camera-outer">
+              <div class="icons-common icons-common-camera-inner"></div>
+            </i>
+            <span>车辆正后方照片</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="wc-card">
+      <div class="wc-car-check__title">
+        <i class="icons-common-camera-outer">
+          <div class="icons-common icons-common-camera-inner"></div>
+        </i>
+        <span>车辆损坏拍照</span>
+      </div>
+      <div class="wc-car-check__tips">
+        损坏部位细节图（可选）
+      </div>
+      <button class="wc-car-check__upload"
+              v-xy-moving-btn>
+        <i class="icons-common-camera-light-outer">
+          <div class="icons-common icons-common-camera-light-inner"></div>
+        </i>
+      </button>
+    </div>
+    <div class="wc-car-check__btn">
+      <button class="wc-btn wc-btn--yellow wc-btn--w600 wc-btn--h85"
+              v-xy-moving-btn>立即取车
+      </button>
+    </div>
+  </div>
+</template>
+
+<script>
+  import common from '~/mixins/common'
+  import seo from '~/mixins/seo'
+  import wxMixin from '~/mixins/wx-mixin'
+  import vuxValidate from '~/mixins/vux-validate'
+
+  export default {
+    mixins: [common, wxMixin, seo],
+    components: {},
+    data () {
+      return {
+        pageTitle: '',
+        startLoad: false,
+        //
+      }
+    },
+    watch: {
+      '$store.state.wxAuthStatus': function (v) {
+        let that = this
+        // 需要授权才可以加载的数据(授权比页面装载慢)
+        if (v && !that.startLoad) {
+          that.startLoad = true
+          //
+        }
+      }
+    },
+    methods: {},
+    created () {
+      let that = this
+      that.type = that.$route.params.type
+      // 需要授权才可以加载的数据(授权比页面装载快)
+      if (that.$store.state.wxAuthStatus && !that.startLoad) {
+        that.startLoad = true
+        //
+      }
+      // 无需授权可以提前加载的数据
+    }
+  }
+</script>

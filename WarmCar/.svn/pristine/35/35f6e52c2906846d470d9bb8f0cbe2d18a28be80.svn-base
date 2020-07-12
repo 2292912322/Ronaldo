@@ -1,0 +1,19 @@
+@import "~vue-xy-ui/dist/mixin";
+@import "~assets/scss/value";
+
+.wc-card {
+  box-shadow: 0 0 rsh(30) rgba($baseShadowColor, 1);
+  margin: rsh(20);
+  border-radius: rsh(10);
+  display: block;
+  &.wc-card--full {
+    border-bottom-right-radius: 0;
+    min-height: calc(100vh - #{rsh(20)});
+    min-height: calc(100vh - #{rsh(20)} - env(safe-area-inset-bottom));
+    margin-bottom: 0;
+  }
+  &.wc-card--page {
+    min-height: calc(100vh - #{rsh(20*2)});
+    min-height: calc(100vh - #{rsh(20*2)} - env(safe-area-inset-bottom));
+  }
+}

@@ -1,0 +1,25 @@
+@import "~vue-xy-ui/dist/mixin";
+@import "~assets/scss/value";
+
+.container {
+  font-size: rsh(32);
+  color: $baseFontColor;
+  a {
+    @include acr($baseFontColor);
+  }
+  &:before {
+    content: '';
+    display: block;
+    position: fixed;
+    top: rsh(-20);
+    left: 0;
+    width: 100%;
+    height: rsh(20);
+    box-shadow: 0 rsh(5) rsh(15) rgba($baseShadowColor, 1);
+    z-index: 50;
+  }
+
+  div.xy-list-status {
+    color: #bbb !important;
+  }
+}

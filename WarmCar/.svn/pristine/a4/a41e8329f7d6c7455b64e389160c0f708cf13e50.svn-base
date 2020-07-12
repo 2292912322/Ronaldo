@@ -1,0 +1,768 @@
+<style lang="scss">
+  @import "~vue-xy-ui/dist/mixin";
+  @import "~assets/scss/value";
+
+  .wc-car-control {
+    .wc-card {
+      margin-left: rsh(40);
+      margin-right: rsh(40);
+      &:nth-child(1) {
+        display: flex;
+        padding: rsh(25);
+        & > button {
+          flex-shrink: 0;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          font-size: rsh(22);
+          margin-left: rsh(30);
+          & > i {
+            height: rsh(38);
+          }
+          & > span {
+            line-height: rsh(40);
+          }
+        }
+      }
+      &:nth-child(2) {
+        padding: 0 rsh(44);
+      }
+    }
+    .wc-pop {
+      .wc-pop__ct {
+        top: 0;
+      }
+    }
+    .wc-car-control__info {
+      padding: rsh(30) 0;
+      position: relative;
+      line-height: rsh(40);
+      &:after {
+        content: '';
+        display: block;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 1px;
+        background-color: $lineColor;
+        transform: scale(1, .5);
+      }
+      .wc-car-control__info__num {
+        line-height: rsh(54);
+        font-size: rsh(28);
+        font-weight: bold;
+        text-align: center;
+      }
+      & > div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #999;
+        & > i {
+          margin-right: rsh(14);
+        }
+        & > b {
+          margin: 0 rsh(14);
+          display: block;
+          width: 1px;
+          height: rsh(20);
+          background-color: $lineColor;
+          transform: scale(.5, 1);
+        }
+      }
+      .wc-car-control__info__model {
+        font-size: rsh(20);
+      }
+      .wc-car-control__info__battery {
+        color: $batteryGreen;
+        margin-right: rsh(14);
+        font-size: rsh(26);
+        &.wc-car-control__info__battery--low {
+          color: $batteryRed;
+        }
+      }
+      .wc-car-control__info__distance {
+        font-size: rsh(26);
+        color: #666;
+      }
+      .wc-car-control__info__save {
+        font-size: rsh(24);
+      }
+      .wc-car-control__info__time, .wc-car-control__info__long {
+        font-size: rsh(24);
+        & > i {
+          font-style: normal;
+          margin: 0 rsh(3);
+        }
+      }
+      .wc-car-control__info__time {
+        min-width: rsh(110);
+        color: $batteryGreen;
+        &:not(:last-child) {
+          margin-right: 1em;
+        }
+      }
+      .wc-car-control__info__long {
+        color: $mainColor;
+      }
+    }
+    .wc-car-control__pad {
+      display: flex;
+      justify-content: space-between;
+      padding: rsh(90) 0;
+      &.wc-car-control__pad--isGet {
+        padding: rsh(60) 0 0 0;
+        justify-content: space-around;
+        &:last-child {
+          padding-bottom: rsh(60);
+        }
+      }
+      & > section {
+        font-size: rsh(24);
+        text-align: center;
+        line-height: rsh(32);
+        & > button {
+          width: rsh(108);
+          height: rsh(108);
+          border-radius: 50%;
+          box-shadow: 0 0 rsh(20) $baseShadowColor;
+          margin: rsh(20);
+          & > i {
+            display: inline-block;
+          }
+        }
+      }
+    }
+    .wc-car-control__reasons {
+      & > section {
+        display: flex;
+        align-items: center;
+        padding: rsh(18) rsh(20);
+        & > span {
+          width: 0;
+          flex-grow: 1;
+          text-align: left;
+        }
+        & > button {
+          & > div {
+            border-radius: rsh(8);
+            border: 1px solid #ddd;
+            width: rsh(44);
+            height: rsh(44);
+            margin: 1px;
+          }
+          & > i {
+            display: none;
+          }
+          &.wc-car-control__reasons__item--selected {
+            & > div {
+              display: none;
+            }
+            & > i {
+              display: block;
+            }
+          }
+        }
+      }
+    }
+    .wc-car-control__question {
+      background-color: #fff;
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      text-align: center;
+      padding-bottom: rsh(56);
+      .wc-car-control__question__title {
+        line-height: rsh(110);
+        font-size: rsh(34);
+        color: #555;
+        font-weight: bold;
+        margin-bottom: rsh(54);
+        &:after {
+          content: '';
+          display: block;
+          position: relative;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 1px;
+          background-color: $lineColor;
+          transform: scale(1, .5)
+        }
+      }
+      .wc-car-control__question__text {
+        line-height: rsh(40);
+        font-size: rsh(30);
+        color: #666;
+        margin-bottom: rsh(50);
+        & > b {
+          color: #333;
+        }
+      }
+      .wc-car-control__question__select {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        padding: 0 rsh((750-225*2)/6);
+        & > button {
+          position: relative;
+          & > div {
+            position: absolute;
+            top: 0;
+            left: rsh(75);
+            width: rsh(225 - 75);
+            font-size: rsh(28);
+            line-height: rsh(78);
+            z-index: 2;
+          }
+        }
+      }
+      .wc-car-control__question__label {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: rsh(76) rsh(40) rsh(46) rsh(40);
+        & > span {
+          flex-shrink: 0;
+          margin: 0 rsh(25);
+          font-size: rsh(26);
+          color: #999;
+        }
+        &:before, &:after {
+          content: '';
+          width: 0;
+          height: 1px;
+          flex-grow: 1;
+          background-color: $lineColor;
+          transform: scale(1, .5)
+        }
+      }
+      .wc-car-control__question__des {
+        display: flex;
+        justify-content: center;
+        & > section {
+          text-align: left;
+          & > div {
+            line-height: rsh(42);
+            font-size: rsh(24);
+            color: #999;
+            &:before {
+              content: '*';
+              font-size: rsh(42);
+              line-height: rsh(24);
+              color: $mainColor;
+              vertical-align: bottom;
+              margin-right: rsh(6);
+            }
+          }
+        }
+      }
+    }
+    .wc-car-control__location {
+      width: 0;
+      flex-grow: 1;
+      & > section {
+        line-height: rsh(54);
+        font-size: rsh(28);
+      }
+      & > div {
+        line-height: rsh(36);
+        font-size: rsh(24);
+      }
+    }
+  }
+</style>
+
+<template>
+  <div class="wc-car-control"
+       v-xy-pull-refresh="pullRefresh">
+    <div>
+      <div class="wc-card">
+        <div class="wc-car-control__location">
+          <section>{{$store.state.currentOrder.appointmentBranchInfo.branchName}}</section>
+          <div>{{$store.state.currentOrder.appointmentBranchInfo.branchAddress}}</div>
+        </div>
+        <button @click="onNav"
+                v-xy-moving-btn>
+          <i class="icons-common-control-nav-outer">
+            <div class="icons-common icons-common-control-nav-inner"></div>
+          </i>
+          <span>{{distance | wcDistance}}</span>
+        </button>
+        <button v-if="imgs.length>0"
+                :data-img="imgs?imgs[0]:''"
+                :data-index="0"
+                v-xy-pop-image:imgs="imgs"
+                v-xy-moving-btn>
+          <i class="icons-common-control-pic-outer">
+            <div class="icons-common icons-common-control-pic-inner"></div>
+          </i>
+          <span>实景</span>
+        </button>
+      </div>
+      <div class="wc-card">
+        <div class="wc-car-control__info">
+          <div class="wc-car-control__info__num">
+            {{$store.state.currentOrder.carInfo.carLpn}}
+          </div>
+          <div>
+            <span class="wc-car-control__info__model">{{$store.state.currentOrder.carInfo.carModelName}}</span>
+            <b></b>
+            <i :class="`icons-common-battery-${$store.state.currentOrder.carInfo.restBatteryRound}-outer`">
+              <div :class="`icons-common icons-common-battery-${$store.state.currentOrder.carInfo.restBatteryRound}-inner`"></div>
+            </i>
+            <span class="wc-car-control__info__battery"
+                  :class="{'wc-car-control__info__battery--low':$store.state.currentOrder.carInfo.restBattery<=20}">{{$store.state.currentOrder.carInfo.restBattery}}%</span>
+            <span class="wc-car-control__info__distance">续航{{$store.state.currentOrder.carInfo.enduranceMileage}}km</span>
+          </div>
+          <div v-if="$store.state.currentOrder.orderInfo.orderStatus==='01'||$store.state.currentOrder.orderInfo.orderStatus==='05'">
+            <span class="wc-car-control__info__save">{{$store.state.currentOrder.orderInfo.orderStatus === '01' ? '免费保留' : '使用时长'}}：</span>
+            <xy-time-count v-if="$store.state.currentOrder.orderInfo.orderStatus==='01'"
+                           class="wc-car-control__info__time"
+                           :time="new Date($store.state.currentOrder.orderInfo.sysCancelTimeStamp+$store.state.systemInfo.timePatch)"
+                           @finish="onFinish">
+            </xy-time-count>
+            <xy-timing v-if="$store.state.currentOrder.orderInfo.orderStatus==='05'"
+                       class="wc-car-control__info__time"
+                       :time="new Date($store.state.currentOrder.orderInfo.takeCarTime)">
+            </xy-timing>
+            <span class="wc-car-control__info__save">{{$store.state.currentOrder.orderInfo.orderStatus === '01' ? '' : '行驶里程'}}：</span>
+            <span class="wc-car-control__info__long">{{$store.state.currentOrder.orderInfo.orderMileage}}公里</span>
+          </div>
+        </div>
+        <div class="wc-car-control__pad"
+             v-show="$store.state.currentOrder.orderInfo.orderStatus==='01'">
+          <section>
+            <button @click="onAlarm"
+                    v-xy-moving-btn>
+              <i class="icons-common-control-find-outer">
+                <div class="icons-common icons-common-control-find-inner"></div>
+              </i>
+            </button>
+            <div>鸣笛找车</div>
+          </section>
+          <section>
+            <button @click="onGet"
+                    v-xy-moving-btn>
+              <i class="icons-common-control-get-outer">
+                <div class="icons-common icons-common-control-get-inner"></div>
+              </i>
+            </button>
+            <div>取车</div>
+          </section>
+          <section>
+            <button @click="onCancel"
+                    v-xy-moving-btn>
+              <i class="icons-common-control-cancel-outer">
+                <div class="icons-common icons-common-control-cancel-inner"></div>
+              </i>
+            </button>
+            <div>取消预约</div>
+          </section>
+        </div>
+        <div class="wc-car-control__pad wc-car-control__pad--isGet"
+             v-show="$store.state.currentOrder.orderInfo.orderStatus==='05'">
+          <section>
+            <button @click="onOpen"
+                    v-xy-moving-btn>
+              <i class="icons-common-control-open-outer">
+                <div class="icons-common icons-common-control-open-inner"></div>
+              </i>
+            </button>
+            <div>开门</div>
+          </section>
+          <section>
+            <button @click="onClose"
+                    v-xy-moving-btn>
+              <i class="icons-common-control-lock-outer">
+                <div class="icons-common icons-common-control-lock-inner"></div>
+              </i>
+            </button>
+            <div>锁门</div>
+          </section>
+        </div>
+        <div class="wc-car-control__pad wc-car-control__pad--isGet"
+             v-show="$store.state.currentOrder.orderInfo.orderStatus==='05'">
+          <section>
+            <button @click="onAlarm"
+                    v-xy-moving-btn>
+              <i class="icons-common-control-find-outer">
+                <div class="icons-common icons-common-control-find-inner"></div>
+              </i>
+            </button>
+            <div>鸣笛找车</div>
+          </section>
+          <section>
+            <button @click="OnReturn"
+                    v-xy-moving-btn>
+              <i class="icons-common-control-return-outer">
+                <div class="icons-common icons-common-control-return-inner"></div>
+              </i>
+            </button>
+            <div>还车</div>
+          </section>
+        </div>
+      </div>
+      <div class="wc-pop"
+           ref="wcPop"
+           style="display: none;"
+           :class="{'wc-pop--show':showReason}"
+           :style="{'z-index':99}">
+        <div class="wc-pop__ct">
+          <div class="wc-pop__ct__title">
+            选择取消用车原因
+          </div>
+          <div class="wc-pop__ct__content">
+            <div class="wc-car-control__reasons">
+              <section v-for="item in reasons"
+                       :key="item.code">
+                <span>{{item.msg}}</span>
+                <button :class="{'wc-car-control__reasons__item--selected':item.selected}"
+                        @click="onSelect(item)"
+                        v-xy-moving-btn>
+                  <i class="icons-common-control-selected-outer">
+                    <div class="icons-common icons-common-control-selected-inner"></div>
+                  </i>
+                  <div></div>
+                </button>
+              </section>
+            </div>
+          </div>
+          <div class="wc-pop__ct__split"></div>
+          <div class="wc-pop__ct__op">
+            <button class="wc-pop__ct__op__btn"
+                    @click="onCancelConfirm"
+                    v-xy-moving-btn>确定取消
+            </button>
+            <div class="wc-pop__ct__op__split">
+            </div>
+            <button class="wc-pop__ct__op__btn wc-pop__ct__op__btn--confirm"
+                    @click="onCancelCancel"
+                    v-xy-moving-btn>继续用车
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="wc-pop"
+           :class="{'wc-pop--show':showFormer&&$store.state.currentOrder.orderInfo.isEvaluateWC==='0'&&former.type==='02'}">
+        <div class="wc-car-control__question">
+          <div class="wc-car-control__question__title">
+            文明用车·温暖传递
+          </div>
+          <div class="wc-car-control__question__text">
+            您对上一位员工<b>{{former.name}}</b>的清洁工作满意吗?
+          </div>
+          <div class="wc-car-control__question__select">
+            <button @click="onFormer(true)"
+                    v-xy-moving-btn>
+              <i class="icons-common-control-like-outer">
+                <div class="icons-common icons-common-control-like-inner"></div>
+              </i>
+              <div>感恩点赞</div>
+            </button>
+            <button @click="onFormer(false)"
+                    v-xy-moving-btn>
+              <i class="icons-common-control-hate-outer">
+                <div class="icons-common icons-common-control-hate-inner"></div>
+              </i>
+              <div>吐槽追责</div>
+            </button>
+          </div>
+          <div class="wc-car-control__question__label">
+            <span>评价说明</span>
+          </div>
+          <div class="wc-car-control__question__des">
+            <section>
+              <!--<div>车内无垃圾遗留、无异味、内饰整洁、协助充电等</div>-->
+              <!--<div>若评价情况属实，我们将立即进行追责或奖励</div>-->
+              <div v-for="item in former.evaluationTxt">{{item}}</div>
+            </section>
+          </div>
+        </div>
+      </div>
+      <div class="wc-pop"
+           :class="{'wc-pop--show':showFormer&&$store.state.currentOrder.orderInfo.isEvaluateWC==='0'&&former.type==='01'}">
+        <div class="wc-car-control__question">
+          <div class="wc-car-control__question__title">
+            文明用车·温暖传递
+          </div>
+          <div class="wc-car-control__question__text">
+            上一位用户<b>{{former.name}}</b>有保持车内干净整洁吗?
+          </div>
+          <div class="wc-car-control__question__select">
+            <button @click="onFormer(true)"
+                    v-xy-moving-btn>
+              <i class="icons-common-control-like-outer">
+                <div class="icons-common icons-common-control-like-inner"></div>
+              </i>
+              <div>感恩点赞</div>
+            </button>
+            <button @click="onFormer(false)"
+                    v-xy-moving-btn>
+              <i class="icons-common-control-hate-outer">
+                <div class="icons-common icons-common-control-hate-inner"></div>
+              </i>
+              <div>吐槽追责</div>
+            </button>
+          </div>
+          <div class="wc-car-control__question__label">
+            <span>评价说明</span>
+          </div>
+          <div class="wc-car-control__question__des">
+            <section>
+              <!--<div>车内无垃圾遗留、无异味、内饰整洁、协助充电等</div>-->
+              <!--<div>用车后被点赞每超过5次将获得一张6元优惠券</div>-->
+              <!--<div>若评价情况属实，我们将立即进行追责或奖励</div>-->
+              <div v-for="item in former.evaluationTxt">{{item}}</div>
+              <!--{{ former.evaluationTxt}}-->
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+    <actionsheet v-model="addressShow"
+                 :menus="addressSelections"
+                 @on-click-menu="onAddressClick"></actionsheet>
+  </div>
+</template>
+
+<script>
+  import common from '~/mixins/common'
+  import seo from '~/mixins/seo'
+  import wxMixin from '~/mixins/wx-mixin'
+  import wcService from '~/mixins/service'
+
+  let timer = null
+
+  export default {
+    mixins: [common, wxMixin, seo, wcService],
+    components: {},
+    data () {
+      return {
+        pageTitle: '控制车辆',
+        startLoad: false,
+        //
+        showReason: false,
+        reasons: [],
+        former: {evaluationTxt: []},
+        addressShow: false,
+        addressSelections: [
+          {
+            label: '百度地图',
+            value: 'baidu'
+          },
+          {
+            label: '高德地图',
+            value: 'gaode'
+          },
+          {
+            label: '腾讯地图',
+            value: 'tengxu'
+          }
+        ],
+        imgs: [],
+        distance: 0,
+        showFormer: false
+      }
+    },
+    watch: {
+      '$store.state.wxAuthStatus': async function (v) {
+        let that = this
+        // 需要授权才可以加载的数据(授权比页面装载慢)
+        if (v && !that.startLoad) {
+          that.startLoad = true
+          //
+          await that.loadAll()
+        }
+      }
+    },
+    methods: {
+      async pullRefresh (stop) {
+        let that = this
+        that.stop = stop
+        await that.loadAll()
+        that.stop()
+      },
+      async loadAll () {
+        let that = this
+        await that.wcService.updateCurrentOrder()
+        //
+        if (that.$store.state.currentOrder.orderId) {
+          if (that.$store.state.currentOrder.orderInfo.orderStatus === '01' || that.$store.state.currentOrder.orderInfo.orderStatus === '05') {
+            await that.loadReasons()
+            await that.loadFormer()
+
+            clearInterval(timer)
+            timer = setInterval(function () {
+              that.loadAll()
+            }, 30000)
+          } else {
+            that.$router.replace(`/my/order/detail?id=${that.$store.state.currentOrder.orderId}`)
+          }
+        } else {
+          that.$router.go(-1)
+        }
+      },
+      onCancel () {
+        let that = this
+        that.showReason = true
+      },
+      onCancelCancel () {
+        let that = this
+        that.showReason = false
+      },
+      async onCancelConfirm () {
+        let that = this
+        let selects = that.reasons.filter(o => o.selected)
+                          .map(o => o.msg)
+                          .join(',')
+        //        if (selects.length > 0) {
+        let {success} = await that.$api.warmcar['customer/cancel_appointment_car']({
+          orderId: that.$store.state.currentOrder.orderId,//		订单号	是	int
+          cancelStatus: '02',//		取消状态	是	string		APP端固定值为： 02
+          cancelOrderRemark: '',//		取消备注	是	string
+          cancelOrderReason: selects//		取消原因（多个用英文逗号相隔）	是	string		参照37号接口
+        })
+        if (success) {
+          that.showReason = false
+          that.$wc.toast('操作成功')
+          that.$router.go(-1)
+        }
+        //        } else {
+        //          that.$wc.toast('请选择取消用车原因')
+        //        }
+      },
+      async loadReasons () {
+        let that = this
+        let {success, bizContent} = await that.$api.warmcar['query/dic_list']({
+          dicId: 150
+        })
+        if (success && bizContent) {
+          that.reasons = that._.sortBy(bizContent.map(o => Object.assign(o, {selected: false})), o => o.sort)
+        }
+      },
+      onSelect (item) {
+        item.selected = !item.selected
+      },
+      async onAlarm () {
+        let that = this
+        let {success} = await that.$api.warmcar['customer/whistle_find_car']({
+          orderId: that.$store.state.currentOrder.orderId
+        })
+        if (success) {
+          that.$wc.toast('操作成功')
+        }
+      },
+      async OnReturn () {
+        let that = this
+        await that.$router.replace('/car/return')
+      },
+      async loadFormer () {
+        let that = this
+        let {success, bizContent} = await that.$api.warmcar['query/former_info']({
+          carId: that.$store.state.currentOrder.carInfo.carId
+        })
+        if (success && bizContent) {
+          that.former = bizContent
+          that.former.evaluationTxt = JSON.parse(bizContent.evaluationTxt)
+        }
+      },
+      async onFormer (type) {
+        let that = this
+        if (that.former.id) {
+          let {success, bizContent} = await that.$api.warmcar['query/former_info_submit']({
+            orderId: that.$store.state.currentOrder.orderId,
+            cwId: that.former.id,//	客户运维ID	是	int		根据上一单客户和运维人员接口返回数据为准
+            type: that.former.type,//	评价对象	是	String		根据上一单客户和运维人员接口返回数据为准
+            result: type ? '01' : '02',//	评价结果	是	String		01 赞， 02吐槽
+            remark: '',//	备注	是	String		xx
+            previousOrderId: that.former.previousOrderId,//	上一个订单ID	是	int	当-1的时候，表示没有客户订单和运维的订单	1
+            fileURL1: '',//	照片1	是	String		xx
+            fileURL2: ''//	照片2	是	String		xx
+          })
+          if (success) {
+            await that.open()
+          }
+        }
+      },
+      async open () {
+        let that = this
+        let {success} = await that.$api.warmcar['customer/open_door']({
+          orderId: that.$store.state.currentOrder.orderId
+        })
+        if (success) {
+          that.$wc.toast('操作成功')
+        }
+      },
+      async onOpen () {
+        let that = this
+        if (that.$store.state.currentOrder.orderInfo.isEvaluateWC === '0') {
+          that.showFormer = true
+        } else {
+          await that.open()
+        }
+      },
+      async onClose () {
+        let that = this
+        let {success} = await that.$api.warmcar['customer/close_door']({
+          orderId: that.$store.state.currentOrder.orderId
+        })
+        if (success) {
+          that.$wc.toast('操作成功')
+        }
+      },
+      onGet () {
+        let that = this
+        that.$router.push('/car/check')
+      },
+      onNav () {
+        let that = this
+        that.addressShow = true
+      },
+      async onAddressClick (key) {
+        let that = this
+        that.$vux.loading.show({text: '请稍候'})
+        let temp = that.$store.state.currentOrder.appointmentBranchInfo.gps.split(',')
+        await that.$wc.goToMap(key, parseFloat(temp[1]), parseFloat(temp[0]), that.$store.state.currentOrder.appointmentBranchInfo.branchName, that.$store.state.currentOrder.appointmentBranchInfo.branchAddress)
+        that.$vux.loading.hide()
+      },
+      async onFinish () {
+        let that = this
+        that.$vux.loading.show()
+        await that.$xyTools.sleep(5000)
+        await that.loadAll()
+        that.$vux.loading.hide()
+        if (!that.$store.state.currentOrder.orderId) {
+          that.$router.go(-1)
+        }
+      }
+    },
+    async created () {
+      let that = this
+      await that.wcService.updateLocation()
+      // 需要授权才可以加载的数据(授权比页面装载快)
+      if (that.$store.state.wxAuthStatus && !that.startLoad) {
+        that.startLoad = true
+        //
+        await that.loadAll()
+      }
+      // 无需授权可以提前加载的数据
+      let temp = that.$store.state.currentOrder.appointmentBranchInfo.gps.split(',')
+      that.distance = that.$wc.getDistance(that.$store.state.location.latitude, that.$store.state.location.longitude, parseFloat(temp[1]), parseFloat(temp[0]))
+      that.imgs = that.$store.state.currentOrder.appointmentBranchInfo.pictures.map(o => o.url)
+    },
+    updated () {
+      let that = this
+      if (that.$refs.wcPop) {
+        that.$refs.wcPop.removeAttribute('style')
+      }
+    },
+    beforeDestroy () {
+      let that = this
+      clearInterval(timer)
+    }
+  }
+</script>

@@ -1,0 +1,863 @@
+<style lang="scss">
+  @import "~vue-xy-ui/dist/mixin";
+  @import "~assets/scss/value";
+
+  .wc-map {
+    #wc-map__ct {
+      height: 100vh;
+    }
+    $pointSize: 24px;
+    .point-branch {
+      position: absolute;
+      box-sizing: content-box;
+      background-color: #ddd;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      text-align: center;
+      color: #fff;
+      font-size: 14px;
+      font-weight: bold;
+      box-shadow: 0px 3px 8px rgba(0, 0, 0, .2);
+      width: $pointSize;
+      height: $pointSize;
+      line-height: $pointSize;
+      & > div {
+        position: absolute;
+        bottom: -4px;
+        left: ($pointSize - 4px)/2;
+        transform: scale(1, .8);
+        & > div {
+          background-color: #fff;
+          width: 4px;
+          height: 4px;
+          transform: rotate(45deg);
+        }
+      }
+      &.point-branch--selected {
+        border-color: #666;
+        color: #666;
+        background-color: #ffcc00;
+        z-index: 999 !important;
+        & > div {
+          & > div {
+            background-color: #666;
+          }
+        }
+      }
+      &.point-branch--has {
+        background-color: #ffcc00;
+      }
+      &.point-branch--hide {
+        display: none;
+      }
+    }
+  }
+</style>
+
+<template>
+  <div class="wc-map">
+    <div id="wc-map__ct"></div>
+  </div>
+</template>
+
+<script>
+  import common from '~/mixins/common'
+  import seo from '~/mixins/seo'
+  import wxMixin from '~/mixins/wx-mixin'
+  import location from '~/mixins/location'
+
+  export default {
+    mixins: [common/*, wxMixin*/, seo, location],
+    components: {},
+    data () {
+      return {
+        pageTitle: '地图测试',
+        startLoad: false,
+        //
+      }
+    },
+    watch: {
+      '$store.state.wxAuthStatus': function (v) {
+        let that = this
+        // 需要授权才可以加载的数据(授权比页面装载慢)
+        if (v && !that.startLoad) {
+          that.startLoad = true
+          //
+        }
+      }
+    },
+    methods: {
+      onClick: function ({currentTarget: {dataset: {num}}}) {
+        let that = this
+        that.$wc.toast(num)
+      }
+    },
+    mounted () {
+      let that = this
+      // 需要授权才可以加载的数据(授权比页面装载快)
+      if (that.$store.state.wxAuthStatus && !that.startLoad) {
+        that.startLoad = true
+        //
+      }
+      let location = null
+      //      try {
+      //        location = await that.location()
+      //      } catch (e) {
+      //
+      //      }
+      // 无需授权可以提前加载的数据
+      // 创建地图实例
+      var liteMap = new BMap.Map('wc-map__ct')
+      liteMap.disableDoubleClickZoom()
+      // 创建点坐标
+      var point = location ? BMap.Point(location.longitude, location.latitude) : new BMap.Point(113.5684, 22.3744)
+      // 初始化地图， 设置中心点坐标和地图级别
+      liteMap.centerAndZoom(point, 15)
+
+      // 海量覆盖物
+      if (false) {
+        // 获取地图区域的边界
+        var bounds = liteMap.getBounds()
+        // 获取西南角的经纬度信息
+        var sw = bounds.getSouthWest()
+        // 获取东北角的经纬度信息 东边的经度>西边的经度 北边的纬度>南边的纬度
+        var ne = bounds.getNorthEast()
+
+        // lng为longitute 经度 lat为latitute纬度
+        var lngSpan = ne.lng - sw.lng
+        var latSpan = ne.lat - sw.lat
+        var arrFeatures = []
+        for (var i = 0; i < 500; i++) {
+          // 初始化位置
+          var mpt = new BMap.Point(sw.lng + lngSpan * (Math.random() * 0.7 + 0.15),
+            sw.lat + latSpan * (Math.random() * 0.7 + 0.15))
+          // 变换icon
+          var iconOffsetX = 42
+          var iconOffsetY = 66
+          // 初始化icon
+          var icon = new BMap.Icon('./images/test.png', new BMap.Size(42, 64), {
+            backGroundImageSize: new BMap.Size(600, 600),
+            imageOffset: new BMap.Size(0 - iconOffsetX * Math.floor(Math.random() * 9),
+              0 - iconOffsetY * Math.floor(Math.random() * 3))
+          })
+          var massFeature = new BMap.MassFeature(mpt, {
+            icon: icon,
+            data: 'MassFeature' + i
+          })
+          arrFeatures.push(massFeature)
+        }
+      }
+
+      // 自定义标注
+      if (true) {
+        let points = [
+          {
+            'num': 0,
+            'lng': '113.588571',
+            'lat': '22.377056'
+          },
+          {
+            'num': 0,
+            'lng': '113.56127',
+            'lat': '22.396943'
+          },
+          {
+            'num': 0,
+            'lng': '113.525035',
+            'lat': '22.25922'
+          },
+          {
+            'num': 0,
+            'lng': '113.543665',
+            'lat': '22.244865'
+          },
+          {
+            'num': 0,
+            'lng': '113.542527',
+            'lat': '22.272542'
+          },
+          {
+            'num': 0,
+            'lng': '113.528335',
+            'lat': '22.249602'
+          },
+          {
+            'num': 0,
+            'lng': '113.595726',
+            'lat': '22.252492'
+          },
+          {
+            'num': 0,
+            'lng': '113.499352',
+            'lat': '22.251944'
+          },
+          {
+            'num': 0,
+            'lng': '113.29835',
+            'lat': '22.170173'
+          },
+          {
+            'num': 0,
+            'lng': '113.541531',
+            'lat': '22.391559'
+          },
+          {
+            'num': 0,
+            'lng': '113.535041',
+            'lat': '22.268917'
+          },
+          {
+            'num': 0,
+            'lng': '113.357424',
+            'lat': '22.057008'
+          },
+          {
+            'num': 0,
+            'lng': '113.550906',
+            'lat': '22.13546'
+          },
+          {
+            'num': 0,
+            'lng': '113.380936',
+            'lat': '22.019473'
+          },
+          {
+            'num': 0,
+            'lng': '113.482026',
+            'lat': '22.268856'
+          },
+          {
+            'num': 0,
+            'lng': '113.481296',
+            'lat': '22.263577'
+          },
+          {
+            'num': 0,
+            'lng': '113.291278',
+            'lat': '22.231501'
+          },
+          {
+            'num': 0,
+            'lng': '113.599192',
+            'lat': '22.34573'
+          },
+          {
+            'num': 0,
+            'lng': '113.409719',
+            'lat': '22.045679'
+          },
+          {
+            'num': 0,
+            'lng': '113.557624',
+            'lat': '22.367491'
+          },
+          {
+            'num': 0,
+            'lng': '113.547805',
+            'lat': '22.28284'
+          },
+          {
+            'num': 0,
+            'lng': '113.541929',
+            'lat': '22.393511'
+          },
+          {
+            'num': 0,
+            'lng': '113.573639',
+            'lat': '22.286243'
+          },
+          {
+            'num': 0,
+            'lng': '113.542758',
+            'lat': '22.211418'
+          },
+          {
+            'num': 0,
+            'lng': '113.500623',
+            'lat': '22.23069'
+          },
+          {
+            'num': 0,
+            'lng': '113.488886',
+            'lat': '22.270421'
+          },
+          {
+            'num': 0,
+            'lng': '113.538091',
+            'lat': '22.204337'
+          },
+          {
+            'num': 0,
+            'lng': '113.54212',
+            'lat': '22.227081'
+          },
+          {
+            'num': 0,
+            'lng': '113.510603',
+            'lat': '22.233613'
+          },
+          {
+            'num': 0,
+            'lng': '113.486386',
+            'lat': '22.223171'
+          },
+          {
+            'num': 0,
+            'lng': '113.244965',
+            'lat': '22.355249'
+          },
+          {
+            'num': 0,
+            'lng': '113.570815',
+            'lat': '22.376122'
+          },
+          {
+            'num': 0,
+            'lng': '113.477423',
+            'lat': '22.218042'
+          },
+          {
+            'num': 0,
+            'lng': '113.282013',
+            'lat': '22.165549'
+          },
+          {
+            'num': 0,
+            'lng': '113.309088',
+            'lat': '22.212506'
+          },
+          {
+            'num': 0,
+            'lng': '113.472656',
+            'lat': '22.278421'
+          },
+          {
+            'num': 0,
+            'lng': '113.447721',
+            'lat': '22.299638'
+          },
+          {
+            'num': 0,
+            'lng': '113.606153',
+            'lat': '22.365641'
+          },
+          {
+            'num': 0,
+            'lng': '113.430059',
+            'lat': '22.342999'
+          },
+          {
+            'num': 0,
+            'lng': '113.400338',
+            'lat': '22.047998'
+          },
+          {
+            'num': 0,
+            'lng': '113.51532',
+            'lat': '22.281634'
+          },
+          {
+            'num': 0,
+            'lng': '113.589292',
+            'lat': '22.255358'
+          },
+          {
+            'num': 0,
+            'lng': '113.357563',
+            'lat': '22.137175'
+          },
+          {
+            'num': 0,
+            'lng': '113.551355',
+            'lat': '22.244506'
+          },
+          {
+            'num': 0,
+            'lng': '113.604822',
+            'lat': '22.363177'
+          },
+          {
+            'num': 0,
+            'lng': '113.465189',
+            'lat': '22.268268'
+          },
+          {
+            'num': 0,
+            'lng': '113.531672',
+            'lat': '22.275072'
+          },
+          {
+            'num': 0,
+            'lng': '113.494433',
+            'lat': '22.265475'
+          },
+          {
+            'num': 0,
+            'lng': '113.505263',
+            'lat': '22.28894'
+          },
+          {
+            'num': 0,
+            'lng': '113.588449',
+            'lat': '22.313827'
+          },
+          {
+            'num': 0,
+            'lng': '113.311334',
+            'lat': '22.22761'
+          },
+          {
+            'num': 0,
+            'lng': '113.500463',
+            'lat': '22.278266'
+          },
+          {
+            'num': 0,
+            'lng': '113.482469',
+            'lat': '22.267939'
+          },
+          {
+            'num': 0,
+            'lng': '113.282546',
+            'lat': '22.180048'
+          },
+          {
+            'num': 0,
+            'lng': '113.521767',
+            'lat': '22.27925'
+          },
+          {
+            'num': 0,
+            'lng': '113.348888',
+            'lat': '22.170058'
+          },
+          {
+            'num': 4,
+            'lng': '113.577893',
+            'lat': '22.377082'
+          },
+          {
+            'num': 0,
+            'lng': '113.528827',
+            'lat': '22.289244'
+          },
+          {
+            'num': 0,
+            'lng': '113.604258',
+            'lat': '22.366063'
+          },
+          {
+            'num': 0,
+            'lng': '113.485798',
+            'lat': '22.26054'
+          },
+          {
+            'num': 0,
+            'lng': '113.475724',
+            'lat': '22.256999'
+          },
+          {
+            'num': 0,
+            'lng': '113.287533',
+            'lat': '22.177484'
+          },
+          {
+            'num': 0,
+            'lng': '113.288971',
+            'lat': '22.180299'
+          },
+          {
+            'num': 0,
+            'lng': '113.210827',
+            'lat': '22.106408'
+          },
+          {
+            'num': 0,
+            'lng': '113.320079',
+            'lat': '22.23242'
+          },
+          {
+            'num': 0,
+            'lng': '113.513797',
+            'lat': '22.23424'
+          },
+          {
+            'num': 0,
+            'lng': '113.398828',
+            'lat': '22.050698'
+          },
+          {
+            'num': 0,
+            'lng': '113.527881',
+            'lat': '22.253398'
+          },
+          {
+            'num': 0,
+            'lng': '113.47351',
+            'lat': '22.25413'
+          },
+          {
+            'num': 0,
+            'lng': '113.54952',
+            'lat': '22.27199'
+          },
+          {
+            'num': 0,
+            'lng': '113.590721',
+            'lat': '22.352704'
+          },
+          {
+            'num': 0,
+            'lng': '113.603809',
+            'lat': '22.359285'
+          },
+          {
+            'num': 0,
+            'lng': '113.356508',
+            'lat': '22.050715'
+          },
+          {
+            'num': 0,
+            'lng': '113.35855',
+            'lat': '22.05912'
+          },
+          {
+            'num': 0,
+            'lng': '113.372067',
+            'lat': '22.064112'
+          },
+          {
+            'num': 0,
+            'lng': '113.353541',
+            'lat': '22.142235'
+          },
+          {
+            'num': 0,
+            'lng': '113.532179',
+            'lat': '22.351337'
+          },
+          {
+            'num': 0,
+            'lng': '113.541889',
+            'lat': '22.234722'
+          },
+          {
+            'num': 0,
+            'lng': '113.348088',
+            'lat': '22.133196'
+          },
+          {
+            'num': 0,
+            'lng': '113.37532',
+            'lat': '22.131547'
+          },
+          {
+            'num': 0,
+            'lng': '113.372558',
+            'lat': '22.137779'
+          },
+          {
+            'num': 0,
+            'lng': '113.39003',
+            'lat': '22.076132'
+          },
+          {
+            'num': 0,
+            'lng': '113.363364',
+            'lat': '22.060938'
+          },
+          {
+            'num': 0,
+            'lng': '113.40757',
+            'lat': '22.067298'
+          },
+          {
+            'num': 0,
+            'lng': '113.405816',
+            'lat': '22.045409'
+          },
+          {
+            'num': 0,
+            'lng': '113.565966',
+            'lat': '22.286235'
+          },
+          {
+            'num': 0,
+            'lng': '113.530283',
+            'lat': '22.280071'
+          },
+          {
+            'num': 0,
+            'lng': '113.537051',
+            'lat': '22.259305'
+          },
+          {
+            'num': 0,
+            'lng': '113.571492',
+            'lat': '22.282876'
+          },
+          {
+            'num': 0,
+            'lng': '113.5512',
+            'lat': '22.259493'
+          },
+          {
+            'num': 0,
+            'lng': '113.527431',
+            'lat': '22.26084'
+          },
+          {
+            'num': 0,
+            'lng': '113.38608',
+            'lat': '22.069413'
+          },
+          {
+            'num': 0,
+            'lng': '113.349988',
+            'lat': '22.055902'
+          },
+          {
+            'num': 0,
+            'lng': '113.561051',
+            'lat': '22.232214'
+          },
+          {
+            'num': 0,
+            'lng': '113.558408',
+            'lat': '22.235343'
+          },
+          {
+            'num': 0,
+            'lng': '113.555815',
+            'lat': '22.232554'
+          },
+          {
+            'num': 0,
+            'lng': '113.587718',
+            'lat': '22.259315'
+          },
+          {
+            'num': 0,
+            'lng': '113.587494',
+            'lat': '22.25818'
+          },
+          {
+            'num': 0,
+            'lng': '113.549264',
+            'lat': '22.237279'
+          },
+          {
+            'num': 0,
+            'lng': '113.583159',
+            'lat': '22.246503'
+          },
+          {
+            'num': 0,
+            'lng': '113.533248',
+            'lat': '22.240831'
+          },
+          {
+            'num': 0,
+            'lng': '113.551656',
+            'lat': '22.37517'
+          },
+          {
+            'num': 0,
+            'lng': '113.578571',
+            'lat': '22.376827'
+          },
+          {
+            'num': 0,
+            'lng': '113.548803',
+            'lat': '22.236207'
+          },
+          {
+            'num': 0,
+            'lng': '113.775845',
+            'lat': '22.991213'
+          },
+          {
+            'num': 0,
+            'lng': '113.46875',
+            'lat': '22.285298'
+          },
+          {
+            'num': 0,
+            'lng': '113.537345',
+            'lat': '22.210523'
+          },
+          {
+            'num': 0,
+            'lng': '113.597072',
+            'lat': '22.245257'
+          },
+          {
+            'num': 0,
+            'lng': '113.583474',
+            'lat': '22.246046'
+          },
+          {
+            'num': 0,
+            'lng': '113.372193',
+            'lat': '22.063612'
+          },
+          {
+            'num': 0,
+            'lng': '113.498275',
+            'lat': '22.256358'
+          },
+          {
+            'num': 0,
+            'lng': '113.52806',
+            'lat': '22.279572'
+          },
+          {
+            'num': 0,
+            'lng': '113.402473',
+            'lat': '22.048242'
+          },
+          {
+            'num': 0,
+            'lng': '113.579388',
+            'lat': '22.290466'
+          },
+          {
+            'num': 0,
+            'lng': '113.566528',
+            'lat': '22.244112'
+          },
+          {
+            'num': 0,
+            'lng': '113.563799',
+            'lat': '22.234367'
+          },
+          {
+            'num': 0,
+            'lng': '113.499111',
+            'lat': '22.276621'
+          },
+          {
+            'num': 0,
+            'lng': '113.529334',
+            'lat': '22.259535'
+          },
+          {
+            'num': 0,
+            'lng': '113.530568',
+            'lat': '22.272683'
+          }
+        ].map(function (o) {
+          return Object.assign(o, {
+            lng: parseFloat(o.lng),
+            lat: parseFloat(o.lat)
+          })
+        })
+
+        // 定义自定义覆盖物的构造函数
+        function SquareOverlay (center) {
+          this._center = center
+          this._length = 24
+          this._num = center.num
+          this._div = null
+        }
+
+        // 继承API的BMap.Overlay
+        SquareOverlay.prototype = new BMap.Overlay()
+        // 实现初始化方法
+        SquareOverlay.prototype.initialize = function (map) {
+          // 保存map对象实例
+          this._map = map
+          // 创建div元素，作为自定义覆盖物的容器
+          var div = document.createElement('div')
+          var angle = document.createElement('div')
+          var inner = document.createElement('div')
+
+          div.classList.add('point-branch')
+          if (this._num > 0) {
+            div.classList.add('point-branch--has')
+          }
+          div.style.zIndex = this._num + 1
+          div.dataset.num = this._num
+          div.innerHTML = this._num
+
+          angle.appendChild(inner)
+          div.appendChild(angle)
+
+          // 将div添加到覆盖物容器中
+          map.getPanes()
+             .markerPane
+             .appendChild(div)
+          // 保存div实例
+          this._div = div
+          // 需要将div元素作为方法的返回值，当调用该覆盖物的show、
+          // hide方法，或者对覆盖物进行移除时，API都将操作此元素。
+          return div
+        }
+        // 实现绘制方法
+        SquareOverlay.prototype.draw = function () {
+          // 根据地理坐标转换为像素坐标，并设置给容器
+          var position = this._map.pointToOverlayPixel(this._center)
+          this._div.style.left = position.x - this._length / 2 + 'px'
+          this._div.style.top = position.y - this._length / 2 + 'px'
+        }
+        // 实现显示方法
+        SquareOverlay.prototype.show = function () {
+          if (this._div) {
+            this._div.style.display = ''
+          }
+        }
+        // 实现隐藏方法
+        SquareOverlay.prototype.hide = function () {
+          if (this._div) {
+            this._div.style.display = 'none'
+          }
+        }
+        // 添加自定义方法
+        SquareOverlay.prototype.toggle = function () {
+          if (this._div) {
+            if (this._div.style.display == '') {
+              this.hide()
+            }
+            else {
+              this.show()
+            }
+          }
+        }
+
+        let overlays = []
+        points.forEach(function (item) {
+          let overlay = new SquareOverlay(item)
+          overlays.push(overlay)
+          liteMap.addOverlay(overlay)
+        })
+        overlays.forEach(function (item) {
+          BMapLib.EventWrapper.addDomListener(item._div, 'touchend', function ({currentTarget: {dataset: {num}}}) {
+            overlays.forEach(function (item) {
+              if (item.domElement.classList.contains('point-branch--selected')) {
+                item.domElement.classList.remove('point-branch--selected')
+              }
+            })
+            item.domElement.classList.add('point-branch--selected')
+            let tempCenter = new BMap.Point(item._center.lng, item._center.lat)
+            item._map.panTo(tempCenter, {noAnimation: true})
+            item._map.setZoom(16)
+            //            that.$wc.toast(`数量:${num}`)
+          })
+          //          item.hide()
+        })
+        liteMap.addEventListener('dragging', function () {
+          alert(1)
+          overlays.forEach(function (item) {
+            item.domElement.classList.add('point-branch--hide')
+          })
+        })
+        liteMap.addEventListener('dragend', function () {
+          alert(2)
+          overlays.forEach(function (item) {
+            item.domElement.classList.remove('point-branch--hide')
+          })
+        })
+      }
+    }
+  }
+</script>

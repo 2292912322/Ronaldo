@@ -1,0 +1,11 @@
+var XY_APP_NAME = '比邻客商城'
+var XY_WX_APPID = 'wxeef3ba2a59f4aa5e'
+var XY_API = 'https://st.be-linker.com'
+
+// var XY_APP_NAME = '骜创商城'
+// var XY_WX_APPID = 'wxd028bfbb0aae2eb2'
+// var XY_API = 'https://app.aclife.net'
+//
+// var XY_APP_NAME = '待定'
+// var XY_WX_APPID = 'wx0f78fb7bcd22c155'
+// var XY_API = 'mobile.be-linker.com'

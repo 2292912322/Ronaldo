@@ -1,0 +1,18 @@
+export default [
+  {
+    // session
+    //
+    // [“文件名1”,”文件名2”]
+    name: 'file_upload',
+    desc: '文件上传接口',
+    path: '/v206/file/warmcar_file_update_service',
+    mockPath: '',
+    params: {
+      fileDir: '', // 文件目录	是	String	服务器文件存放目录	
+      data: '', // 非文件流参数外的所有打包成JSON字符串	是	String	
+      file: '' // 图片	是	io	
+    },
+    cache: false,
+    contentType: 'multipart/form-data'
+  }
+]

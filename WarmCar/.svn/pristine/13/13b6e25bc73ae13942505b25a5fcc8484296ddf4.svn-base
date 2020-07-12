@@ -1,0 +1,10 @@
+function wcDistance (value) {
+  if (value < 1000) {
+    return `${Math.floor(value)}m`
+  }
+  return `${Math.floor(value / 1000)}km`
+}
+
+export default {
+  wcDistance
+}

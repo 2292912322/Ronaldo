@@ -1,0 +1,325 @@
+<style lang="scss">
+  @import "~vue-xy-ui/dist/mixin";
+  @import "~assets/scss/value";
+
+  .wc-branch {
+
+  }
+</style>
+
+<template>
+  <div class="wc-branch">
+    <wc-branch-map ref="map"
+                   v-model="current"
+                   :location.sync="location"
+                   :branches.sync="branches"
+                   v-show="loaded"></wc-branch-map>
+    <div class="wc-branch__top"
+         :class="{'wc-branch__top--search':searching}">
+      <div class="wc-branch__top__search">
+        <section>
+          <i class="icons-common-map-search-outer">
+            <div class="icons-common icons-common-map-search-inner"></div>
+          </i>
+          <x-input @on-focus="onFocus"
+                   placeholder="搜索查找网点"
+                   text-align="left"
+                   v-model="search"
+                   ref="search">
+          </x-input>
+        </section>
+        <router-link v-show="!searching"
+                     tag="button"
+                     to="/find/cityReturn"
+                     v-xy-moving-btn>
+          <span>{{detail.returnTeamShowName}}</span>
+          <i class="icons-common-map-angle-outer">
+            <div class="icons-common icons-common-map-angle-inner"></div>
+          </i>
+        </router-link>
+        <button @click="onCancelSearch"
+                v-show="searching"
+                v-xy-moving-btn>
+          <span>返回</span>
+        </button>
+      </div>
+      <div class="wc-branch__top__list">
+        <a class="wc-branch__top__list__item"
+           v-for="(item,index) in list"
+           :key="item.branchId"
+           @click="onSelect(item)"
+           v-xy-hover-btn>
+          <div class="wc-branch__top__list__item__ct">
+            <i class="icons-common-location-empty-outer">
+              <div class="icons-common icons-common-location-empty-inner"></div>
+            </i>
+            <section>
+              <div class="wc-branch__top__list__item__name"
+                   v-text="item.branchName">
+              </div>
+              <div class="wc-branch__top__list__item__location">
+                {{item.branchAddress}} <span>距您 {{item.distance | wcDistance}}</span>
+              </div>
+            </section>
+            <span class="wc-branch__top__list__item__distance">
+              {{item.distance | wcDistance}}
+            </span>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="wc-branch__info"
+         v-show="current.branchId">
+      <div class="wc-branch__info__ct">
+        <button class="wc-branch__info__back"
+                @click="onBack"
+                v-xy-moving-btn>
+          <i class="icons-common-map-location-outer">
+            <div class="icons-common icons-common-map-location-inner"></div>
+          </i>
+        </button>
+        <div class="wc-branch__info__ct__info">
+          <div class="wc-branch__info__ct__info__loc">
+            <div>{{current.branchName}}</div>
+            <section>{{current.branchAddress}}</section>
+          </div>
+          <button @click="onNav"
+                  v-xy-moving-btn>
+            <i class="icons-common-map-nav-outer">
+              <div class="icons-common icons-common-map-nav-inner"></div>
+            </i>
+            <span>{{current.distance | wcDistance}}</span>
+          </button>
+          <!--<button>-->
+          <!--<span>{{current.distance | wcDistance}}</span>-->
+          <!--</button>-->
+          <button v-if="imgs.length>0"
+                  data-id="imgs"
+                  :data-img="imgs?imgs[0]:''"
+                  v-xy-pop-image:imgs="imgs"
+                  v-xy-moving-btn>
+            <i class="icons-common-map-pic-outer">
+              <div class="icons-common icons-common-map-pic-inner"></div>
+            </i>
+            <span>实景</span>
+          </button>
+        </div>
+        <div class="wc-branch__info__ct__data">
+          <section>
+            <div>{{branchDetail.chargeLotNum}}</div>
+            <div>充电桩</div>
+          </section>
+          <i></i>
+          <section>
+            <div>{{branchDetail.openTime ? branchDetail.openTime : '24h'}}</div>
+            <div>开放时间</div>
+          </section>
+        </div>
+        <div class="wc-branch__info__ct__fee">
+          <div v-for="item in current.additionalInfo">
+            <span v-if="item.isListDisplay===1">*{{item.name}}{{item.value}}元</span>
+          </div>
+        </div>
+        <div class="wc-branch__info__ct__btn">
+          <button @click="onConfirm"
+                  class="wc-btn wc-btn--f30 wc-btn--w600 wc-btn--h80"
+                  :class="{'wc-btn--gray':current.type==='02','wc-btn--yellow':current.type!=='02','wc-btn--cfff':current.type==='02'}"
+                  :disabled="current.type==='02'"
+                  v-xy-moving-btn>{{current.type === '02' ? '不可用' : '设为还车点'}}
+          </button>
+        </div>
+      </div>
+    </div>
+    <actionsheet v-model="addressShow"
+                 :menus="addressSelections"
+                 @on-click-menu="onAddressClick"></actionsheet>
+  </div>
+</template>
+
+<script>
+  import common from '~/mixins/common'
+  import seo from '~/mixins/seo'
+  import wxMixin from '~/mixins/wx-mixin'
+
+  export default {
+    mixins: [common, wxMixin, seo],
+    components: {},
+    data () {
+      let that = this
+      return {
+        pageTitle: '',
+        startLoad: false,
+        //
+        location: {
+          lat: parseFloat(that.$store.state.location.latitude),
+          lng: parseFloat(that.$store.state.location.longitude)
+        },
+        branches: [],
+        current: {},
+        searching: false,
+        search: '',
+        list: [],
+        addressShow: false,
+        addressSelections: [
+          {
+            label: '百度地图',
+            value: 'baidu'
+          },
+          {
+            label: '高德地图',
+            value: 'gaode'
+          },
+          {
+            label: '腾讯地图',
+            value: 'tengxu'
+          }
+        ],
+        detail: {
+          returnTeamShowName: '未知',
+          branchInfo: []
+        },
+        loaded: false,
+        branchDetail: {
+          pictures: []
+        },
+        imgs: []
+      }
+    },
+    watch: {
+      '$store.state.wxAuthStatus': function (v) {
+        let that = this
+        // 需要授权才可以加载的数据(授权比页面装载慢)
+        if (v && !that.startLoad) {
+          that.startLoad = true
+          //
+        }
+      },
+      'search': function (v) {
+        let that = this
+        let kw = v.trim()
+                  .toLowerCase()
+        that.list = that.branches.filter(o => o.branchName.toLowerCase()
+                                               .includes(kw) || o.branchAddress.toLowerCase()
+                                                                 .includes(kw))
+      },
+      'current': async function () {
+        let that = this
+        await that.loadDetail()
+      }
+    },
+    methods: {
+      checkParams () {
+        let that = this
+        if (that.$store.state.location.latitude
+          && that.$store.state.location.longitude) {
+          //
+        } else {
+          that.$router.go(-1)
+        }
+      },
+      async loadAll () {
+        let that = this
+        let {success, bizContent} = await that.$api.warmcar['query/return_car_branch']({
+          carId: that.$store.state.currentOrder.carInfo.carId ? that.$store.state.currentOrder.carInfo.carId : that.$store.state.getCar.carDetail.carId,
+          appointmentBranchId: that.$store.state.currentOrder.appointmentBranchInfo.branchId ? that.$store.state.currentOrder.appointmentBranchInfo.branchId : that.$store.state.getCar.branchId,
+          returnTeamId: that.$store.state.returnCar.returnTeamId ? that.$store.state.returnCar.returnTeamId : 0
+        })
+        if (bizContent) {
+          that.detail = bizContent
+          let {branchInfo} = that.detail
+          that.branches = that._.sortBy(branchInfo.map(o => {
+            let temp = o.gps.split(',')
+            let distance = 0
+            if (temp.length === 2) {
+              distance = that.$wc.getDistance(that.location.lat, that.location.lng, parseFloat(temp[1]), parseFloat(temp[0]))
+            }
+            return Object.assign(o, {
+              distance: distance,
+              num: o.leisureCarNum,
+              lng: parseFloat(temp[0]),
+              lat: parseFloat(temp[1]),
+              //              type: o.branchName.includes('测') ? '02' : o.branchReturnType
+              type: o.branchReturnType
+            })
+          }), o => o.distance)
+          that.list = [...that.branches]
+
+          if (that.$store.state.returnCar.detail.branchId) {
+            let temp = that.branches.find(o => o.branchId === that.$store.state.returnCar.detail.branchId)
+            if (temp) {
+              that.current = temp
+            }
+          }
+
+          if (!that.current.branchId) {
+            that.current = that.branches[0]
+            await that.loadDetail()
+          }
+        } else if (success) {
+          that.detail.returnTeamShowName = that.$store.state.returnCar.returnTeamShowName
+        }
+        that.loaded = true
+      },
+      onBack () {
+        let that = this
+        that.$refs.map.back()
+      },
+      onFocus () {
+        let that = this
+        that.searching = true
+      },
+      onCancelSearch () {
+        let that = this
+        that.searching = false
+        that.$refs.search.reset()
+      },
+      async onSelect (item) {
+        let that = this
+        that.$refs.search.reset()
+        setTimeout(function () {
+          that.searching = false
+          that.current = item
+        }, 100)
+        await that.loadDetail()
+      },
+      async loadDetail () {
+        let that = this
+        let {success, bizContent} = await that.$api.warmcar['query/return_car_simple_branch']({
+          branchId: that.current.branchId
+        })
+        if (success && bizContent) {
+          that.branchDetail = bizContent
+          that.imgs = that.branchDetail.pictures.map(o => o.url)
+        }
+      },
+      onNav () {
+        let that = this
+        that.addressShow = true
+      },
+      async onAddressClick (key) {
+        let that = this
+        that.$vux.loading.show({text: '请稍候'})
+        await that.$wc.goToMap(key, that.current.lat, that.current.lng, that.current.branchName, that.current.branchAddress)
+        that.$vux.loading.hide()
+      },
+      onConfirm () {
+        let that = this
+        that.$store.commit('returnCar', {
+          detail: {...that.current, ...that.branchDetail}
+        })
+        that.$router.go(-1)
+      }
+    },
+    async mounted () {
+      let that = this
+      that.checkParams()
+      // 需要授权才可以加载的数据(授权比页面装载快)
+      if (that.$store.state.wxAuthStatus && !that.startLoad) {
+        that.startLoad = true
+        //
+        await that.loadAll()
+      }
+      // 无需授权可以提前加载的数据
+    }
+  }
+</script>

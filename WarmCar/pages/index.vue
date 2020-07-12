@@ -1,0 +1,121 @@
+<style lang="scss">
+  @import "~assets/scss/common";
+  @import "~assets/scss/card";
+  @import "~assets/scss/pop";
+  @import "~assets/scss/btn";
+  @import "~assets/scss/box";
+  @import "~assets/scss/weui-override";
+  @import "~assets/scss/find-point";
+  @import "~assets/scss/branch-map";
+  @import "~vue-xy-ui/dist/mixin";
+
+  .wc-home--bar {
+    & > * {
+      //min-height: calc(100vh - #{rsh(100)});
+      //min-height: calc(100vh - #{rsh(100)} - env(safe-area-inset-bottom));
+      padding-bottom: rsh(100);
+      //padding-bottom: calc(env(safe-area-inset-bottom) + #{rsh(100)});
+    }
+  }
+
+  .wc-navbar {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: rsh(100);
+    min-height: rsh(100);
+    box-shadow: 0 rsh(-10) rsh(15) rgba(#efefef, .5);
+    display: none;
+    padding-top: rsh(10);
+    padding-bottom: 0;
+    padding-bottom: env(safe-area-inset-bottom);
+    box-sizing: content-box;
+    background-color: #fff;
+    &.wc-navbar--show {
+      display: flex;
+    }
+    .wc-navbar__nav {
+      padding: 0 rsh(50);
+      width: 0;
+      flex-grow: 1;
+      flex-shrink: 0;
+      text-align: center;
+      font-size: rsh(22);
+      color: #555;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      & > span {
+        display: block;
+        transform: scale(.92);
+        line-height: rsh(40);
+      }
+    }
+  }
+</style>
+
+<template>
+  <div class="container"
+       :class="{'route-out':$router.currentRoute.meta.move==='out','route-in':$router.currentRoute.meta.move==='in','wc-home--bar':navbarShow}">
+    <!-- 页面容器 -->
+    <nuxt-child/>
+    <nav class="wc-navbar"
+         :class="{'wc-navbar--show':navbarShow}">
+      <button class="wc-navbar__nav"
+              @click="onNav('/home')"
+              v-xy-moving-btn>
+        <i class="icons-common-nav-bar-car-outer">
+          <div class="icons-common icons-common-nav-bar-car-inner"></div>
+        </i>
+        <span>用车</span>
+      </button>
+      <button class="wc-navbar__nav"
+              @click="onNav('/my/order')"
+              v-xy-moving-btn>
+        <i class="icons-common-nav-bar-order-outer">
+          <div class="icons-common icons-common-nav-bar-order-inner"></div>
+        </i>
+        <span>订单</span>
+      </button>
+      <button class="wc-navbar__nav"
+              @click="onNav('/my')"
+              v-xy-moving-btn>
+        <i class="icons-common-nav-bar-user-outer">
+          <div class="icons-common icons-common-nav-bar-user-inner"></div>
+        </i>
+        <span>我的</span>
+      </button>
+    </nav>
+  </div>
+</template>
+
+<script>
+
+  export default {
+    data () {
+      return {
+        navbarPaths: ['/home', '/my', '/my/order']
+      }
+    },
+    computed: {
+      navbarShow () {
+        let that = this
+        return that.navbarPaths.includes(that.$route.fullPath)
+      }
+    },
+    methods: {
+      onNav (path) {
+        let that = this
+        that.$router.replace(path)
+      }
+    },
+    created () {
+      // 默认重定向至首页
+      if (this.$route.fullPath === '/') {
+        this.$router.replace('/home')
+      }
+    }
+  }
+</script>

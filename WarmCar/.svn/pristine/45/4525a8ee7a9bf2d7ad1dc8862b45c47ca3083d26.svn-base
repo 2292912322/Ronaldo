@@ -1,0 +1,171 @@
+<style lang="scss">
+  @import "~vue-xy-ui/dist/mixin";
+
+  .wc-license__header__icon1 {
+    width: rsh(710);
+    height: rsh(200);
+  }
+
+  .mall-comment-submit__upload__new {
+    position: relative;
+    & > input {
+      display: block;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+    }
+  }
+</style>
+
+<template>
+  <div>
+    <button class="wc-btn wc-btn--yellow wc-btn--w600 wc-btn--h85 mall-comment-submit__upload__new"
+            v-xy-moving-btn>立即用车
+      <input type="file"
+             @change="onUploadChange"
+             accept="image/*">
+    </button>
+
+  </div>
+</template>
+
+<script>
+  import common from '~/mixins/common'
+  import seo from '~/mixins/seo'
+  import wxMixin from '~/mixins/wx-mixin'
+  import parseData from '~/service/parseData'
+
+  export default {
+    mixins: [common, wxMixin, seo],
+    components: {},
+    data () {
+      return {
+        pageTitle: '图片上传demo',
+        startLoad: false,
+        //
+        phone: '',
+        verificationCode: '',
+        terminalType: '',
+        signed: '',
+        fileDir: 'userValidateCarH5'
+      }
+    },
+    watch: {
+      '$store.state.wxAuthStatus': function (v) {
+        let that = this
+        // 需要授权才可以加载的数据(授权比页面装载慢)
+        if (v && !that.startLoad) {
+          that.startLoad = true
+          //
+        }
+      }
+    },
+    methods: {
+      async onUploadChange ({currentTarget}) {
+        let {files} = currentTarget
+        console.log(files)
+        let that = this
+        let {success, bizContent} = await that.$api.common['upload/file_upload']({
+          file: files,
+          fileDir: that.fileDir,
+          //          data: ''
+        })
+        //              console.log(bizContent)
+        //   let valid = false
+        //     for (let f of files) {
+        //         if (!valid && !(/^image\//.test(f.type))) {
+        //         valid = true
+        //         }
+        //     }
+        //     if (valid) {
+        //           that.$wc.toast(`仅能上传图片文件`)
+        //         } else {
+        //           that.$wc.loading.show({text: '正在上传'})
+        //           let {success, bizContent} = await that.$api.common['upload/file_upload']({
+        //             file: files,
+        //             fileDir:that.fileDir,
+        //             data:''
+        //           })
+        //         }
+        // that.$wc.loading.hide()
+      },
+      async onVerificationCode () {
+        let that = this
+        let {success} = await that.$api.warmcar[
+          'customer/send_verification_code'
+          ]({
+          phone: that.phone
+        })
+        // 发送验证码成功
+        if (success) {
+          that.$wc.toast('验证码发送成功')
+        }
+      },
+      async onSign () {
+        let that = this
+        //        that.signed = parseData({
+        //          phone: that.phone,
+        //          verificationCode: that.verificationCode,
+        //          terminalType: that.terminalType
+        //        })
+
+        let {success, bizContent, customerId} = await that.$api.warmcar[
+          'customer/login_register'
+          ]({
+          phone: that.phone,
+          verificationCode: that.verificationCode,
+          terminalType: that.terminalType
+        })
+        // 登录成功
+        if (success) {
+          let {session} = bizContent
+          // bizContent示例:
+          //          certificationStatus: "01"
+          //          headImg: ""
+          //          moneyStatus: "01"
+          //          nickName: "18507567676"
+          //          phone: "18507567676"
+          //          session: "4c4c200054680cc52d0a5b6efb6313a5"
+          //          sex: ""
+
+          // 保存身份凭证:
+          that.$cookie.set('session', session)
+          that.$cookie.set('customerId', customerId)
+
+          // 其余保存至store
+          // 参考:/store/index.js(定义初始状态)
+          // 参考:/store/mutations.js(提取数据, 保存状态)
+          // 参考:/store/action.js(提取数据, 保存状态, 异步)
+
+          // 用户信息
+          that.$store.commit('userInfo', bizContent)
+          // 用户状态
+          that.$store.commit('userStatus', bizContent)
+          // 异步action用:
+          //          that.$store.dispatch('xxx', '123,456')
+          that.$wc.toast('登录成功')
+        }
+      }
+    },
+    created () {
+      let that = this
+      that.type = that.$route.params.type
+      // 需要授权才可以加载的数据(授权比页面装载快)
+      if (that.$store.state.wxAuthStatus && !that.startLoad) {
+        that.startLoad = true
+        //
+      }
+      // 无需授权可以提前加载的数据
+
+      let browser = that.$xyTools.browser()
+      if (browser.type === 'android') {
+        that.terminalType = '01'
+      } else if (browser.type === 'ios') {
+        that.terminalType = '02'
+      }
+    }
+  }
+</script>

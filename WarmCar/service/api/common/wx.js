@@ -1,0 +1,34 @@
+export default [
+  {
+    // {
+    //   "success": true,
+    //   "message": null,
+    //   "code": null,
+    //   "attach": null,
+    //   "data": {
+    //     "appId": "",
+    //     "timestamp": "",
+    //     "nonceStr": "",
+    //     "signature": ""
+    //   }
+    // }
+    name: 'jssdk',
+    desc: '获取jssdk参数',
+    path: '/app/wx/signature',
+    // mockPath: '/common/wx/jssdk',
+    cache: false,
+    params: {
+      url: ''
+    }
+  },
+  {
+    name: 'session',
+    desc: '公众号-授权登录',
+    path: '/app/wxOauth/oAuthLogin',
+    mockPath: '/common/wx/session',
+    cache: false,
+    params: {
+      code: ''
+    }
+  }
+]

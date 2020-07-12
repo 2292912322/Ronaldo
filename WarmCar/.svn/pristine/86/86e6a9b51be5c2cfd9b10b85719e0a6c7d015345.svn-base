@@ -1,0 +1,414 @@
+<style lang="scss">
+  @import "~vue-xy-ui/dist/mixin";
+  @import "~assets/scss/value";
+
+  .wc-car-check {
+    position: relative;
+    .wc-card {
+      padding: rsh(15);
+    }
+    .wc-car-check__btn {
+      position: absolute;
+      bottom: rsh(50);
+      bottom: calc(env(safe-area-inset-bottom) + #{rsh(50)});
+      width: 100%;
+      left: 0;
+    }
+    .wc-car-check__title {
+      font-size: rsh(24);
+      color: #666;
+      display: flex;
+      align-items: center;
+      line-height: rsh(34);
+      & > i {
+        margin-right: rsh(8);
+      }
+      & > span {
+        margin-right: rsh(15);
+      }
+    }
+    .wc-car-check__tips {
+      line-height: rsh(30);
+      color: #c3c3c3;
+      font-size: rsh(20);
+    }
+    .wc-car-check__line {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      margin-top: rsh(10);
+      .wc-car-check__line__item {
+        transform: scale(.99);
+        position: relative;
+        &:nth-child(2n+1) {
+          transform-origin: left center;
+        }
+        &:nth-child(2n) {
+          transform-origin: right center;
+        }
+        & > i {
+          display: block;
+          position: relative;
+          .lazy-load {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+          }
+        }
+        & > div {
+          border-radius: rsh(8);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: rsh(23);
+          color: #666;
+          line-height: rsh(32);
+          background-color: #fce43d;
+          padding: rsh(10) 0;
+          margin-top: rsh(3);
+          & > i {
+            margin-right: rsh(8);
+          }
+        }
+        & > input {
+          display: block;
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          font-size: 0;
+          opacity: 0;
+        }
+      }
+    }
+    .wc-car-check__upload {
+      display: flex;
+      flex-wrap: wrap;
+      & > button {
+        border: 1px solid #ccc;
+        border-radius: rsh(10);
+        width: rsh(108);
+        height: rsh(108);
+        margin-top: rsh(5);
+        margin-right: rsh(5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        & > input {
+          display: block;
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          font-size: 0;
+          opacity: 0;
+        }
+        & > i {
+          display: block;
+          margin: 0 auto;
+        }
+      }
+      & > i {
+        border-radius: rsh(10);
+        width: rsh(108);
+        height: rsh(108);
+        margin-top: rsh(5);
+        margin-right: rsh(5);
+      }
+    }
+  }
+</style>
+
+<template>
+  <div class="wc-car-check">
+    <div class="wc-card">
+      <div class="wc-car-check__title">
+        <i class="icons-common-camera-outer">
+          <div class="icons-common icons-common-camera-inner"></div>
+        </i>
+        <span>车辆外观拍照</span>
+        <span>{{imgsCount}}/2</span>
+      </div>
+      <div class="wc-car-check__tips">
+        请按以下示意图拍摄车辆外观照片（必选）
+      </div>
+      <div class="wc-car-check__line">
+        <div class="wc-car-check__line__item"
+             v-xy-moving-btn>
+          <i :class="`icons-car-return-front-left-${$store.state.getCar.carDetail.carSeatNum}-outer`">
+            <div class="icons-car"
+                 :class="`icons-car-return-front-left-${$store.state.getCar.carDetail.carSeatNum}-inner`"
+                 v-show="!imgs[0]"></div>
+            <i class="lazy-load"
+               v-show="imgs[0]"
+               :key="'0'+imgs[0]">
+              <img v-lazy="imgs[0]"
+                   class="lazy-cover">
+            </i>
+          </i>
+          <div>
+            <i class="icons-common-camera-outer">
+              <div class="icons-common icons-common-camera-inner"></div>
+            </i>
+            <span>车辆左前方照片</span>
+          </div>
+          <input type="file"
+                 @change="onUploadChange"
+                 data-index='0'
+                 accept="image/*">
+        </div>
+        <!--<div class="wc-car-check__line__item"-->
+        <!--v-xy-moving-btn>-->
+        <!--<i class="icons-car-return-front-right-2-outer">-->
+        <!--<div class="icons-car icons-car-return-front-right-2-inner"-->
+        <!--v-show="!imgs[1]"></div>-->
+        <!--<i class="lazy-load"-->
+        <!--v-show="imgs[1]"-->
+        <!--:key="'1'+imgs[1]">-->
+        <!--<img v-lazy="imgs[1]"-->
+        <!--class="lazy-cover">-->
+        <!--</i>-->
+        <!--</i>-->
+        <!--<div>-->
+        <!--<i class="icons-common-camera-outer">-->
+        <!--<div class="icons-common icons-common-camera-inner"></div>-->
+        <!--</i>-->
+        <!--<span>车辆右前方照片</span>-->
+        <!--</div>-->
+        <!--<input type="file"-->
+        <!--@change="onUploadChange"-->
+        <!--data-index='1'-->
+        <!--accept="image/*">-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--<div class="wc-car-check__line">-->
+        <div class="wc-car-check__line__item"
+             v-xy-moving-btn>
+          <i :class="`icons-car-return-back-left-${$store.state.getCar.carDetail.carSeatNum}-outer`">
+            <div class="icons-car"
+                 :class="`icons-car-return-back-left-${$store.state.getCar.carDetail.carSeatNum}-inner`"
+                 v-show="!imgs[1]"></div>
+            <i class="lazy-load"
+               v-show="imgs[1]"
+               :key="'1'+imgs[1]">
+              <img v-lazy="imgs[1]"
+                   class="lazy-cover">
+            </i>
+          </i>
+          <div>
+            <i class="icons-common-camera-outer">
+              <div class="icons-common icons-common-camera-inner"></div>
+            </i>
+            <span>车辆右后方照片</span>
+          </div>
+          <input type="file"
+                 @change="onUploadChange"
+                 data-index='1'
+                 accept="image/*">
+        </div>
+        <!--<div class="wc-car-check__line__item"-->
+        <!--v-xy-moving-btn>-->
+        <!--<i class="icons-car-return-back-right-2-outer">-->
+        <!--<div class="icons-car icons-car-return-back-right-2-inner"-->
+        <!--v-show="!imgs[3]"></div>-->
+        <!--<i class="lazy-load"-->
+        <!--v-show="imgs[3]"-->
+        <!--:key="'3'+imgs[3]">-->
+        <!--<img v-lazy="imgs[3]"-->
+        <!--class="lazy-cover">-->
+        <!--</i>-->
+        <!--</i>-->
+        <!--<div>-->
+        <!--<i class="icons-common-camera-outer">-->
+        <!--<div class="icons-common icons-common-camera-inner"></div>-->
+        <!--</i>-->
+        <!--<span>车辆正后方照片</span>-->
+        <!--</div>-->
+        <!--<input type="file"-->
+        <!--@change="onUploadChange"-->
+        <!--data-index='3'-->
+        <!--accept="image/*">-->
+        <!--</div>-->
+      </div>
+    </div>
+    <div class="wc-card">
+      <div class="wc-car-check__title">
+        <i class="icons-common-camera-outer">
+          <div class="icons-common icons-common-camera-inner"></div>
+        </i>
+        <span>车辆损坏拍照</span>
+      </div>
+      <div class="wc-car-check__tips">
+        损坏部位细节图（可选）
+      </div>
+      <div class="wc-car-check__upload">
+        <i class="lazy-load"
+           v-for="(item,index) in otherImgs"
+           :key="item"
+           @click="onDelete(index)">
+          <img v-lazy="item"
+               class="lazy-cover">
+        </i>
+        <button v-xy-moving-btn>
+          <i class="icons-common-camera-light-outer">
+            <div class="icons-common icons-common-camera-light-inner"></div>
+          </i>
+          <input type="file"
+                 @change="onUploadChange"
+                 accept="image/*">
+          <!--multiple="multiple"-->
+        </button>
+      </div>
+    </div>
+    <div class="wc-car-check__btn">
+      <button class="wc-btn wc-btn--yellow wc-btn--w600 wc-btn--h85"
+              @click="onTake"
+              v-xy-moving-btn>立即取车
+      </button>
+    </div>
+  </div>
+</template>
+
+<script>
+  import common from '~/mixins/common'
+  import seo from '~/mixins/seo'
+  import wxMixin from '~/mixins/wx-mixin'
+  import wcService from '~/mixins/service'
+
+  export default {
+    mixins: [common, wxMixin, seo, wcService],
+    components: {},
+    data () {
+      return {
+        pageTitle: '',
+        startLoad: false,
+        //
+        imgs: Array.from(new Array(2), (v, i) => {
+          return ''
+        }),
+        otherImgs: []
+      }
+    },
+    watch: {
+      '$store.state.wxAuthStatus': async function (v) {
+        let that = this
+        // 需要授权才可以加载的数据(授权比页面装载慢)
+        if (v && !that.startLoad) {
+          that.startLoad = true
+          //
+          await that.loadAll()
+        }
+      }
+    },
+    computed: {
+      imgsCount () {
+        let that = this
+        return that.imgs.filter(o => o).length
+      }
+    },
+    methods: {
+      async loadAll () {
+        let that = this
+        await that.wcService.updateCurrentOrder()
+        //
+        if (that.$store.state.currentOrder.orderId) {
+          if (that.$store.state.currentOrder.orderInfo.orderStatus === '01') {
+          } else {
+            that.$router.replace(`/my/order/detail?id=${that.$store.state.currentOrder.orderId}`)
+          }
+        } else {
+          that.$router.go(-1)
+        }
+      },
+      async onUploadChange ({currentTarget}) {
+        let that = this
+        let {files, dataset: {index}} = currentTarget
+        let valid = false
+        let over = false
+        for (let f of files) {
+          if (!valid && !/^image\//.test(f.type)) {
+            valid = true
+          }
+          //          if (f.size / 1024000 > 1) {
+          //            over = true
+          //          }
+        }
+        if (over) {
+          that.$wc.toast(`图片大小不能超过4MB`)
+        } else if (valid) {
+          that.$wc.toast(`仅能上传图片文件`)
+        } else {
+          let {bizContent} = await that.$api.common['upload/file_upload']({
+            file: files,
+            fileDir: 'userValidateCarH5'
+          })
+          if (Object.prototype.toString.call(bizContent)
+                    .toLowerCase()
+                    .includes('array')
+            && bizContent.length > 0 && bizContent[0]) {
+            let idx = parseInt(index)
+            if (isNaN(idx)) {
+              if (that.otherImgs.length < 10) {
+                that.otherImgs.push(bizContent[0].fileURL)
+              } else {
+                that.$wc.toast('只能上传最多10张图片')
+              }
+            } else {
+              that.$set(that.imgs, parseInt(index), bizContent[0].fileURL)
+            }
+          } else {
+            that.$wc.toast(`上传失败`)
+          }
+          // 使选择相同图片触发change事件
+          currentTarget.value = ''
+        }
+      },
+      async onDelete (index) {
+        let that = this
+        await that.$wc.confirm('取消上传该图片?', {
+          onConfirm () {
+            that.otherImgs.splice(index, 1)
+          }
+        })
+      },
+      async onTake () {
+        let that = this
+        let count = 0
+        that.imgs.forEach(function (item) {
+          if (item) {
+            count++
+          }
+        })
+        if (count >= 2) {
+          let {success, bizContent} = await that.$api.warmcar['customer/take_car']({
+            orderId: that.$store.state.currentOrder.orderId,
+            imgs: that.imgs.concat(that.otherImgs)
+                      .map(o => {
+                        return {fileURL: o}
+                      })
+          })
+          if (success && bizContent) {
+            await that.wcService.updateCurrentOrder()
+            that.$router.replace('/car/control')
+          }
+        } else {
+          that.$wc.toast(`请上传车辆外观照片`)
+        }
+      }
+    },
+    async created () {
+      let that = this
+      // 需要授权才可以加载的数据(授权比页面装载快)
+      if (that.$store.state.wxAuthStatus && !that.startLoad) {
+        that.startLoad = true
+        //
+        await that.loadAll()
+      }
+      // 无需授权可以提前加载的数据
+
+    }
+  }
+</script>

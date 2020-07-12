@@ -1,0 +1,46 @@
+let env = process.env.NODE_ENV ? process.env.NODE_ENV : 'production'
+
+let local = 'http://localhost'
+
+export const APP_NAME = XY_APP_NAME
+export const WX_APPID = XY_WX_APPID
+export const WC_KEY = XY_KEY
+
+let pro = XY_API
+
+let dev = 'http://120.77.148.248:6992'
+
+// API 配置
+export const API_CONFIG_BASE = {
+  baseUrl: env === 'production' ? pro : dev,
+  mock: env === 'production' ? false : false,
+  mockBaseURL: `${local}:3004`,
+  debug: false,
+  cache: true,
+  accessToken: env === 'production' ? '' : '',
+  dir: '/#'
+}
+
+// API 默认配置
+export const API_CONFIG_DEFAULT = {
+  method: 'POST',
+  name: '',
+  desc: '',
+  path: '',
+  params: {},
+  // contentType: 'application/x-www-form-urlencoded',
+  contentType: 'application/json',
+  mock: true,
+  mockPath: '',
+  cache: true
+}
+
+export const LONG_WAIT_SEC = 3000
+
+// axios 默认配置
+export const AXIOS_DEFAULT_CONFIG = {
+  timeout: 15000,
+  // maxContentLength: 2000,
+  // headers: {}
+}
+

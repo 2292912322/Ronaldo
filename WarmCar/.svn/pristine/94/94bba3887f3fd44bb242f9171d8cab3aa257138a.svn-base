@@ -1,0 +1,310 @@
+export default [
+  {
+    // cityName	城市区域名称	是	String
+    // longitude	经度	是	String
+    // latitude	纬度	是	String
+    // level	级别	是	int		2市 3区
+    name: 'open_city_list',
+    desc: '获取开放的城市区列表',
+    path: '/v206/home/warmcar_query_open_city_list_service',
+    mockPath: '',
+    params: {},
+    cache: false
+  },
+  {
+    // gps	服务网点GPS	是	String
+    // leisureCarNum	网点空闲车辆数	是	int
+    // branchId	网点ID	是	int
+    // branchName	网点名称	是	String
+    // branchAddress	网点地址	是	String
+    name: 'all_branch_by_city_code',
+    desc: '获取所有网点信息',
+    path: '/v206/home/warmcar_query_all_branch_by_city_code_service',
+    mockPath: '',
+    params: {
+      cityCode: '' // 城市编码	是	String		深圳:440300
+    },
+    cache: false
+  },
+  {
+    // branchId	网点ID	是	int
+    // branchName	网点名称	是	String
+    // branchAddress	网点详细地址	是	String
+    // isOtherReturn	是否异地取还	是	String
+    // notifyId	网点提醒ID	是	int
+    // notifyStartTimestamp	提醒开始时间戳	是	long
+    // notifyEndTimestamp	提醒结束时间戳	是	long
+    // fenceType	电子围栏类型	是	String
+    // fenceRadius	电子围栏半径	是	int
+    // gps	网点GPS	是	String
+    // pictures	现场图片集合	是	List
+    // cars	网点可用车辆集合	是	List
+    // fencePoints	电子围栏	是	List
+
+    // <pictures>
+    // url	图片链接	是	String		URL
+
+    // <cars>
+    // carId	车辆ID	是	int
+    // carImg	车辆图片	是	String
+    // gps	车辆GPS	是	String
+    // carLpn	车牌号	是	String		0
+    // carModelName	车型名称	是	String		0
+    // restBattery	剩余电量	是	int		0
+    // chargeState	车辆充电状态	是	String		0
+    // enduranceMileage	剩余里程	是	int		0
+    // timeMoney	时间计费	是	int		0
+    // timeUnit	时间单位	是	int		0
+    // mileageMoney	里程计费	是	int	直接显示	0
+    // mileageUnit	里程计费单位	是	String		0
+    // carColor	车辆颜色	是	string		0
+    // carSeatNum	车辆座位数	是	string		0
+    // carTagName	车辆标签	是	String	原点取还	0
+    // carTagNameTips	车辆标签提示	是	string		0
+
+    // <fencePoints>
+    // longitude	longitude	是	String		longitude
+    // latitude	longitude	是	String		longitude
+    name: 'branch',
+    desc: '查询单个网点',
+    path: '/v206/home/warmcar_query_branch_service',
+    mockPath: '',
+    params: {
+      branchId: '' // 网点ID	是	int		1
+    },
+    cache: false
+  },
+  {
+    // appointmentTeamShowName	取车企业城市展示名称	是	String
+    // returnTeamShowName	还车企业城市展示名称	是	String
+    // teamGps	企业城市Gps	是	String
+    // branchInfo	网点信息	是	Array
+    //
+    // <branchInfo>
+    // gps	服务网点GPS	是	String
+    // branchId	网点ID	是	int
+    // branchName	网点名称	是	String
+    // branchAddress	网点地址	是	String
+    // branchReturnType	网点还车类型	是	String	01不限制（能还）；02限制（不能还）；03收费不限制（可以还要收费）
+    // additionalInfo	附加信息	是	Array
+    //
+    // <additionalInfo>
+    // name	附加费名称	是	String
+    // value	附加费值	是	int		0
+    // type	类型	是	String		01 跨区服务费,02跨区优惠,03还车手续费,04跨城服务费
+    // isListDisplay	是否在列表展示	是	int		0不展示,1展示
+    name: 'return_car_branch',
+    desc: '查询还车网点',
+    path: '/v206/control/warmcar_query_return_car_branch_service',
+    mockPath: '',
+    params: {
+      carId: '',//	车辆ID		int
+      returnTeamId: '',//	还车企业Id(默认0为当前车辆所在企业)		int
+      appointmentBranchId: ''//	预约网点ID		int
+    },
+    cache: false
+  },
+  {
+    // switchDeductibles	不计免赔是否开启	是	String		1开启，0未
+    // deductiblesId	不计免赔ID	是	int		-
+    // deductiblesName	不计免赔名称	是	String		-
+    // deductiblesBrief	不计免赔简短描述	是	String		-
+    // deductiblesTips	不计免赔提示语	是	String		-
+    // switchDeductiblesCoerce	是否强制	是	String		1强制，0不强制
+    // packagesFormat	套餐格式	是	Array		-
+    //
+    // <packagesFormat>
+    // type	类型	是	String		A: 标题+金额+文字+金额+文字+文字； B：标题+金额+文字+文字
+    // packageId	套餐ID	是	int
+    // title	标题	是	String
+    // timeMny	时间金额	是	String
+    // timeMnyText	时间金额文字	是	String
+    // mileageMny	里程金额	是	String
+    // mileageMnyText	里程文字	是	String
+    // mny	金额	是	String
+    // mnyText	文字	是	String
+    // describe	描述	是	String		-
+    // sort	排序	是	int		1
+    name: 'cost_package_list',
+    desc: '查询计费套餐列表',
+    path: '/v206/control/warmcar_query_cost_package_list_service',
+    mockPath: '',
+    params: {
+      carId: ''
+    },
+    cache: false
+  },
+  {
+    // code	编码	是	String		xxx
+    // msg	文字	是	String		xxx
+    // sort	排序	是	int		1
+    name: 'dic_list',
+    desc: '查询字典表',
+    path: '/v206/home/warmcar_query_dic_list_service',
+    mockPath: '',
+    params: {
+      dicId: ''
+    },
+    cache: false
+  },
+  {
+    // id	客户运维ID	是	int		1
+    // name	客户运维姓名	是	String		1
+    // phone	客户运维手机号	是	String		xxx
+    // type	评价对象	是	String		01客户，02运维
+    // previousOrderId	上一个订单ID	是	int		1
+    // evaluationTxt	评价说明文字	是	array		1
+    name: 'former_info',
+    desc: '查询上单客户或运维工作人员点赞吐槽',
+    path: '/v206/order/warmcar_query_former_info_service',
+    mockPath: '',
+    params: {
+      carId: ''
+    },
+    cache: false
+  },
+  {
+    name: 'former_info_submit',
+    desc: '确认对上单客户或运维工作人员点赞吐槽信息',
+    path: '/v206/order/warmcar_query_former_info_submit_service',
+    mockPath: '',
+    params: {
+      orderId: 0,//	订单Id	是	int		1
+      cwId: 0,//	客户运维ID	是	int		根据上一单客户和运维人员接口返回数据为准
+      type: '',//	评价对象	是	String		根据上一单客户和运维人员接口返回数据为准
+      result: '',//	评价结果	是	String		01 赞， 02吐槽
+      remark: '',//	备注	是	String		xx
+      previousOrderId: 0,//	上一个订单ID	是	int	当-1的时候，表示没有客户订单和运维的订单	1
+      fileURL1: '',//	照片1	是	String		xx
+      fileURL2: ''//	照片2	是	String		xx
+    },
+    cache: false
+  },
+  {
+    // phone	手机号码	是	String	用户登录手机号码	纯11位的数字
+    // nickName	客户昵称	是	String
+    // headImg	头像	是	String		URL
+    // certificationStatus	用户状态	是	String		0
+    // sex	性别	是	String	1男 2女	1
+    // moneyStatus	资金状态	是	String		0
+    // session	会员session	是	String		0
+    // isEnterprise	是否为团体用户	是	String		0否，1是
+    // enterpriseId	团体ID	是	int		1313
+    // balance	余额	是	int	单位(分)	12000
+    // deposit	押金	是	int	单位(分)
+    // couponNum	优惠券数量	是	int	单位(张)	URL
+    // enterpriseBalance	团体账户的余额	是	int	单位(分)	0
+    name: 'customer_info',
+    desc: '查询用户信息',
+    path: '/v206/customer/warmcar_query_customer_info_service',
+    mockPath: '',
+    params: {},
+    cache: false
+  },
+  {
+    // page	页码	是	int
+    // rows	集合	是	JSONArray		JSONArray
+    //
+    // <rows>
+    // trafficViolationId	违章ID	是	int
+    // trafficViolationNo	违章编号	是	String
+    // carLpn	车牌号	是	String
+    // trafficViolationTime	违章时间	是	long
+    // trafficViolationScore	违章扣分	是	int
+    // trafficViolationMny	违章罚款	是	int
+    // trafficViolationDesc	违章描述	是	String
+    // trafficViolationPlace	违章地点	是	String
+    // trafficVolationStatus	违章状态	是	String		01待处理，02待审核，03审核成功，04审核失败
+    name: 'traffic_violation_list',
+    desc: '查询违章记录列表',
+    path: '/v206/customer/warmcar_query_customer_traffic_violation_list_service',
+    mockPath: '',
+    params: {
+      page: 1,
+      size: 10
+    },
+    cache: false
+  },
+  {
+    // orderInfo	订单信息	是	bean
+    // carInfo	车辆信息	是	bean
+    // costInfo	计费模式	是	bean
+    // appointmentBranchInfo	预约网点信息	是	bean
+    // returnBranchInfo	还车网点信息	是	bean
+    // bluetoothInfo	蓝牙信息	是	bean
+    //
+    // <orderInfo>
+    // orderId	订单ID	是	int
+    // currentTimeStamp	服务器当前时间(本地时间)	是	long
+    // sysCancelTimeStamp	系统自动取消时间	是	long
+    // orderStatus	订单状态	是	String
+    // appointmentTime	预约时间	是	long
+    // takeCarTime	取车时间	是	long
+    // isValidate	是否验车	是	String	0否 1是
+    // isEvaluateWC	是否已经用车前评价	是	String	0否 1是
+    // orderMileage	订单里程	是	int		0
+    //
+    // <carInfo>
+    // carId	车辆ID	是	int
+    // carImg	车辆图片	是	String
+    // gps	车辆GPS	是	String
+    // carLpn	车牌号	是	String		0
+    // carModelName	车型名称	是	String		0
+    // restBattery	剩余电量	是	int		0
+    // chargeState	车辆充电状态	是	String		0
+    // enduranceMileage	剩余里程	是	int		0
+    // carColor	车辆颜色	是	string		0
+    // carSeatNum	车辆座位数	是	string		0
+    // carTagName	车辆标签	是	String	原点取还	0
+    // carTagNameTips	车辆标签提示	是	string		0
+    // direction	方向	是	String		0~360
+    //
+    // <costInfo>
+    // switchCost	计费模式	是	string		1套餐计费模式，0标准计费模式
+    // costName	计费名称	是	string
+    // timeMoney	时间计费	是	int		0
+    // timeUnit	时间单位	是	int		0
+    // mileageMoney	里程计费	是	int		0
+    // mileageUnit	里程计费单位	是	String		0
+    //
+    // <appointmentBranchInfo>
+    // branchId	网点Id	是	int
+    // branchName	网点名称	是	String
+    // branchAddress	网点详细地址	是	String
+    // isOtherReturn	是否异地取还	是	String
+    // isLock	是否有地锁	是	String	0无，1有
+    // gps	网点GPS	是	String
+    // pictures	现场图片集合	是	List		<>
+    //
+    // <pictures>
+    // url	图片链接	是	String		URL
+    //
+    // <returnBranchInfo>
+    // branchId	网点Id	是	int
+    // branchName	网点名称	是	String
+    // branchAddress	网点详细地址	是	String
+    //
+    // <bluetoothInfo>
+    // blueBoxDeviceName	蓝牙盒子设备名称		String	无订单时空字符串
+    // unlockDoorCMD	解锁车门指令		String	无订单时空字符串
+    // lockDoorCMD	锁车门指令		String	无订单时空字符串
+    // findCarCMD	蓝牙找车指令		String	无订单时空字符串
+    name: 'customer_current_order',
+    desc: '查询当前订单',
+    path: '/v206/control/warmcar_query_customer_current_order_service',
+    mockPath: '',
+    params: {},
+    cache: false
+  },
+  {
+    // phone	热线服务号码	是	String
+    name: 'city_service_phone',
+    desc: '按城市查询服务热线',
+    path: '/v206/home/warmcar_query_city_service_phone_service',
+    mockPath: '',
+    params: {
+      cityCode: ''
+    },
+    cache: false
+  }
+]

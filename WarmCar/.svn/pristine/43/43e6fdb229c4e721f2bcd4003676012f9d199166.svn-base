@@ -1,0 +1,206 @@
+<style lang="scss">
+  @import "~vue-xy-ui/dist/mixin";
+  @import "~assets/scss/value";
+
+  .wc-order-detail {
+    .wc-card {
+      &:first-child {
+        .wc-box {
+          padding: 0 rsh(30);
+        }
+      }
+      &:nth-child(2) {
+        padding: 0 rsh(30);
+      }
+    }
+    .wc-order-detail__top {
+      display: flex;
+      align-items: center;
+
+      .wc-order-detail__top__face {
+        width: rsh(170);
+        height: rsh(110);
+        margin-right: rsh(50);
+      }
+      .wc-order-detail__top__car {
+        & > b, & > span {
+          display: block;
+        }
+        & > b {
+          line-height: rsh(40);
+        }
+        & > span {
+          line-height: rsh(30);
+          font-size: rsh(20);
+          color: #666;
+        }
+      }
+    }
+    .wc-order-detail__time {
+      position: relative;
+      padding: rsh(55) 0 rsh(28) 0;
+      font-size: rsh(26);
+      text-align: center;
+      &:after {
+        content: '';
+        display: block;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 1px;
+        background-color: $lineColor;
+        transform: scale(1, .5);
+      }
+      & > label {
+        font-size: rsh(72);
+        margin-bottom: rsh(15);
+      }
+      & > .wc-btn {
+      }
+      & > div {
+        display: flex;
+        justify-content: space-around;
+        div {
+          &:first-child {
+            line-height: rsh(32);
+          }
+          &:last-child {
+            line-height: rsh(36);
+          }
+        }
+      }
+    }
+    .wc-order-detail__money {
+      padding: rsh(46) rsh(10) rsh(44) rsh(10);
+      font-size: rsh(26);
+      line-height: rsh(44);
+      & > div {
+        display: flex;
+        justify-content: space-between;
+      }
+    }
+  }
+</style>
+
+<template>
+  <div class="wc-order-detail">
+    <div class="wc-card">
+      <a class="wc-box"
+         v-xy-hover-btn>
+        <div class="wc-box__ct">
+          <div class="wc-box__title wc-box__title--f30 wc-order-detail__top">
+            <i class="lazy-load wc-order-detail__top__face">
+              <img v-lazy="detail.carModelSmallUrl"
+                   class="lazy-contain">
+            </i>
+            <div class="wc-order-detail__top__car">
+              <b>{{detail.carLpn}}</b>
+              <span>{{detail.appointmentTime | formatDate('MM月dd日 hh:mm')}}</span>
+            </div>
+          </div>
+          <div class="wc-box__text wc-box__text--f30 wc-box__text--c999">详情</div>
+          <button class="wc-box__select">
+            <i class="icons-common-gt-outer">
+              <div class="icons-common icons-common-gt-inner"></div>
+            </i>
+          </button>
+        </div>
+      </a>
+    </div>
+    <div class="wc-card">
+      <section class="wc-order-detail__time">
+        <label>{{detail.orderMny}}</label>
+        <button class="wc-btn wc-btn--yellow wc-btn--p20 wc-btn--h40 wc-btn--c666 wc-btn--f24">
+          {{statusEnum[detail.orderStatus]}}
+        </button>
+        <div>
+          <section>
+            <div>{{detail.totalMileage}}</div>
+            <div>里程(公里)</div>
+          </section>
+          <section>
+            <div>{{detail.totalTime | wcTimeByMin}}</div>
+            <div>时间(时)</div>
+          </section>
+        </div>
+      </section>
+      <section class="wc-order-detail__money">
+        <!--<div><span>里程（公里）</span><span>20元</span></div>-->
+        <!--<div><span>时间（时）</span><span>20元</span></div>-->
+        <div v-for="item in detail.costList"><span>{{item.name}}</span><span>{{item.value}}元</span></div>
+      </section>
+    </div>
+  </div>
+</template>
+
+<script>
+  import common from '~/mixins/common'
+  import seo from '~/mixins/seo'
+  import wxMixin from '~/mixins/wx-mixin'
+
+  export default {
+    mixins: [common, wxMixin, seo],
+    components: {},
+    data () {
+      return {
+        pageTitle: '订单详情',
+        startLoad: false,
+        //
+        id: 0,
+        detail: {
+          costList: [],
+          evaluationContent: {},
+          orderShare: {}
+        },
+        statusEnum: {}
+      }
+    },
+    watch: {
+      '$store.state.wxAuthStatus': async function (v) {
+        let that = this
+        // 需要授权才可以加载的数据(授权比页面装载慢)
+        if (v && !that.startLoad) {
+          that.startLoad = true
+          //
+          await that.loadStatus()
+          await that.loadAll()
+        }
+      }
+    },
+    methods: {
+      async loadAll () {
+        let that = this
+        let {success, bizContent} = await that.$api.warmcar['time_rental/order_detail']({
+          orderId: that.id
+        })
+        if (success && bizContent) {
+          that.detail = bizContent
+        }
+      },
+      async loadStatus () {
+        let that = this
+        let {success, bizContent} = await that.$api.warmcar['query/dic_list']({
+          dicId: 81
+        })
+        if (success && bizContent) {
+          bizContent.forEach(function (item) {
+            that.statusEnum[item.code] = item.msg
+          })
+        }
+      }
+    },
+    async created () {
+      let that = this
+      that.id = that.$route.query.id
+      // 需要授权才可以加载的数据(授权比页面装载快)
+      if (that.$store.state.wxAuthStatus && !that.startLoad) {
+        that.startLoad = true
+        //
+        await that.loadStatus()
+        await that.loadAll()
+      }
+      // 无需授权可以提前加载的数据
+    }
+  }
+</script>

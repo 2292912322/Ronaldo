@@ -1,0 +1,5 @@
+/components/mint-ui/**/*.*
+/components/vux/**/*.*
+/plugins/vue-router-storage/**/*.*
+/plugins/query-string.js
+/plugins/MD5.js

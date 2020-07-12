@@ -1,0 +1,440 @@
+<style lang="scss">
+@import "~vue-xy-ui/dist/mixin";
+@import "~assets/scss/value";
+@import "../../../assets/style/icons-auth.css";
+.wc-license {
+  background: #f5f8fb;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .wc-license__header {
+    display: flex;
+    flex-direction: column;
+    margin-top: rsh(35);
+    margin-bottom: rsh(20);
+    .wc-license__header__icon {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      .wc-license-dashed {
+        width: rsh(210);
+        height: 0;
+        margin-top: 5px;
+        border: 1px dashed #bbbbbb;
+        transform: scaleY(0.1);
+      }
+    }
+    .wc-license__header__span {
+      font-size: rsh(24);
+      color: #999999;
+      width: rsh(360);
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      margin-top: rsh(20);
+    }
+  }
+  .wc-license-cn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .wc-license__picture {
+      height: rsh(498);
+    }
+    .wc-card-car {
+      height: rsh(310);
+      .wc-card-car__content {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        margin-top: rsh(30);
+        width: rsh(672);
+        & > i {
+          display: block;
+          position: relative;
+          width: rsh(331);
+          & > input {
+            display: block;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+          }
+        }
+        .lazy-img {
+          width: rsh(331);
+          height: rsh(197);
+        }
+      }
+    }
+    .wc-license__message {
+      height: rsh(239);
+      .wc-license__message__input {
+        width: rsh(630);
+        height: rsh(100);
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        font-size: rsh(24);
+        color: #999999;
+        & > span {
+          margin-left: rsh(30);
+        }
+        &:last-of-type {
+          &:before {
+            content: "";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background-color: $inputLineColor;
+            transform: scale(1, 0.5);
+          }
+        }
+      }
+      .wc-license__message__input--text--w120 {
+        width: rsh(95);
+      }
+    }
+  }
+  .wc-license-card {
+    background: #ffffff;
+    width: rsh(710);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .wc-license__picture__title {
+      font-size: rsh(26);
+      color: #666666;
+      padding-top: rsh(30);
+    }
+    .wc-license__picture__content {
+      display: flex;
+      flex-direction: row;
+      width: rsh(660);
+      margin-top: rsh(25);
+      .wc-license__picture__left {
+        height: rsh(390);
+        width: rsh(320);
+        margin-right: rsh(10);
+        display: flex;
+        flex-direction: column;
+        & > i {
+          display: block;
+          position: relative;
+          height: rsh(190);
+          & > input {
+            display: block;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+          }
+        }
+        .lazy-img {
+          width: rsh(320);
+          height: rsh(190);
+        }
+        & > i:last-of-type {
+          margin-top: rsh(10);
+        }
+      }
+      .wc-license__picture__right {
+        height: rsh(390);
+        width: rsh(330);
+        & > i {
+          display: block;
+          position: relative;
+          & > input {
+            display: block;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+          }
+        }
+        .lazy-img {
+          width: rsh(330);
+          height: rsh(390);
+        }
+      }
+    }
+  }
+  .wc-license__text {
+    font-size: rsh(26);
+    color: #ffcc00;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: rsh(110);
+    & > span {
+      margin-right: rsh(10);
+    }
+  }
+  .wc-btn-m350 {
+    margin-top: rsh(345);
+  }
+  .wc-license-fontColor {
+    color: #ffcc00;
+  }
+}
+</style>
+
+<template>
+  <div class="wc-license">
+
+    <!-- 头部导航 -->
+    <div class="wc-license__header">
+      <div class="wc-license__header__icon ">
+        <i :class="{'icons-auth-proc-ing-outer':isMan,'icons-auth-proc-wait-outer':!isMan}">
+          <div :class="{'icons-auth':true, 'icons-auth-proc-ing-inner':isMan,'icons-auth-proc-wait-inner':!isMan}"></div>
+        </i>
+        <div class="wc-license-dashed"></div>
+        <i :class="{'icons-auth-proc-ing-outer':!isMan,'icons-auth-proc-wait-outer':isMan}">
+          <div :class="{'icons-auth':true, 'icons-auth-proc-ing-inner':!isMan,'icons-auth-proc-wait-inner':isMan}"></div>
+        </i>
+      </div>
+      <div class="wc-license__header__span">
+        <span :class="{'wc-license-fontColor':isMan}">身份证认证</span>
+        <span :class="{'wc-license-fontColor':!isMan}">驾驶证认证</span>
+      </div>
+    </div>
+    <!-- 大陆居民证上传 -->
+    <div class="wc-license-cn" v-if='isMan&&isChina'>
+      <!-- 图片上传框 -->
+      <div class="wc-card wc-license-card wc-license__picture">
+        <div class="wc-license__picture__title">居民身份证上传</div>
+        <div class="wc-license__picture__content">
+          <div class="wc-license__picture__left">
+            <i :class="fileURL['1'] ?'lazy-load lazy-img' :'icons-auth-cn-front-outer'" >
+              <div class="icons-auth icons-auth-cn-front-inner" v-if="!fileURL['1']"></div>
+              <img v-lazy="fileURL['1']" class="lazy-cover" v-if="fileURL['1']">
+              <input type="file" @change="onUploadChange" :data-id='1' accept="image/*">
+            </i>
+            <i :class="!fileURL['2'] ? 'icons-auth-cn-back-outer' : 'lazy-load lazy-img'" >
+              <div class="icons-auth icons-auth-cn-back-inner" v-if="!fileURL['2']"></div>
+              <img v-lazy="fileURL['2']" class="lazy-cover" v-if="fileURL['2']">
+              <input type="file" @change="onUploadChange" :data-id='2' accept="image/*">
+            </i>
+          </div>
+          <div class="wc-license__picture__right">
+            <i :class="fileURL['3'] ?'lazy-load lazy-img' :'icons-auth-cn-photo-outer'" >
+              <div class="icons-auth icons-auth-cn-photo-inner" v-if="!fileURL['3']"></div>
+              <img v-lazy="fileURL['3']" class="lazy-cover" v-if="fileURL['3']">
+              <input type="file" @change="onUploadChange" :data-id='3' accept="image/*">
+            </i>
+          </div>
+        </div>
+      </div>
+      <!-- 信息采集框 -->
+      <div class="wc-card wc-license-card wc-license__message">
+        <div class="wc-license__picture__title">身份证信息采集</div>
+        <div class="wc-license__message__input">
+          <span class="wc-license__message__input--text wc-license__message__input--text--w120">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名</span>：
+          <div>
+            <x-input class="wc-license__message__input--border"></x-input>
+          </div>
+        </div>
+        <div class="wc-license__message__input">
+          <span class="wc-license__message__input--text">身份证号：</span>
+          <div>
+            <x-input class="wc-license__message__input--border"></x-input>
+          </div>
+        </div>
+      </div>
+      <div class="wc-license__text" @click="changeIsChina">
+        <span>港、澳、台及国际证件信息认证入口</span>
+        <i class="icons-auth-left-outer">
+          <div class="icons-auth icons-auth-left-inner"></div>
+        </i>
+      </div>
+      <button class="wc-btn wc-btn--yellow wc-btn--w600 wc-btn--h85" v-xy-moving-btn @click="changeIsMan">下一个
+      </button>
+    </div>
+    <!-- 非大陆居民证上传 -->
+    <div class="wc-license-cn" v-if='!isChina&&isMan'>
+      <!-- 图片上传框 -->
+      <div class="wc-card wc-license-card wc-license__picture">
+        <div class="wc-license__picture__title">非大陆居民证上传</div>
+        <div class="wc-license__picture__content">
+          <div class="wc-license__picture__left">
+             <i :class="fileURL['1'] ?'lazy-load lazy-img' :'icons-auth-ot-front-outer'" >
+              <div class="icons-auth icons-auth-ot-front-inner" v-if="!fileURL['1']"></div>
+              <img v-lazy="fileURL['1']" class="lazy-cover" v-if="fileURL['1']">
+              <input type="file" @change="onUploadChange" :data-id='1' accept="image/*">
+            </i>
+            <i :class="!fileURL['2'] ? 'icons-auth-ot-back-outer' : 'lazy-load lazy-img'" >
+              <div class="icons-auth icons-auth-ot-back-inner" v-if="!fileURL['2']"></div>
+              <img v-lazy="fileURL['2']" class="lazy-cover" v-if="fileURL['2']">
+              <input type="file" @change="onUploadChange" :data-id='2' accept="image/*">
+            </i>
+          </div>
+          <div class="wc-license__picture__right">
+            <i :class="fileURL['3'] ?'lazy-load lazy-img' :'icons-auth-cn-photo-outer'">
+              <div class="icons-auth icons-auth-cn-photo-inner" v-if="!fileURL['3']"></div>
+              <img v-lazy="fileURL['3']" class="lazy-cover" v-if="fileURL['3']">
+              <input type="file" @change="onUploadChange" :data-id='3' accept="image/*">
+            </i>
+          </div>
+        </div>
+      </div>
+      <!-- 信息采集框 -->
+      <div class="wc-card wc-license-card wc-license__message">
+        <div class="wc-license__picture__title">非大陆居民证信息采集</div>
+        <div class="wc-license__message__input">
+          <span class="wc-license__message__input--text wc-license__message__input--text--w120">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名</span>：
+          <div>
+            <x-input class="wc-license__message__input--border"></x-input>
+          </div>
+        </div>
+        <div class="wc-license-solid"></div>
+        <div class="wc-license__message__input">
+          <span class="wc-license__message__input--text">证件编号：</span>
+          <div>
+            <x-input class="wc-license__message__input--border"></x-input>
+          </div>
+        </div>
+      </div>
+      <div class="wc-license__text" @click="changeIsChina">
+        <span>大陆居民证件信息认证入口</span>
+        <i class="icons-auth-left-outer">
+          <div class="icons-auth icons-auth-left-inner"></div>
+        </i>
+      </div>
+      <button class="wc-btn wc-btn--yellow wc-btn--w600 wc-btn--h85" v-xy-moving-btn @click="changeIsMan">下一个
+      </button>
+    </div>
+    <!-- 驾驶证上传 -->
+    <div class="wc-license-cn" v-if='!isMan'>
+      <!-- 图片上传框 -->
+      <div class="wc-card  wc-license-card wc-card-car">
+        <div class="wc-license__picture__title">驾驶证证上传</div>
+        <div class="wc-card-car__content">
+           <i :class="fileURL['4'] ?'lazy-load lazy-img' :'icons-auth-license-front-outer'">
+              <div class="icons-auth icons-auth-license-front-inner" v-if="!fileURL['4']"></div>
+              <img v-lazy="fileURL['4']" class="lazy-cover" v-if="fileURL['4']">
+              <input type="file" @change="onUploadChange" :data-id='4' accept="image/*">
+            </i>
+            <i :class="!fileURL['5'] ? 'icons-auth-license-back-outer' : 'lazy-load lazy-img'">
+              <div class="icons-auth icons-auth-license-back-inner" v-if="!fileURL['5']"></div>
+              <img v-lazy="fileURL['5']" class="lazy-cover" v-if="fileURL['5']">
+              <input type="file" @change="onUploadChange" :data-id='5' accept="image/*">
+            </i>
+        </div>
+      </div>
+      <!-- 信息采集框 -->
+      <div class="wc-card wc-license-card wc-license__message">
+        <div class="wc-license__picture__title">驾驶证信息采集</div>
+        <div class="wc-license__message__input">
+          <span class="wc-license__message__input--text wc-license__message__input--text--w120">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名</span>：
+          <div>
+            <x-input class="wc-license__message__input--border"></x-input>
+          </div>
+        </div>
+        <div class="wc-license-solid"></div>
+        <div class="wc-license__message__input">
+          <span class="wc-license__message__input--text">身份证号：</span>
+          <div>
+            <x-input class="wc-license__message__input--border"></x-input>
+          </div>
+        </div>
+      </div>
+      <button class="wc-btn wc-btn--yellow wc-btn--w600 wc-btn--h85 wc-btn-m350" v-xy-moving-btn>提交
+      </button>
+    </div>
+  </div>
+</template>
+
+<script>
+import common from "~/mixins/common";
+import seo from "~/mixins/seo";
+import wxMixin from "~/mixins/wx-mixin";
+
+export default {
+  mixins: [common, wxMixin, seo],
+  components: {},
+  data() {
+    return {
+      pageTitle: "身份认证",
+      isMan: true,
+      isChina: true,
+      phone: "",
+      captcha: "",
+      fileDir: "userValidateCarH5",
+      fileURL: {}
+    };
+  },
+  watch: {
+    "$store.state.wxAuthStatus": function(v) {
+      let that = this;
+      // 需要授权才可以加载的数据(授权比页面装载慢)
+      if (v) {
+        // console.log(`%c${that.$route.fullPath} wxAuthStatus`, 'font-size:20px;color:blue;')
+      }
+    }
+  },
+  methods: {
+    onCaptcha() {
+      let that = this;
+    },
+    onSubmit() {
+      let that = this;
+    },
+    //切换顶部文字颜色
+    changeIsMan() {
+      this.isMan = false;
+      this.pageTitle = "驾驶认证";
+    },
+    //切换大陆与非大陆认证视图
+    changeIsChina() {
+      this.fileURL = {};
+      this.isChina = !this.isChina;
+    },
+    //单图片上传
+    async onUploadChange({ currentTarget }) {
+      let {
+        files,
+        dataset: { id }
+      } = currentTarget;
+      let that = this;
+      let valid = false;
+      for (let f of files) {
+        if (!valid && !/^image\//.test(f.type)) {
+          valid = true;
+        }
+      }
+      if (valid) {
+        that.$wc.toast(`仅能上传图片文件`);
+      } else {
+        that.$vux.loading.show({
+          text: "正在上传"
+        });
+        let { bizContent } = await that.$api.common["upload/file_upload"]({
+          file: files,
+          fileDir: that.fileDir
+        });
+        that.$set(that.fileURL, id, bizContent[0].fileURL);
+      }
+      that.$vux.loading.hide();
+    }
+  },
+  created() {
+    let that = this;
+    that.type = that.$route.params.type;
+    // 需要授权才可以加载的数据(授权比页面装载快)
+    if (that.$store.state.wxAuthStatus) {
+      // console.log(`%c${that.$route.fullPath} created`, 'font-size:20px;color:blue;')
+    }
+    // 无需授权可以提前加载的数据
+  }
+};
+</script>

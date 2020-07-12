@@ -1,0 +1,244 @@
+//  押金支付页
+<style lang="scss">
+@import "~vue-xy-ui/dist/mixin";
+@import "~assets/scss/value";
+@import "../../../assets/style/icons-auth.css";
+.wc-deposit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .wc-deposit-card {
+    width: rsh(710);
+    height: rsh(214);
+    margin: rsh(40) auto rsh(15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .wc-deposit-card__span {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      font-size: rsh(26);
+      color: #333333;
+      & > span:first-child {
+        font-size: rsh(51);
+      }
+      & > span:last-child {
+        margin-top: rsh(5);
+      }
+    }
+  }
+  .wc-pay-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: rsh(710);
+    margin-bottom: rsh(38);
+    .wc-pay-card__item {
+      width: rsh(646);
+      height: rsh(100);
+      position: relative;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      &:last-child {
+        &:after {
+          content: "";
+          width: rsh(646);
+          height: 1px;
+          position: absolute;
+          top: 0;
+          left: 0;
+          background-color: $inputLineColor;
+          transform: scale(1, 0.5);
+        }
+      }
+      .wc-pay-card__item--left {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        & > i {
+          margin: 0 rsh(30) 0 rsh(20);
+        }
+        & > span {
+          font-size: rsh(30);
+          color: #333333;
+        }
+      }
+      .wc-pay-card__item--right {
+        margin-right: rsh(25);
+      }
+    }
+  }
+  & > span {
+    font-size: rsh(24);
+    color: #666666;
+    word-spacing: 0;
+  }
+  & > button {
+    margin-top: rsh(280);
+  }
+}
+.wc-paySuccess-card {
+  width: rsh(710);
+  height: rsh(334);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  & > i {
+    margin: rsh(50) auto rsh(40);
+  }
+  & > span:first-of-type {
+    font-size: rsh(24);
+    color: #666666;
+    margin-bottom: rsh(15);
+  }
+  & > span:last-of-type {
+    font-size: rsh(20);
+    color: #999999;
+  }
+}
+</style>
+
+<template>
+  <div>
+    <div class="wc-deposit" v-if="!isPay">
+      <!-- 押金 -->
+      <div class="wc-card wc-deposit-card">
+        <div class="wc-deposit-card__span">
+          <span>{{mny | wcNumFormat}}元</span>
+          <span>押金充值</span>
+        </div>
+      </div>
+      <!-- 付款渠道 -->
+      <div class="wc-card wc-pay-card">
+        <div class="wc-pay-card__item" @click="changeisZFB">
+          <div class="wc-pay-card__item--left">
+            <i class="icons-common-pay-type-ali-outer">
+              <div class="icons-common icons-common-pay-type-ali-inner"></div>
+            </i>
+            <span>支付宝</span>
+          </div>
+          <div class="wc-pay-card__item--right">
+            <i
+              :class="{'icons-common-selected-outer':isZFB,'icons-common-pay-unselected-outer':!isZFB}"
+            >
+              <div
+                :class="{'icons-common':true,'icons-common-selected-inner':isZFB,'icons-common-pay-unselected-inner':!isZFB }"
+              ></div>
+            </i>
+          </div>
+        </div>
+        <div class="wc-pay-card__item" @click="changeisZFB">
+          <div class="wc-pay-card__item--left">
+            <i class="icons-common-pay-type-wx-outer">
+              <div class="icons-common icons-common-pay-type-wx-inner"></div>
+            </i>
+            <span>微信支付</span>
+          </div>
+          <div class="wc-pay-card__item--right">
+            <i
+              :class="{'icons-common-selected-outer':!isZFB,'icons-common-pay-unselected-outer':isZFB}"
+            >
+              <div
+                :class="{'icons-common':true,'icons-common-selected-inner':!isZFB,'icons-common-pay-unselected-inner':isZFB }"
+              ></div>
+            </i>
+          </div>
+        </div>
+      </div>
+      <span>充值押金不可抵扣用车费用、违章罚款、不可开具发票</span>
+      <span>用车结束后10个工作日，未产生违章即可申请</span>
+      <button
+        class="wc-btn wc-btn--yellow wc-btn--w600 wc-btn--h85"
+        v-xy-moving-btn
+        @click="paySuccess"
+      >立即缴费</button>
+    </div>
+    <!-- 缴费成功 -->
+    <div v-if="isPay">
+      <div class="wc-card wc-paySuccess-card">
+        <i class="icons-common-selected-main-outer">
+          <div class="icons-common icons-common-selected-main-inner"></div>
+        </i>
+        <span>缴纳成功</span>
+        <span>已缴纳押金{{mny | wcNumFormat}}元整</span>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import common from "~/mixins/common";
+import seo from "~/mixins/seo";
+import wxMixin from "~/mixins/wx-mixin";
+import { setTimeout } from "timers";
+
+export default {
+  mixins: [common, wxMixin, seo],
+  components: {},
+  data() {
+    return {
+      pageTitle: "缴纳押金",
+      startLoad: false,
+      isZFB: true,
+      isPay: false,
+      bankType:'',
+      mny:''
+    };
+  },
+  watch: {
+    "$store.state.wxAuthStatus": function(v) {
+      let that = this;
+      // 需要授权才可以加载的数据(授权比页面装载慢)
+      if (v) {
+        // console.log(`%c${that.$route.fullPath} wxAuthStatus`, 'font-size:20px;color:blue;')
+      }
+    }
+  },
+  methods: {
+    changeisZFB() {
+      this.isZFB = !this.isZFB;
+    },
+    async paySuccess() {
+      let that = this;
+      if(that.isZFB){
+         that.bankType = '01'
+      }else {
+         that.bankType = '02'
+      }
+      let {success,bizContent} = await that.$api.warmcar['customer/deposit_unified_order']({
+        money:that.mny,
+        bankType:that.bankType
+      })
+      if(success){
+        that.isPay = true;
+        setTimeout(function() {
+          that.$router.replace({ path: "/home" });
+        }, 1500);
+      }
+    },
+    //查询当前订单可用优惠劵列表
+      async loadAll(){
+        let that = this
+        let {success,bizContent} = await that.$api.warmcar['query/deposit_quota']({
+             cityCode: that.$store.state.location.cityCode
+        })
+        if(success&&bizContent){
+           that.mny = bizContent.mny
+        }
+      }
+  },
+  async created() {
+    let that = this;
+    that.type = that.$route.params.type;
+    // 需要授权才可以加载的数据(授权比页面装载快)
+    if (that.$store.state.wxAuthStatus) {
+      // console.log(`%c${that.$route.fullPath} created`, 'font-size:20px;color:blue;')
+    }
+    // 无需授权可以提前加载的数据
+     await that.loadAll();
+  }
+};
+</script>

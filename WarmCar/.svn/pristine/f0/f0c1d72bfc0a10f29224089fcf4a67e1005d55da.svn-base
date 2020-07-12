@@ -1,0 +1,286 @@
+<style lang="scss">
+  @import "~vue-xy-ui/dist/mixin";
+  @import "~assets/scss/value";
+
+  .wc-find-car {
+    color: #666;
+    button {
+      color: #666;
+      text-align: center;
+    }
+    .wc-find-car__location {
+      display: flex;
+      align-items: center;
+      margin: 0 rsh(20);
+      padding: rsh(25);
+      position: relative;
+      font-size: rsh(24);
+      & > section {
+        width: 0;
+        flex-grow: 1;
+        line-height: rsh(36);
+        .wc-find-car__location__place {
+          & > b {
+            font-size: rsh(26);
+            color: #333;
+            font-weight: normal;
+          }
+          & > i {
+            display: inline-block;
+            margin: 0 rsh(6);
+            vertical-align: top;
+            position: relative;
+            top: 1px;
+          }
+        }
+      }
+      & > button {
+        & > div {
+          font-size: rsh(20);
+          color: #666;
+          line-height: rsh(28);
+          margin-top: rsh(6);
+        }
+      }
+    }
+    .wc-find-car__btns {
+      position: relative;
+      margin: 0 rsh(20);
+      padding: rsh(20) 0;
+      font-size: rsh(20);
+      line-height: rsh(40);
+      display: flex;
+      align-items: center;
+      & > b {
+        width: 1px;
+        height: rsh(40);
+        background-color: $lineColor;
+        transform: scale(.5, 1);
+        flex-shrink: 0;
+      }
+      & > button {
+        width: 0;
+        flex-grow: 1;
+        & > i, & > span {
+          display: inline-block;
+          vertical-align: middle;
+        }
+        & > span {
+          margin-left: rsh(10);
+        }
+      }
+      &:before, &:after {
+        content: '';
+        display: block;
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background-color: $lineColor;
+        transform: scale(1, .5);
+      }
+      &:before {
+        top: 0;
+      }
+      &:after {
+        bottom: 0;
+      }
+    }
+    .wc-find-car__list {
+      & > section {
+        margin: 0 rsh(30) 0 rsh(40);
+        padding: rsh(35) 0 rsh(25) 0;
+        display: flex;
+        align-items: center;
+        .wc-find-car__list__face {
+          text-align: center;
+          flex-shrink: 0;
+          & > span {
+            line-height: rsh(28);
+            font-size: rsh(20);
+            color: #999;
+          }
+        }
+        .wc-find-car__list__info {
+          width: 0;
+          flex-grow: 1;
+          margin: 0 rsh(30);
+          & > div {
+            display: flex;
+            align-items: center;
+            line-height: rsh(30);
+            font-size: rsh(24);
+            color: #999;
+            &:nth-child(2) {
+              margin: rsh(15) 0;
+            }
+            i {
+              display: inline-block;
+            }
+            .wc-find-car__list__info__num {
+              font-size: rsh(26);
+              color: #333;
+            }
+            .wc-find-car__list__info__place {
+              color: #bbb;
+              font-size: rsh(18);
+              border: 1px solid $lineColor;
+              border-radius: rsh(6);
+              padding: 0 rsh(5);
+              margin-left: rsh(10);
+            }
+            .wc-find-car__list__info__battery {
+              color: #5ed642;
+              margin-left: rsh(10);
+              margin-right: rsh(20);
+              font-size: rsh(26);
+            }
+            .wc-find-car__list__info__distance {
+              font-size: rsh(20);
+              color: #666;
+            }
+            .wc-find-car__list__info__money {
+              color: $mainColor;
+            }
+          }
+        }
+        & > button {
+          flex-shrink: 0;
+          font-size: rsh(34);
+          color: #333;
+          width: rsh(100);
+          height: rsh(100);
+          border-radius: 50%;
+          line-height: rsh(100);
+          background: linear-gradient(120deg, #fce43d, #facd00);
+          box-shadow: 0 0 rsh(20) $baseShadowColor;
+        }
+      }
+    }
+  }
+</style>
+
+<template>
+  <div class="wc-find-car">
+    <div class="wc-card">
+      <div class="wc-find-car__location">
+        <section>
+          <div class="wc-find-car__location__place">
+            <b>南方软件园</b>
+            <i class="icons-common-location-main-outer">
+              <div class="icons-common icons-common-location-main-inner"></div>
+            </i>
+            <span>距您 10km</span>
+          </div>
+          <div class="wc-find-car__location__address">
+            珠海市高新区南方软件园
+          </div>
+        </section>
+        <button @click="onNav"
+                v-xy-moving-btn>
+          <i class="icons-common-nav-main-outer">
+            <div class="icons-common icons-common-nav-main-inner"></div>
+          </i>
+          <div>导航</div>
+        </button>
+      </div>
+      <div class="wc-find-car__btns">
+        <button @click="onNav"
+                v-xy-moving-btn>
+          <i class="icons-common-car-main-outer">
+            <div class="icons-common icons-common-car-main-inner"></div>
+          </i>
+          <span>车辆数</span><span>10</span>
+        </button>
+        <b></b>
+        <button @click="onNav"
+                v-xy-moving-btn>
+          <i class="icons-common-p-main-outer">
+            <div class="icons-common icons-common-p-main-inner"></div>
+          </i>
+          <span>停车位</span><span>10</span>
+        </button>
+        <b></b>
+        <button @click="onNav"
+                v-xy-moving-btn>
+          <i class="icons-common-charger-main-outer">
+            <div class="icons-common icons-common-charger-main-inner"></div>
+          </i>
+          <span>充电桩</span><span>10</span>
+        </button>
+      </div>
+      <div class="wc-find-car__list">
+        <section>
+          <div class="wc-find-car__list__face">
+            <i class="icons-car-众泰云100S-outer">
+              <div class="icons-car icons-car-众泰云100S-inner"></div>
+            </i>
+            <span>众泰云100S</span>
+          </div>
+          <div class="wc-find-car__list__info">
+            <div>
+              <span class="wc-find-car__list__info__num">粤CST000</span>
+              <span class="wc-find-car__list__info__place">4座</span>
+            </div>
+            <div>
+              <i class="icons-common-battery-80-outer">
+                <div class="icons-common icons-common-battery-80-inner"></div>
+              </i>
+              <span class="wc-find-car__list__info__battery">80%</span>
+              <span class="wc-find-car__list__info__distance">续航180km</span>
+            </div>
+            <div>
+              <span class="wc-find-car__list__info__money">10</span>
+              <span>元/分钟 + </span>
+              <span class="wc-find-car__list__info__money">10</span>
+              <span>元/公里</span>
+            </div>
+          </div>
+          <button v-xy-moving-btn>
+            用车
+          </button>
+        </section>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  import common from '~/mixins/common'
+  import seo from '~/mixins/seo'
+  import wxMixin from '~/mixins/wx-mixin'
+
+  export default {
+    mixins: [common, wxMixin, seo],
+    components: {},
+    data () {
+      return {
+        pageTitle: '网点选车'
+      }
+    },
+    watch: {
+      '$store.state.wxAuthStatus': function (v) {
+        let that = this
+        // 需要授权才可以加载的数据(授权比页面装载慢)
+        if (v) {
+          // console.log(`%c${that.$route.fullPath} wxAuthStatus`, 'font-size:20px;color:blue;')
+        }
+      }
+    },
+    methods: {
+      onNav () {
+        let that = this
+      }
+    },
+    created () {
+      let that = this
+      that.type = that.$route.params.type
+      // 需要授权才可以加载的数据(授权比页面装载快)
+      if (that.$store.state.wxAuthStatus) {
+        // console.log(`%c${that.$route.fullPath} created`, 'font-size:20px;color:blue;')
+      }
+      // 无需授权可以提前加载的数据
+
+    }
+  }
+</script>

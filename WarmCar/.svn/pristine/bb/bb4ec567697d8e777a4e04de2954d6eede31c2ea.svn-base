@@ -1,0 +1,635 @@
+<style lang="scss">
+  @import "~vue-xy-ui/dist/mixin";
+  @import "~assets/scss/value";
+
+  .wc-car-confirm {
+    .wc-card {
+      position: relative;
+      padding: rsh(50);
+    }
+    .wc-car-confirm__label {
+      position: absolute;
+      top: rsh(-4);
+      left: rsh(-4);
+      background: linear-gradient(90deg, $mainColor, #fd744b);
+      color: #fff;
+      font-size: rsh(22);
+      line-height: rsh(37);
+      padding: 0 rsh(10);
+      border-radius: rsh(5);
+      box-shadow: rsh(5) rsh(5) rsh(15) rgba(#fea224, .5);
+      z-index: 10;
+    }
+    .wc-car-confirm__btn {
+      position: absolute;
+      bottom: rsh(50);
+      bottom: calc(env(safe-area-inset-bottom) + #{rsh(50)});
+      width: 100%;
+      left: 0;
+    }
+    .wc-car-confirm__info, .wc-car-confirm__location {
+      position: relative;
+      &:after {
+        content: '';
+        display: block;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 1px;
+        background-color: $lineColor;
+        transform: scale(1, .5);
+      }
+    }
+    .wc-car-confirm__info {
+      padding-bottom: rsh(25);
+      display: flex;
+      align-items: center;
+      & > div {
+        &:last-child {
+          width: 0;
+          flex-grow: 1;
+          text-align: center;
+          position: relative;
+          & > i {
+            width: 100%;
+            height: rsh(123);
+            display: inline-block;
+          }
+        }
+      }
+      .wc-car-confirm__info__label {
+        font-size: rsh(30);
+        line-height: rsh(48);
+      }
+      .wc-car-confirm__info__name {
+        line-height: rsh(36);
+        & > label {
+          font-size: rsh(16);
+          color: #bbb;
+          border: 1px solid $lineColor;
+          border-radius: rsh(6);
+          padding: 0 rsh(4);
+          line-height: rsh(26);
+          margin-left: rsh(10);
+        }
+        & > span {
+          font-size: rsh(26);
+          color: #aaa;
+          margin-right: rsh(15);
+        }
+      }
+      .wc-car-confirm__info__other {
+        line-height: rsh(46);
+        & > i {
+          display: inline-block;
+          vertical-align: middle;
+        }
+        .wc-car-confirm__info__other__battery {
+          color: $batteryGreen;
+          font-size: rsh(26);
+          margin-left: rsh(12);
+          &.wc-car-confirm__info__other__battery--low {
+            color: $batteryRed;
+          }
+        }
+        .wc-car-confirm__info__other__distance {
+          font-size: rsh(26);
+          color: #aaa;
+          margin-left: rsh(12);
+        }
+      }
+    }
+    .wc-car-confirm__location {
+      padding: rsh(20) 0;
+      line-height: rsh(55);
+      font-size: rsh(26);
+      & > div {
+        display: flex;
+        & > label {
+          flex-shrink: 0;
+        }
+        & > button {
+          display: flex;
+          align-items: center;
+          &.wc-car-confirm__location__select {
+            color: #aaa;
+            width: 0;
+            flex-grow: 1;
+            text-align: left;
+            & > i {
+              margin-left: rsh(10);
+            }
+            &.wc-car-confirm__location__select--on {
+              color: #333;
+            }
+          }
+          &.wc-car-confirm__location__switch {
+            color: #666;
+            flex-shrink: 0;
+            position: relative;
+            &:before {
+              content: '';
+              display: block;
+              width: 1px;
+              height: rsh(28);
+              background-color: $lineColor;
+              transform: scale(.5, 1);
+            }
+            & > i {
+              margin: 0 rsh(20);
+            }
+          }
+        }
+      }
+      & > section {
+        line-height: rsh(44);
+        color: #6dc97b;
+        display: flex;
+        & > span {
+          &:first-child {
+            width: 0;
+            flex-grow: 1;
+          }
+        }
+      }
+    }
+    .wc-car-confirm__fee {
+      padding-top: rsh(10);
+      .wc-car-confirm__fee__title {
+        display: flex;
+        align-items: center;
+        line-height: rsh(90);
+        & > label {
+          font-size: rsh(26);
+          width: 0;
+          flex-grow: 1;
+        }
+        & > span {
+          font-size: rsh(24);
+          color: #999;
+          margin-right: rsh(20);
+        }
+        & > span, & > i {
+          flex-shrink: 0;
+        }
+      }
+      & > div {
+        max-height: rsh(450);
+        overflow: scroll;
+        & > section {
+          border-radius: rsh(20);
+          padding: rsh(20);
+          font-size: rsh(26);
+          margin-bottom: rsh(20);
+          position: relative;
+          & > label {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: rsh(50);
+            height: rsh(45);
+            background: linear-gradient(40deg, transparent, transparent 50%, #6dc97d 50%, #6dc97d);
+            border-top-right-radius: rsh(20);
+            & > i {
+              position: absolute;
+              bottom: rsh(18);
+              left: rsh(22);
+            }
+          }
+          background-color: #f5f5f3;
+          .wc-car-confirm__fee__selection__title {
+            line-height: rsh(70);
+            position: relative;
+            & > b, & > span {
+              float: right;
+            }
+            & > label {
+            }
+            & > b {
+              font-weight: normal;
+              font-size: rsh(41);
+              margin-right: rsh(5);
+            }
+            & > span {
+              margin-right: rsh(10);
+            }
+          }
+          .wc-car-confirm__fee__selection__des {
+            font-size: rsh(22);
+            color: #666;
+            line-height: rsh(36);
+            /*height: 0;*/
+            overflow: hidden;
+            transition: height .3s ease-in-out;
+          }
+          &.wc-car-confirm__fee__selection--selected {
+            background: linear-gradient(90deg, #fdef8b, #fce166);
+            /*.wc-car-confirm__fee__selection__des {*/
+            /*height: 36px;*/
+            /*}*/
+          }
+        }
+      }
+    }
+    .wc-car-confirm__insurance {
+      margin-bottom: rsh(170);
+      display: flex;
+      align-items: center;
+      .wc-car-confirm__insurance__select {
+        flex-shrink: 0;
+      }
+      .wc-car-confirm__insurance__des {
+        width: 0;
+        flex-grow: 1;
+        font-size: rsh(20);
+        color: #999;
+        margin: 0 rsh(10);
+        line-height: rsh(32);
+        & > label {
+          display: block;
+          font-size: rsh(26);
+          color: #666;
+          font-weight: bold;
+          line-height: rsh(46);
+        }
+      }
+      & > i {
+        flex-shrink: 0;
+      }
+    }
+  }
+</style>
+
+<template>
+  <div class="wc-car-confirm">
+    <div class="wc-card wc-card--page">
+      <label class="wc-car-confirm__label">原点还取</label>
+      <div class="wc-car-confirm__info">
+        <div>
+          <label class="wc-car-confirm__info__label">{{$store.state.getCar.carDetail.carLpn}}</label>
+          <div class="wc-car-confirm__info__name">
+            <span>{{$store.state.getCar.carDetail.carModelName}}</span>
+            <label>{{$store.state.getCar.carDetail.carSeatNum}}座</label>
+            <label>{{$store.state.getCar.carDetail.carColor}}</label>
+          </div>
+          <div class="wc-car-confirm__info__other">
+            <i :class="`icons-common-battery-${$store.state.getCar.carDetail.restBatteryRound}-outer`">
+              <div :class="`icons-common icons-common-battery-${$store.state.getCar.carDetail.restBatteryRound}-inner`"></div>
+            </i>
+            <span class="wc-car-confirm__info__other__battery"
+                  :class="{'wc-car-confirm__info__other__battery--low':$store.state.getCar.carDetail.restBattery<=20}">{{$store.state.getCar.carDetail.restBattery}}%</span>
+            <span class="wc-car-confirm__info__other__distance">续航{{$store.state.getCar.carDetail.enduranceMileage}}km</span>
+          </div>
+        </div>
+        <div>
+          <i class="lazy-load">
+            <img v-lazy="$store.state.getCar.carDetail.carImg"
+                 class="lazy-contain">
+          </i>
+        </div>
+      </div>
+      <div class="wc-car-confirm__location">
+        <div>
+          <label>取车：</label><span>{{$store.state.getCar.branchDetail.branchName}}</span>
+        </div>
+        <div>
+          <label>还车：</label>
+          <button class="wc-car-confirm__location__select"
+                  @click="onPoint"
+                  v-xy-hover-btn>
+            <span :class="{'wc-car-confirm__location__select--on':$store.state.returnCar.detail.branchId}">{{$store.state.returnCar.detail.branchId ? $store.state.returnCar.detail.branchName : '选择还车网点'}}</span>
+            <i class="icons-common-gt-small-outer">
+              <div class="icons-common icons-common-gt-small-inner"></div>
+            </i>
+          </button>
+          <button class="wc-car-confirm__location__switch"
+                  @click="onSameBranch"
+                  v-xy-hover-btn>
+            <i class="icons-common-sync-outer">
+              <div class="icons-common icons-common-sync-inner"></div>
+            </i>
+            <span>同取车网点</span>
+          </button>
+        </div>
+        <section v-for="item in $store.state.returnCar.detail.additionalInfo"
+                 :key="item">
+          <span>{{item.name}}</span><span>{{item.value}}元/单</span>
+        </section>
+        <!--<section>-->
+        <!--<span>跨区调度费</span><span>10元/单</span>-->
+        <!--</section>-->
+        <!--<section>-->
+        <!--<span>还车调度费（车位已满）</span><span>10元/单</span>-->
+        <!--</section>-->
+      </div>
+      <div class="wc-car-confirm__fee"
+           v-show="feeDetail.packagesFormat.length>0">
+        <section class="wc-car-confirm__fee__title">
+          <label>计费类型</label>
+          <span>计费详情</span>
+          <i class="icons-common-question-outer">
+            <div class="icons-common icons-common-question-inner"></div>
+          </i>
+        </section>
+        <div>
+          <section :class="{'wc-car-confirm__fee__selection--selected':item.packageId===packageId}"
+                   @click="onSelect(item.packageId)"
+                   v-for="(item,index) in feeDetail.packagesFormat"
+                   :key="item.packageId">
+            <label v-show="item.packageId===packageId">
+              <i class="icons-common-selected-white-outer">
+                <div class="icons-common icons-common-selected-white-inner"></div>
+              </i>
+            </label>
+            <div class="wc-car-confirm__fee__selection__title">
+              <label>{{item.title}}</label>
+              <span>{{item.mileageMnyText}}</span>
+              <b>{{item.mileageMny}}</b>
+              <span>{{item.timeMnyText}}</span>
+              <b>{{item.timeMny}}</b>
+              <span>{{item.mnyText}}</span>
+              <b>{{item.mny}}</b>
+            </div>
+            <div class="wc-car-confirm__fee__selection__des"
+                 v-html="item.describe.replace(/\n/g, '&lt;br&gt;')"
+                 :data-id="item.packageId"
+                 :data-selected="item.packageId===packageId"
+                 ref="package">
+            </div>
+          </section>
+        </div>
+        <!--<section class="wc-car-confirm__fee__selection&#45;&#45;standard"-->
+        <!--@click="onSelect('01')"-->
+        <!--v-xy-moving-btn>-->
+        <!--<label v-show="feeType==='01'">-->
+        <!--<i class="icons-common-selected-white-outer">-->
+        <!--<div class="icons-common icons-common-selected-white-inner"></div>-->
+        <!--</i>-->
+        <!--</label>-->
+        <!--<div class="wc-car-confirm__fee__selection__title">-->
+        <!--<label>标准</label>-->
+        <!--<span>元/公里</span>-->
+        <!--<b>0.8</b>-->
+        <!--<span>元/分钟+</span>-->
+        <!--<b>0.15</b>-->
+        <!--</div>-->
+        <!--</section>-->
+        <!--<section class="wc-car-confirm__fee__selection&#45;&#45;day"-->
+        <!--@click="onSelect('02')"-->
+        <!--v-xy-moving-btn>-->
+        <!--<label v-show="feeType==='02'">-->
+        <!--<i class="icons-common-selected-white-outer">-->
+        <!--<div class="icons-common icons-common-selected-white-inner"></div>-->
+        <!--</i>-->
+        <!--</label>-->
+        <!--<div class="wc-car-confirm__fee__selection__title">-->
+        <!--<label>超值工作套餐</label>-->
+        <!--<span>元</span>-->
+        <!--<b>38</b>-->
+        <!--</div>-->
+        <!--<div class="wc-car-confirm__fee__selection__des">-->
+        <!--周一至周四24小时内免时长费（超出时间按标准计价）里程费：0.55元/公里（套餐内不包含）-->
+        <!--</div>-->
+        <!--</section>-->
+      </div>
+      <div class="wc-car-confirm__insurance"
+           v-show="feeDetail.switchDeductibles==='1'"
+           @click="onInsurance">
+        <div class="wc-car-confirm__insurance__select">
+          <i class="icons-common-selected-big-outer"
+             v-show="hasInsurance">
+            <div class="icons-common icons-common-selected-big-inner"></div>
+          </i>
+          <i class="icons-common-unselected-big-outer"
+             v-show="!hasInsurance">
+            <div class="icons-common icons-common-unselected-big-inner"></div>
+          </i>
+        </div>
+        <div class="wc-car-confirm__insurance__des">
+          <label>{{feeDetail.deductiblesName}}</label>
+          <div>{{feeDetail.deductiblesBrief}}</div>
+        </div>
+        <i class="icons-common-tips-outer">
+          <div class="icons-common icons-common-tips-inner"></div>
+        </i>
+      </div>
+      <div class="wc-car-confirm__btn">
+        <button class="wc-btn wc-btn--yellow wc-btn--w600 wc-btn--h85"
+                @click="onUse"
+                v-xy-moving-btn>立即用车
+        </button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  import common from '~/mixins/common'
+  import seo from '~/mixins/seo'
+  import wxMixin from '~/mixins/wx-mixin'
+  import vuxValidate from '~/mixins/vux-validate'
+  import location from '~/mixins/location'
+
+  export default {
+    mixins: [common, wxMixin, seo, location],
+    components: {},
+    data () {
+      return {
+        pageTitle: '确定用车',
+        startLoad: false,
+        //
+        id: '',
+        hasInsurance: true,
+        returnBranch: {},
+        feeDetail: {packagesFormat: []},
+        packageId: 0
+      }
+    },
+    watch: {
+      '$store.state.wxAuthStatus': async function (v) {
+        let that = this
+        // 需要授权才可以加载的数据(授权比页面装载慢)
+        if (v && !that.startLoad) {
+          that.startLoad = true
+          //
+          await that.updateFee()
+        }
+      },
+      '$store.state.returnCar.detail.branchId': async function () {
+        let that = this
+        await that.updateFee()
+      },
+      'packageId': function (v) {
+        let that = this
+        if (v) {
+          let ps = that.$refs['package']
+          if (ps) {
+            ps.forEach(function (item) {
+              if (item.dataset.height === undefined) {
+                item.dataset.height = item.offsetHeight
+              }
+              if (parseInt(item.dataset.id) === that.packageId) {
+                if (item.dataset.height !== undefined) {
+                  item.style.height = `${item.dataset.height}px`
+                }
+              } else {
+                item.style.height = '0'
+              }
+            })
+          }
+        }
+      }
+    },
+    methods: {
+      checkParams () {
+        let that = this
+        if (that.id
+          && that.$store.state.getCar && that.$store.state.getCar.carDetail && that.$store.state.getCar.carDetail.carId) {
+          //
+        } else {
+          that.$router.go(-1)
+        }
+      },
+      async onPoint () {
+        let that = this
+        let result = await that.wcService.updateLocation()
+        if (result) {
+          that.$router.push(`/find/branchReturn`)
+        } else {
+          // 测试
+          that.$store.commit('location', {
+            cityCode: '440400',
+            cityName: '珠海',
+            latitude: 22.224979,
+            longitude: 113.553986
+          })
+          that.$router.push(`/find/branchReturn`)
+          //          that.$wc.toast('获取定位失败')
+        }
+        //        that.$router.push(`/find/returnPoint?carId=${that.$store.state.getCar.carDetail.carId}&appointmentBranchId=${that.$store.state.getCar.branchDetail.branchId}&la=${that.$store.state.location.latitude}&lo=${that.$store.state.location.longitude}`)
+      },
+      async findReturnBranch () {
+        let that = this
+        let {success, bizContent} = await that.$api.warmcar['query/return_car_branch']({
+          carId: that.$store.state.getCar.carDetail.carId,
+          returnTeamId: 0,//	还车企业Id(默认0为当前车辆所在企业)		int
+          appointmentBranchId: that.$store.state.getCar.branchDetail.branchId
+        })
+        if (success && bizContent) {
+          return bizContent.branchInfo.find(o => o.branchId === that.$store.state.getCar.branchDetail.branchId)
+        }
+        return null
+      },
+      async loadDetail () {
+        let that = this
+        let {success, bizContent} = await that.$api.warmcar['query/return_car_simple_branch']({
+          branchId: that.current.branchId
+        })
+        if (success && bizContent) {
+          that.branchDetail = bizContent
+          that.imgs = that.branchDetail.pictures.map(o => o.url)
+        }
+      },
+      async onSameBranch () {
+        let that = this
+        let branch = await that.findReturnBranch()
+        if (branch) {
+          let {success, bizContent} = await that.$api.warmcar['query/return_car_simple_branch']({
+            branchId: branch.branchId
+          })
+          if (success && bizContent) {
+
+            that.$store.commit('returnCar', {
+              detail: {...branch, ...bizContent}
+            })
+            that.current = branch
+          }
+        }
+      },
+      async onUse () {
+        let that = this
+        if (that.$store.state.returnCar.detail.branchId) {
+          let {success, bizContent} = await that.$api.warmcar['customer/appointment_car']({
+            carId: that.$store.state.getCar.carDetail.carId,//	车辆ID	是	int
+            appointmentType: '01',//	预约方式	是	String		01表示APP终端下单，02表示平台下单
+            appointmentReturnCarBranchId: that.$store.state.returnCar.detail.branchId,//	预约还车网点	是	int		1
+            switchDisregard: that.feeDetail.switchDeductibles === '1' ? (that.hasInsurance ? '1' : '0') : '0',//	是否选择不计免赔	是	String		1 选择， 0不选择
+            packagesId: that.packageId,//	价格套餐ID	是	int		1
+            disregardId: that.feeDetail.deductiblesId//	不计免赔ID	是	int		1
+          })
+          if (success && bizContent) {
+            // orderId	订单号	是	int
+            // currentTimeStamp	服务器当前时间(本地时间)	是	long
+            // appointmentTimeStamp	订单预约时间	是	long
+            // sysCancelTimeStamp	系统自动取消时间	是	long		1
+            let {orderId, currentTimeStamp, appointmentTimeStamp, sysCancelTimeStamp} = bizContent
+            that.$store.dispatch('clearState', 'returnCar')
+            that.$store.commit('systemInfo', {timePatch: Date.now() - currentTimeStamp})
+            //            that.$router.push(`/car/control?orderId=${orderId}&currentTimeStamp=${currentTimeStamp}&appointmentTimeStamp=${appointmentTimeStamp}&sysCancelTimeStamp=${sysCancelTimeStamp}`)
+            that.$router.push(`/car/control`)
+          }
+        } else {
+          that.$wc.toast('请选择还车网点')
+        }
+      },
+      async onInsurance () {
+        let that = this
+        if (that.hasInsurance) {
+          if (that.feeDetail.switchDeductiblesCoerce === '1') {
+            that.$wc.alert(that.feeDetail.deductiblesTips, {
+              title: that.feeDetail.deductiblesName,
+              confirmButtonText: '我要选择'
+            })
+          } else {
+            let result = await that.$wc.confirm(that.feeDetail.deductiblesTips, {
+              title: that.feeDetail.deductiblesName,
+              confirmButtonText: '我要选择',
+              cancelButtonText: '暂不选择'
+            })
+
+            if (!result) {
+              that.hasInsurance = false
+            }
+          }
+        } else {
+          that.hasInsurance = true
+        }
+      },
+      onSelect (id) {
+        let that = this
+        that.packageId = id
+      },
+      async updateFee () {
+        let that = this
+        //        if (that.$store.state.returnCar.branchId) {
+        let {success, bizContent} = await that.$api.warmcar['query/cost_package_list']({
+          carId: that.$store.state.getCar.carDetail.carId
+        })
+        if (success && bizContent) {
+          Object.assign(that.feeDetail, bizContent)
+          if (that.feeDetail.packagesFormat.length > 0) {
+            that.$nextTick(function () {
+              that.packageId = that.feeDetail.packagesFormat[0].packageId
+            })
+          }
+        } else {
+          that.feeDetail = {packagesFormat: []}
+        }
+        //        }
+      }
+    },
+    async created () {
+      let that = this
+      that.id = that.$route.query.id
+      that.checkParams()
+      // 需要授权才可以加载的数据(授权比页面装载快)
+      if (that.$store.state.wxAuthStatus && !that.startLoad) {
+        that.startLoad = true
+        //
+        await that.updateFee()
+      }
+      // 无需授权可以提前加载的数据
+    }
+  }
+</script>

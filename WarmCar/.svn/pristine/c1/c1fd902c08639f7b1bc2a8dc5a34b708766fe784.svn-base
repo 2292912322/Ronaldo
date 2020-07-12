@@ -1,0 +1,21 @@
+function wcDistance (value) {
+  if (value < 1000) {
+    return `${Math.floor(value)}m`
+  }
+  return `${Math.floor(value / 1000)}km`
+}
+
+function wcTimeByMin (min) {
+  let hour = Math.floor(min / 60)
+  let minLeft = min % 60
+  if (hour > 1) {
+    return `${hour}:${minLeft.toString()
+                             .padEnd(2, '0')}`
+  }
+  return min
+}
+
+export default {
+  wcDistance,
+  wcTimeByMin
+}

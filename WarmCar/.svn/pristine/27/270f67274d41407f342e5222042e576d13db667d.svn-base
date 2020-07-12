@@ -1,0 +1,60 @@
+<style lang="scss">
+  @import "~vue-xy-ui/dist/mixin";
+
+  .wc-card {
+    &:nth-child(3) {
+      padding: rsh(35);
+    }
+  }
+</style>
+
+<template>
+  <div>
+    <div class="wc-card">
+      所有页面顶部有内阴影<br>
+      默认字体大小32
+    </div>
+    <div class="wc-card">
+      每个块有外阴影<br>相距20<br>圆角10
+    </div>
+    <div class="wc-card">
+      每个块的padding根据实际页面自行调整, 默认15
+    </div>
+  </div>
+</template>
+
+<script>
+  import common from '~/mixins/common'
+  import seo from '~/mixins/seo'
+  import wxMixin from '~/mixins/wx-mixin'
+  import vuxValidate from '~/mixins/vux-validate'
+
+  export default {
+    mixins: [common, wxMixin, seo],
+    components: {},
+    data () {
+      return {
+        pageTitle: '块demo'
+      }
+    },
+    watch: {
+      '$store.state.wxAuthStatus': function (v) {
+        let that = this
+        // 需要授权才可以加载的数据(授权比页面装载慢)
+        if (v) {
+          // console.log(`%c${that.$route.fullPath} wxAuthStatus`, 'font-size:20px;color:blue;')
+        }
+      }
+    },
+    methods: {},
+    created () {
+      let that = this
+      that.type = that.$route.params.type
+      // 需要授权才可以加载的数据(授权比页面装载快)
+      if (that.$store.state.wxAuthStatus) {
+        // console.log(`%c${that.$route.fullPath} created`, 'font-size:20px;color:blue;')
+      }
+      // 无需授权可以提前加载的数据
+    }
+  }
+</script>

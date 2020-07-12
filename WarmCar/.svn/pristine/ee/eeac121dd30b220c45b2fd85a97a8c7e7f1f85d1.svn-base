@@ -1,0 +1,273 @@
+<style lang="scss">
+  @import "~vue-xy-ui/dist/mixin";
+  @import "~assets/scss/value";
+
+  .wc-photoCar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .wc-photoCar-card__inner {
+      width: rsh(710);
+      height: rsh(365);
+      display: flex;
+      flex-direction: column;
+
+      .wc-photoCar-card__inner__top {
+        display: flex;
+        flex-direction: row;
+
+        &>i {
+          margin: rsh(20) rsh(10) rsh(10) rsh(20);
+        }
+
+        &>span {
+          font-size: rsh(25);
+          color: #666666;
+          margin-top: rsh(20);
+        }
+      }
+
+      &>span {
+        font-size: rsh(20);
+        color: #c3c3c3;
+        margin-left: rsh(22);
+        margin-bottom: rsh(10);
+        letter-spacing: rsh(2);
+      }
+
+      .wc-photoCar-card__inner__photo {
+        display: flex;
+        flex-direction: row;
+        margin-left: rsh(15);
+
+        &>div {
+          display: flex;
+          flex-direction: column;
+
+          &>img {
+            margin-bottom: rsh(5);
+            margin-right: rsh(11);
+          }
+
+          &>button {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            width: rsh(336);
+            height: rsh(55);
+            line-height: rsh(55);
+            font-size: rsh(23);
+            color: #666666;
+            border-radius: 3px;
+            margin: 0;
+
+            &>span {
+              margin-left: rsh(5);
+            }
+          }
+        }
+      }
+    }
+
+    .wc-photoCar-card__outer {
+      width: rsh(710);
+      height: rsh(625);
+      display: flex;
+      flex-direction: column;
+
+      .wc-photoCar-card__inner__top {
+        display: flex;
+        flex-direction: row;
+
+        &>i {
+          margin: rsh(20) rsh(10) rsh(10) rsh(20);
+        }
+
+        &>span {
+          font-size: rsh(25);
+          color: #666666;
+          margin-top: rsh(20);
+        }
+      }
+
+      &>span {
+        font-size: rsh(20);
+        color: #c3c3c3;
+        margin-left: rsh(22);
+        letter-spacing: rsh(2);
+      }
+
+      .wc-photoCar-card__inner__photo {
+        display: flex;
+        flex-direction: row;
+        flex-flow: wrap;
+        margin-left: rsh(15);
+
+        &>div {
+          display: flex;
+          flex-direction: column;
+          margin-top: rsh(10);
+          &>img {
+            margin-bottom: rsh(5);
+            margin-right: rsh(11);
+          }
+
+          &>button {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            width: rsh(336);
+            height: rsh(55);
+            line-height: rsh(55);
+            font-size: rsh(23);
+            color: #666666;
+            border-radius: 3px;
+            margin: 0;
+
+            &>span {
+              margin-left: rsh(5);
+            }
+          }
+        }
+      }
+    }
+    & > button{
+      margin-top: rsh(50)
+    }
+  }
+
+</style>
+
+<template>
+  <div>
+    <div class="wc-photoCar">
+      <!-- 车辆内饰 -->
+      <div class="wc-card wc-photoCar-card__inner">
+        <div class="wc-photoCar-card__inner__top">
+          <i class="icons-common-camera-outer">
+            <div class="icons-common icons-common-camera-inner"></div>
+          </i>
+          <span>车辆内饰拍照</span>
+          <span>&nbsp;&nbsp;0/2</span>
+        </div>
+        <span>请按以下示意图拍摄车辆内饰照片&nbsp;&nbsp;(必选)</span>
+        <div class="wc-photoCar-card__inner__photo">
+          <div>
+            <img src="https://dummyimage.com/168x96/cffbfd/000">
+            <button class="wc-btn wc-btn--yellow " v-xy-moving-btn>
+              <i class="icons-common-camera-outer">
+                <div class="icons-common icons-common-camera-inner"></div>
+              </i>
+              <span>前排内饰照片</span>
+            </button>
+          </div>
+          <div>
+            <img src="https://dummyimage.com/168x96/cffbfd/000">
+            <button class="wc-btn wc-btn--yellow " v-xy-moving-btn>
+              <i class="icons-common-camera-outer">
+                <div class="icons-common icons-common-camera-inner"></div>
+              </i>
+              <span>后排内饰照片</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- 车辆外观 -->
+      <div class="wc-card wc-photoCar-card__outer">
+        <div class="wc-photoCar-card__inner__top">
+          <i class="icons-common-camera-outer">
+            <div class="icons-common icons-common-camera-inner"></div>
+          </i>
+          <span>车辆外观拍照</span>
+          <span>&nbsp;&nbsp;0/4</span>
+        </div>
+        <span>请按以下示意图拍摄车辆外观照片&nbsp;&nbsp;(必选)</span>
+        <div class="wc-photoCar-card__inner__photo">
+          <div>
+            <img src="https://dummyimage.com/168x96/cffbfd/000">
+            <button class="wc-btn wc-btn--yellow " v-xy-moving-btn>
+              <i class="icons-common-camera-outer">
+                <div class="icons-common icons-common-camera-inner"></div>
+              </i>
+              <span>车辆左前方照片</span>
+            </button>
+          </div>
+          <div>
+            <img src="https://dummyimage.com/168x96/cffbfd/000">
+            <button class="wc-btn wc-btn--yellow " v-xy-moving-btn>
+              <i class="icons-common-camera-outer">
+                <div class="icons-common icons-common-camera-inner"></div>
+              </i>
+              <span>车辆右前方照片</span>
+            </button>
+          </div>
+          <div>
+            <img src="https://dummyimage.com/168x96/cffbfd/000">
+            <button class="wc-btn wc-btn--yellow " v-xy-moving-btn>
+              <i class="icons-common-camera-outer">
+                <div class="icons-common icons-common-camera-inner"></div>
+              </i>
+              <span>车辆左后方照片</span>
+            </button>
+          </div>
+          <div>
+            <img src="https://dummyimage.com/168x96/cffbfd/000">
+            <button class="wc-btn wc-btn--yellow " v-xy-moving-btn>
+              <i class="icons-common-camera-outer">
+                <div class="icons-common icons-common-camera-inner"></div>
+              </i>
+              <span>车辆右后方照片</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <button class="wc-btn wc-btn--yellow wc-btn--w470 wc-btn--h80 wc-btn--f26"
+            v-xy-moving-btn>提交
+    </button>
+    </div>
+  </div>
+</template>
+
+<script>
+  import common from "~/mixins/common";
+  import seo from "~/mixins/seo";
+  import wxMixin from "~/mixins/wx-mixin";
+  import vuxValidate from "~/mixins/vux-validate";
+
+  export default {
+    mixins: [common, wxMixin, seo],
+    components: {},
+    data() {
+      return {
+        pageTitle: "",
+        startLoad: false
+        //
+      };
+    },
+    watch: {
+      "$store.state.wxAuthStatus": function (v) {
+        let that = this;
+        // 需要授权才可以加载的数据(授权比页面装载慢)
+        if (v && !that.startLoad) {
+          that.startLoad = true;
+          //
+        }
+      }
+    },
+    methods: {},
+    created() {
+      let that = this;
+      that.type = that.$route.params.type;
+      // 需要授权才可以加载的数据(授权比页面装载快)
+      if (that.$store.state.wxAuthStatus && !that.startLoad) {
+        that.startLoad = true;
+        //
+      }
+      // 无需授权可以提前加载的数据
+    }
+  };
+
+</script>

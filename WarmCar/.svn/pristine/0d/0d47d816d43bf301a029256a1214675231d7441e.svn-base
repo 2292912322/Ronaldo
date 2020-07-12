@@ -1,0 +1,13 @@
+const mutations = {
+  login: function (state) {
+    state.hasLogin = true
+  },
+  logout: function (state) {
+    state.hasLogin = false
+  },
+  wxAuth (state, value) {
+    state.wxAuthStatus = value
+  }
+}
+
+export default mutations

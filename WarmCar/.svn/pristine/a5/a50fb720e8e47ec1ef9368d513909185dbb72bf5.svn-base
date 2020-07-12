@@ -1,0 +1,200 @@
+<style lang="scss">
+  @import "~vue-xy-ui/dist/mixin";
+  @import "~assets/scss/value";
+
+  .container {
+    &:before {
+      box-shadow: none;
+    }
+  }
+</style>
+
+<template>
+  <div class="wc-find-point">
+    <!--<div class="wc-find-point__search">-->
+    <!--<button @click="onUser"-->
+    <!--v-xy-moving-btn>-->
+    <!--<i class="icons-common-search-bar-user-outer">-->
+    <!--<div class="icons-common icons-common-search-bar-user-inner"></div>-->
+    <!--</i>-->
+    <!--</button>-->
+    <!--<div class="wc-find-point__search__input">-->
+    <!--<x-input placeholder="搜索查找网点"-->
+    <!--text-align="center"-->
+    <!--v-model="search">-->
+    <!--</x-input>-->
+    <!--</div>-->
+    <!--<button @click="onSearch"-->
+    <!--v-xy-moving-btn>-->
+    <!--<i class="icons-common-search-bar-icon-outer">-->
+    <!--<div class="icons-common icons-common-search-bar-icon-inner"></div>-->
+    <!--</i>-->
+    <!--</button>-->
+    <!--</div>-->
+    <div class="wc-card wc-card--full">
+      <!--<router-link to="/find/car"-->
+      <!--tag="a"-->
+      <!--class="wc-find-point__item"-->
+      <!--v-xy-hover-btn>-->
+      <!--<div class="wc-find-point__item__ct">-->
+      <!--<i class="icons-common-location-main-outer">-->
+      <!--<div class="icons-common icons-common-location-main-inner"></div>-->
+      <!--</i>-->
+      <!--<section>-->
+      <!--<div class="wc-find-point__item__name">-->
+      <!--南方软件园南方软件园南方软件园南方软件园南方软件园南方软件园-->
+      <!--</div>-->
+      <!--<div class="wc-find-point__item__location">-->
+      <!--珠海市高新区南方软件园珠海市高新区南方软件园南方软件园南方软件园 距您 10km-->
+      <!--</div>-->
+      <!--</section>-->
+      <!--<span class="wc-find-point__item__distance">-->
+      <!--11.1km-->
+      <!--</span>-->
+      <!--</div>-->
+      <!--</router-link>-->
+      <a class="wc-find-point__item"
+         v-for="(item,index) in detail.branchInfo"
+         :key="item.branchId"
+         @click="onSelect(item)"
+         v-xy-hover-btn>
+        <div class="wc-find-point__item__ct">
+          <i class="icons-common-location-empty-outer">
+            <div class="icons-common icons-common-location-empty-inner"></div>
+          </i>
+          <section>
+            <div class="wc-find-point__item__name"
+                 v-text="item.branchName">
+            </div>
+            <div class="wc-find-point__item__location">
+              {{item.branchAddress}} <span>距您 {{item.distance | wcDistance}}</span>
+            </div>
+          </section>
+          <span class="wc-find-point__item__distance">
+          {{item.distance | wcDistance}}
+        </span>
+        </div>
+      </a>
+      <xy-list-status :status="status"
+                      :bottom="20*2+86+20">
+        <span slot="nomore">~ 没有更多了 ~</span>
+        <div class="wc-list-empty"
+             slot="empty">
+          <i class="icons-list-point-outer">
+            <div class="icons-list icons-list-point-inner"></div>
+          </i>
+          <span class="mall-list-status__span">亲，对不起，未能找到网点...</span>
+        </div>
+      </xy-list-status>
+    </div>
+  </div>
+</template>
+
+<script>
+  import common from '~/mixins/common'
+  import seo from '~/mixins/seo'
+  import wxMixin from '~/mixins/wx-mixin'
+
+  export default {
+    mixins: [common, wxMixin, seo],
+    components: {},
+    data () {
+      return {
+        pageTitle: '选择网点',
+        startLoad: false,
+        //
+        carId: 0,
+        returnTeamId: 0,
+        appointmentBranchId: 0,
+        detail: {branchInfo: []},
+        //        list: Array.from(new Array(20), (v, i) => {
+        //          return {number: i}
+        //        }),
+        //        allList: [],
+        status: ''// 'nomore','empty'
+      }
+    },
+    watch: {
+      '$store.state.wxAuthStatus': async function (v) {
+        let that = this
+        // 需要授权才可以加载的数据(授权比页面装载慢)
+        if (v && !that.startLoad) {
+          that.startLoad = true
+          //
+          await that.loadAll()
+        }
+      }
+    },
+    methods: {
+      checkParams () {
+        let that = this
+        if (that.carId
+          && that.appointmentBranchId) {
+          //
+        } else {
+          that.$router.go(-1)
+        }
+      },
+      onSelect (item) {
+        let that = this
+        that.$store.commit('returnCar', {
+          carId: that.carId,
+          branchId: item.branchId,
+          branchName: item.branchName,
+          detail: item
+        })
+        that.$router.go(-1)
+      },
+      //      onSearch () {
+      //        let that = this
+      //        that.list = that._.filter(that.allList, o => o.branchName.includes(that.search))
+      //        that.status = that.list.length === 0 ? 'empty' : ''
+      //      },
+      async loadAll () {
+        let that = this
+        let {success, bizContent} = await that.$api.warmcar['query/return_car_branch']({
+          carId: that.carId,
+          returnTeamId: that.returnTeamId,//	还车企业Id(默认0为当前车辆所在企业)		int
+          appointmentBranchId: that.appointmentBranchId
+        })
+        if (success && bizContent) {
+          that.detail = Object.assign(that.detail, bizContent)
+        } else {
+          that.detail = {branchInfo: []}
+        }
+        that.detail.branchInfo = that._.sortBy(_.filter(that.detail.branchInfo.map(o => {
+          let temp = o.gps.split(',')
+          let distance = 0
+          if (temp.length === 2) {
+            if (that.latitude && that.longitude) {
+              distance = that.$wc.getDistance(that.latitude, that.longitude, parseFloat(temp[1]), parseFloat(temp[0]))
+            } else {
+              distance = that.$wc.getDistance(that.$store.state.getCar.latitude, that.$store.state.getCar.longitude, parseFloat(temp[1]), parseFloat(temp[0]))
+            }
+          }
+          return Object.assign(o, {
+            distance: distance
+          })
+        }), o => o.branchReturnType !== '02'), o => o.distance)
+
+        that.status = that.detail.branchInfo.length === 0 ? 'empty' : ''
+      }
+    },
+    async created () {
+      let that = this
+      that.carId = parseFloat(that.$route.query.carId)
+      that.returnTeamId = 0
+      that.appointmentBranchId = parseFloat(that.$route.query.appointmentBranchId)
+      that.latitude = parseFloat(that.$route.query.la)
+      that.longitude = parseFloat(that.$route.query.lo)
+      that.checkParams()
+      // 需要授权才可以加载的数据(授权比页面装载快)
+      if (that.$store.state.wxAuthStatus && !that.startLoad) {
+        that.startLoad = true
+        //
+        await that.loadAll()
+      }
+      // 无需授权可以提前加载的数据
+    }
+  }
+</script>

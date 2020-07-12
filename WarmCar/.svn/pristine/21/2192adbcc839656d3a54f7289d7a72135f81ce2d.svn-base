@@ -1,0 +1,15 @@
+import customer from './customer'
+import query from './query'
+import time_rental from './time_rental'
+import modify_customer from './modify_customer'
+import immediate from './immediate'
+import order from './order'
+
+export default {
+  customer,
+  query,
+  time_rental,
+  modify_customer,
+  immediate,
+  order
+}

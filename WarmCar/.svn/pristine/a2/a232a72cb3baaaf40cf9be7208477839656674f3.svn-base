@@ -1,0 +1,140 @@
+<style lang="scss">
+  @import "~vue-xy-ui/dist/mixin";
+  @import "~assets/scss/value";
+
+  .wc-home {
+    padding-top: rsh(40);
+    .wc-home__title {
+      font-size: rsh(26);
+      font-weight: bold;
+      padding: 0 rsh(40);
+      line-height: rsh(60);
+    }
+    .wc-card {
+      padding-left: rsh(54);
+      padding-right: rsh(54);
+    }
+    .wc-home__btn {
+      margin-top: rsh(165);
+    }
+    .wc-home__selector {
+      font-size: rsh(30);
+      padding: rsh((108-30)/2) 0;
+      position: relative;
+      display: flex;
+      align-items: center;
+      &:not(:first-child) {
+        &:before {
+          content: '';
+          display: block;
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 1px;
+          background-color: $inputLineColor;
+          transform: scale(1, .5);
+        }
+      }
+      & > label {
+        display: block;
+        width: rsh(210);
+        position: relative;
+        line-height: rsh(34);
+        flex-shrink: 0;
+        &:after {
+          content: '';
+          display: block;
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 1px;
+          height: 100%;
+          background-color: $inputLineColor;
+          transform: scale(0.5, 1);
+        }
+      }
+      .wc-home__selector__val {
+        display: block;
+        width: 0;
+        flex-grow: 1;
+        margin-left: rsh(30);
+        color: $placeholderColor;
+        &.wc-home__selector__val--selected {
+          color: $baseFontColor;
+        }
+      }
+      & > i {
+        flex-shrink: 0;
+      }
+    }
+  }
+</style>
+
+<template>
+  <div class="wc-home">
+    <div class="wc-home__title">
+      选择您要租车的网点
+    </div>
+    <div class="wc-card">
+      <div class="wc-home__selector"
+           v-xy-hover-btn>
+        <label>您所在的城市</label>
+        <span class="wc-home__selector__val wc-home__selector__val--selected">珠海</span>
+      </div>
+      <div class="wc-home__selector"
+           v-xy-hover-btn>
+        <label>取车地点</label>
+        <span class="wc-home__selector__val">选择取车地点</span>
+        <i class="icons-common-gt-outer">
+          <div class="icons-common icons-common-gt-inner"></div>
+        </i>
+      </div>
+    </div>
+    <button class="wc-btn wc-btn--yellow wc-btn--w600 wc-btn--h85 wc-home__btn"
+            @click="onUse"
+            v-xy-moving-btn>立即用车
+    </button>
+  </div>
+</template>
+
+<script>
+  import common from '~/mixins/common'
+  import seo from '~/mixins/seo'
+  import wxMixin from '~/mixins/wx-mixin'
+
+  export default {
+    mixins: [common, wxMixin, seo],
+    components: {},
+    data () {
+      return {
+        pageTitle: '首页'
+      }
+    },
+    watch: {
+      '$store.state.wxAuthStatus': function (v) {
+        let that = this
+        // 需要授权才可以加载的数据(授权比页面装载慢)
+        if (v) {
+          // console.log(`%c${that.$route.fullPath} wxAuthStatus`, 'font-size:20px;color:blue;')
+        }
+      }
+    },
+    methods: {
+      onUse () {
+        let that = this
+        that.$router.push('/test/box')
+      }
+    },
+    created () {
+      let that = this
+      that.type = that.$route.params.type
+      // 需要授权才可以加载的数据(授权比页面装载快)
+      if (that.$store.state.wxAuthStatus) {
+        // console.log(`%c${that.$route.fullPath} created`, 'font-size:20px;color:blue;')
+      }
+      // 无需授权可以提前加载的数据
+
+    }
+  }
+</script>

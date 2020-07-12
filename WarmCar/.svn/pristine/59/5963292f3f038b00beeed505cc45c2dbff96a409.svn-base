@@ -1,0 +1,4 @@
+$dir: '/';
+$maskColor: rgba(0, 0, 0, .48);
+$mainColor: #ffcc00;
+$lineColor: #e3e3e3;

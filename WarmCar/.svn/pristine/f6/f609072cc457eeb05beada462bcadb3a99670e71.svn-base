@@ -1,0 +1,52 @@
+<style lang="scss">
+  @import "~vue-xy-ui/dist/mixin";
+
+  .wc-toast {
+    position: fixed;
+    top: 50vh;
+    left: 0;
+    width: 100vw;
+    /*height: 100vh;*/
+    background-color: rgba(0, 0, 0, .1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    visibility: hidden;
+    &.wc-toast--show {
+      visibility: visible;
+    }
+  }
+</style>
+<template>
+  <div class="wc-toast"
+       :class="{'wc-toast--show':show}">
+    <div>content:{{opts.content}}</div>
+  </div>
+</template>
+<script>
+  import Vue from 'vue'
+  import xyUI from 'vue-xy-ui'
+
+  Vue.use(xyUI)
+
+  export default {
+    name: 'wc-toast',
+    props: {},
+    watch: {},
+    data () {
+      return {
+        opts: {
+          content: '',
+          position: 'middle' // middle/bottom 两种, 色彩参考设计稿
+        },
+        show: false
+      }
+    },
+    computed: {},
+    methods: {},
+    mounted: function () {
+      let that = this
+    }
+  }
+</script>

@@ -1,0 +1,78 @@
+import Vue from 'vue'
+import _ from 'lodash'
+
+import cookie from 'js-cookie'
+import apiCache from '~/mixins/api-cache'
+import VueLazyload from 'vue-lazyload'
+import { xyLazyloadResize } from 'vue-xy-ui'
+// vux start
+// import ConfirmPlugin from '~/components/vux/vux-confirm-plugin'
+import {
+  // plugins
+  ToastPlugin,
+  AlertPlugin,
+  ConfirmPlugin,
+  LoadingPlugin,
+  // components
+  Group,
+  XInput,
+  Selector,
+  Calendar,
+  PopupPicker,
+  Picker,
+  XTextarea,
+  Checklist,
+  Radio,
+  XDialog,
+  Cell,
+  Actionsheet,
+  Popup,
+  CheckIcon,
+  XAddress,
+  Swiper,
+  SwiperItem,
+  XButton
+} from 'vux'
+// vux end
+import xyUI from 'vue-xy-ui'
+
+import wcComponents from './components'
+import wcFilters from './filters'
+
+Vue.prototype.$wc = wcComponents
+Object.keys(wcFilters)
+      .forEach(key => {
+        Vue.filter(key, wcFilters[key])
+      })
+
+Vue.prototype.$cookie = cookie
+Vue.prototype._ = _
+Vue.mixin(apiCache)
+Vue.use(VueLazyload, xyLazyloadResize)
+// vux start
+Vue.use(ToastPlugin)
+Vue.use(AlertPlugin)
+Vue.use(ConfirmPlugin)
+Vue.use(LoadingPlugin)
+Vue.component(Group.name, Group)
+Vue.component(XInput.name, XInput)
+Vue.component(Selector.name, Selector)
+Vue.component(Calendar.name, Calendar)
+Vue.component(PopupPicker.name, PopupPicker)
+Vue.component(Picker.name, Picker)
+Vue.component(XTextarea.name, XTextarea)
+Vue.component(Checklist.name, Checklist)
+Vue.component(Radio.name, Radio)
+Vue.component(XDialog.name, XDialog)
+Vue.component(Cell.name, Cell)
+Vue.component(Actionsheet.name, Actionsheet)
+Vue.component(Popup.name, Popup)
+Vue.component(CheckIcon.name, CheckIcon)
+Vue.component(XAddress.name, XAddress)
+Vue.component(Swiper.name, Swiper)
+Vue.component(SwiperItem.name, SwiperItem)
+Vue.component(XButton.name, XButton)
+// vux end
+Vue.use(xyUI)
+
+

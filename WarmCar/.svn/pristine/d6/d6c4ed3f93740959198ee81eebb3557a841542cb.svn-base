@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+if [ "$1" = "full" ]; then
+    echo "全量"
+    # 删除全部文件
+    # rm -r /Volumes/gc/dist/*
+    # 复制全部文件
+    # cp -r ./dist /Volumes/gc
+else
+    echo "部分"
+    # 替换关键代码
+    # rm -rf /Volumes/gc/dist/index.html /Volumes/gc/dist/200.html /Volumes/gc/dist/site
+    # cp ./dist/index.html /Volumes/gc/dist/index.html
+    # cp ./dist/200.html /Volumes/gc/dist/200.html
+    # cp -r ./dist/site /Volumes/gc/dist/site
+fi

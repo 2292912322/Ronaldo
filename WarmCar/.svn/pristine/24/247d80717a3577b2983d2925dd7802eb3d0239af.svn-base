@@ -1,0 +1,9 @@
+import auth from './auth'
+import wx from './wx'
+import upload from './upload'
+
+export default {
+  auth,
+  wx,
+  upload
+}

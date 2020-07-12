@@ -1,0 +1,44 @@
+export default {
+  methods: {
+    vuxValidate () {
+      let that = this
+      let valid = true
+      for (let input in that.$refs) {
+        let ref = that.$refs[input]
+        if (ref.$el !== undefined) {
+          if (ref.title !== undefined || ref.$el.title !== undefined) {
+            let title = ref.title === undefined ? ref.$el.title : ref.title
+            if (title === undefined || title === '') {
+              title = ref.$el.dataset.title === undefined ? '' : ref.$el.dataset.title
+            }
+            if (ref.required !== undefined || ref.$el.required !== undefined || ref.$el.getAttribute('required')) {
+              let required = ref.required === undefined ? (ref.$el.getAttribute('required') === 'required' ? true : ref.$el.required) : ref.required
+              if (required) {
+                if (!ref.value || ref.value.length === 0) {
+                  let msg = ref.$el.dataset.msg ? ref.$el.dataset.msg : '请输入'
+                  that.$vux.toast.show({
+                    text: `&nbsp;${msg}&nbsp;<br>&nbsp;"${title}"&nbsp;`,
+                    type: 'warn'
+                  })
+                  valid = false
+                  break
+                }
+              }
+              if (ref.valid !== undefined && !ref.valid) {
+                that.$vux.toast.show({
+                  text: `&nbsp;请输入正确的&nbsp;<br>&nbsp;"${title}"&nbsp;`,
+                  type: 'warn'
+                })
+                valid = false
+                break
+              }
+              // console.log('required', required)
+            }
+            // console.log('title', title)
+          }
+        }
+      }
+      return valid
+    }
+  }
+}
